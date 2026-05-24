@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm fsd:lint*)",
+      "Bash(pnpm fsd:watch*)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && pnpm -s fsd:lint 1>&2 || exit 2"
+          }
+        ]
+      }
+    ]
+  }
+}
