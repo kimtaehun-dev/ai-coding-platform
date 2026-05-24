@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "**/*.stories.@(ts|tsx|js|jsx|mdx)",
+    "**/*.mdx",
+    ".storybook/**",
+    "storybook-static/**"
+  ]
+}
