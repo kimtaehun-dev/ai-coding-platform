@@ -1,0 +1,149 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Foundations/타이포그래피 (Typography)" />
+
+{/* ───────────────────────────────────────────────────────────────────────
+ * Foundations / 타이포그래피 (Typography)
+ * 토큰 정의: typography.css
+ * ─────────────────────────────────────────────────────────────────────── */}
+
+export const SCALE_GROUPS = [
+  { group: 'Display',  description: '페이지의 hero 영역. 랜딩, 빈 상태의 큰 헤드라인.',
+    scales: [
+      { token: 'display-lg', usage: '최상위 헤드라인' },
+      { token: 'display-md', usage: '메인 헤드라인' },
+      { token: 'display-sm', usage: '보조 헤드라인' },
+    ] },
+  { group: 'Headline', description: '페이지 또는 큰 섹션의 제목.',
+    scales: [
+      { token: 'headline-lg', usage: '페이지 제목' },
+      { token: 'headline-md', usage: '주요 섹션 제목' },
+      { token: 'headline-sm', usage: '보조 섹션 제목' },
+    ] },
+  { group: 'Title',    description: '카드, 모달, 작은 섹션의 제목.',
+    scales: [
+      { token: 'title-lg', usage: '카드/모달 헤더' },
+      { token: 'title-md', usage: '기본 제목' },
+      { token: 'title-sm', usage: '리스트 항목 제목' },
+    ] },
+  { group: 'Body',     description: '긴 본문, 설명 단락.',
+    scales: [
+      { token: 'body-lg', usage: '주요 본문' },
+      { token: 'body-md', usage: '기본 본문 (가장 자주 사용)' },
+      { token: 'body-sm', usage: '보조 본문, 도움말' },
+    ] },
+  { group: 'Label',    description: '버튼, 입력 레이블, 폼 보조 텍스트.',
+    scales: [
+      { token: 'label-lg', usage: '큰 버튼 레이블' },
+      { token: 'label-md', usage: '기본 버튼/레이블' },
+      { token: 'label-sm', usage: '작은 버튼, 태그' },
+    ] },
+  { group: 'Utility',  description: '캡션, 코드, 그 외 보조용.',
+    scales: [
+      { token: 'caption', usage: '이미지 캡션, 메타데이터' },
+      { token: 'code',    usage: '인라인/블록 코드' },
+      { token: 'code-sm', usage: '작은 코드 스니펫' },
+    ] },
+]
+
+export const SAMPLE_KO = '디자인 시스템에서 일관성은 신뢰의 기반이다.'
+export const SAMPLE_EN = 'The quick brown fox jumps over the lazy dog.'
+export const SAMPLE_CODE = 'const tokens = readCssVars();'
+
+export function SectionHeader({ eyebrow, title, description }) {
+  return (
+    <header style={{ marginBottom: 20 }}>
+      {eyebrow ? (
+        <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--color-foreground-subtle)', textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 4 }}>
+          {eyebrow}
+        </div>
+      ) : null}
+      <h2 style={{ fontSize: 22, fontWeight: 600, color: 'var(--color-foreground)', margin: '0 0 6px 0' }}>{title}</h2>
+      <p style={{ fontSize: 13, color: 'var(--color-foreground-muted)', margin: 0, lineHeight: 1.55 }}>{description}</p>
+    </header>
+  )
+}
+
+export function Divider() {
+  return <hr style={{ border: 0, borderTop: '1px solid var(--color-border-muted)', margin: '40px 0' }} />
+}
+
+export function ScaleRow({ scale, group }) {
+  const isCode = group === 'Utility' && scale.token.startsWith('code')
+  const sample = isCode ? SAMPLE_CODE : `${SAMPLE_KO} ${SAMPLE_EN}`
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: 24, alignItems: 'baseline', padding: '16px 0', borderBottom: '1px solid var(--color-border-muted)' }}>
+      <div>
+        <code style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground)', display: 'block' }}>text-{scale.token}</code>
+        <span style={{ fontSize: 11, color: 'var(--color-foreground-muted)', display: 'block', marginTop: 2 }}>{scale.usage}</span>
+      </div>
+      <div className={`text-${scale.token}`} style={{ color: 'var(--color-foreground)', fontFamily: isCode ? 'var(--font-mono)' : undefined }}>
+        {sample}
+      </div>
+    </div>
+  )
+}
+
+export function TypographyDoc() {
+  return (
+    <div style={{ padding: 32, background: 'var(--color-background)', color: 'var(--color-foreground)', minHeight: '100vh', fontFamily: 'var(--font-sans)' }}>
+      <section>
+        <SectionHeader
+          eyebrow="섹션 1"
+          title="전체 스케일"
+          description="6 그룹 × 18 스케일. 실제 적용된 폰트 크기, 자간, 행간을 한 화면에서 비교할 수 있습니다. 클래스명은 text-{group}-{size} 형태."
+        />
+        {SCALE_GROUPS.map((g) => (
+          <section key={g.group} style={{ marginBottom: 32 }}>
+            <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-foreground-muted)', textTransform: 'uppercase', letterSpacing: 0.5, margin: '0 0 4px 0' }}>{g.group}</h3>
+            <p style={{ fontSize: 12, color: 'var(--color-foreground-subtle)', margin: '0 0 8px 0' }}>{g.description}</p>
+            {g.scales.map((s) => (<ScaleRow key={s.token} scale={s} group={g.group} />))}
+          </section>
+        ))}
+      </section>
+
+      <Divider />
+
+      <section>
+        <SectionHeader
+          eyebrow="섹션 2"
+          title="폰트 패밀리"
+          description="--font-sans (Pretendard Variable) — 한글·라틴 두께 매칭이 좋아 SaaS 한국어 UI에 적합. --font-mono (JetBrains Mono) — 코드용."
+        />
+        <div style={{ marginBottom: 28 }}>
+          <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-foreground-muted)', textTransform: 'uppercase', margin: '0 0 12px 0' }}>Sans — Pretendard Variable</h3>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: 32, margin: '0 0 8px 0', color: 'var(--color-foreground)' }}>{SAMPLE_KO} {SAMPLE_EN}</p>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: 14, color: 'var(--color-foreground-muted)', margin: 0 }}>0123456789 ! @ # $ % &amp; * ( ) [ ] {`{ }`} &lt; &gt;</p>
+        </div>
+        <div>
+          <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-foreground-muted)', textTransform: 'uppercase', margin: '0 0 12px 0' }}>Mono — JetBrains Mono</h3>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: 18, margin: 0, color: 'var(--color-foreground)' }}>{`const greeting = "안녕하세요" + " " + "world";`}</p>
+        </div>
+      </section>
+
+      <Divider />
+
+      <section>
+        <SectionHeader
+          eyebrow="섹션 3"
+          title="Weight 사용 가이드"
+          description="Pretendard Variable은 100~900 전 구간을 지원하지만, 시스템에서는 4개 weight(400/500/600/700)만 사용합니다."
+        />
+        {[
+          [400, 'Regular',  '본문 (body-*)'],
+          [500, 'Medium',   '레이블, 작은 제목 (label-*, title-md/sm)'],
+          [600, 'SemiBold', '강조 제목 (title-lg, headline-*, display-sm)'],
+          [700, 'Bold',     'Display (display-lg, display-md)'],
+        ].map(([w, name, usage]) => (
+          <div key={w} style={{ display: 'grid', gridTemplateColumns: '160px 1fr 200px', gap: 24, alignItems: 'baseline', padding: '14px 0', borderBottom: '1px solid var(--color-border-muted)' }}>
+            <code style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground-muted)' }}>{w} {name}</code>
+            <span style={{ fontSize: 20, fontWeight: w, color: 'var(--color-foreground)' }}>{SAMPLE_KO} {SAMPLE_EN}</span>
+            <span style={{ fontSize: 12, color: 'var(--color-foreground-subtle)' }}>{usage}</span>
+          </div>
+        ))}
+      </section>
+    </div>
+  )
+}
+
+<TypographyDoc />

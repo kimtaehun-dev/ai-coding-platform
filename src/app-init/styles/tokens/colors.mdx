@@ -1,0 +1,195 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Foundations/색상 (Colors)" />
+
+{/* ───────────────────────────────────────────────────────────────────────
+ * Foundations / 색상 (Colors)
+ * 토큰 정의:
+ *   - palette.css   : 프리미티브 팔레트 (5 × 13 = 65 토큰)
+ *   - semantic.css  : 의미 토큰 (light 기본) + shadcn alias
+ *   - dark.css      : 의미 토큰의 dark 오버라이드
+ * ─────────────────────────────────────────────────────────────────────── */}
+
+export const PALETTE_STEPS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100]
+export const PALETTES = ['primary', 'secondary', 'neutral', 'neutral-variant', 'error']
+
+export const SEMANTIC_GROUPS = [
+  { title: 'Surface (배경)', description: '페이지와 컴포넌트의 배경면. 깊이감은 surface → elevated 순서.',
+    tokens: [
+      { name: 'background',       usage: '페이지 최하단 배경' },
+      { name: 'surface',          usage: '카드, 리스트 행 등 1차 표면' },
+      { name: 'surface-muted',    usage: '비활성/보조 영역' },
+      { name: 'surface-elevated', usage: '팝오버, 모달, 떠있는 표면' },
+      { name: 'surface-overlay',  usage: '딤 처리용 반투명 오버레이' },
+    ] },
+  { title: 'Foreground (텍스트)', description: '텍스트와 아이콘의 색. 중요도에 따라 단계적으로 사용.',
+    tokens: [
+      { name: 'foreground',         usage: '본문, 제목 — 기본 텍스트' },
+      { name: 'foreground-muted',   usage: '보조 설명, 캡션' },
+      { name: 'foreground-subtle',  usage: 'placeholder, 비활성 텍스트' },
+      { name: 'foreground-inverse', usage: '어두운 배경 위 텍스트' },
+    ] },
+  { title: 'Border (테두리)', description: '경계선과 디바이더. UI 컴포넌트의 가시성 확보.',
+    tokens: [
+      { name: 'border',          usage: '기본 테두리, 입력 필드' },
+      { name: 'border-muted',    usage: '약한 디바이더' },
+      { name: 'border-strong',   usage: '강조 경계선' },
+      { name: 'outline',         usage: 'focus ring 등 인터랙티브 윤곽' },
+      { name: 'outline-variant', usage: '비활성 인터랙티브 윤곽' },
+    ] },
+  { title: 'Interactive (인터랙티브)', description: '버튼, 링크 등 사용자가 상호작용하는 요소의 색.',
+    tokens: [
+      { name: 'primary',      usage: '기본 액션 (CTA, primary 버튼)' },
+      { name: 'on-primary',   usage: 'primary 위 텍스트/아이콘' },
+      { name: 'secondary',    usage: '보조 액션' },
+      { name: 'on-secondary', usage: 'secondary 위 텍스트/아이콘' },
+    ] },
+  { title: 'Feedback (피드백)', description: '상태와 알림. on-* 는 해당 색 위에 올리는 대비색.',
+    tokens: [
+      { name: 'error',      usage: '에러, 파괴적 액션' },
+      { name: 'on-error',   usage: 'error 위 텍스트' },
+      { name: 'success',    usage: '성공 상태' },
+      { name: 'on-success', usage: 'success 위 텍스트' },
+      { name: 'warning',    usage: '주의 상태' },
+      { name: 'on-warning', usage: 'warning 위 텍스트' },
+      { name: 'info',       usage: '정보성 상태' },
+      { name: 'on-info',    usage: 'info 위 텍스트' },
+    ] },
+]
+
+export const SHADCN_ALIASES = [
+  { alias: 'primary-foreground',     mapsTo: 'on-primary' },
+  { alias: 'secondary-foreground',   mapsTo: 'on-secondary' },
+  { alias: 'destructive',            mapsTo: 'error' },
+  { alias: 'destructive-foreground', mapsTo: 'on-error' },
+  { alias: 'muted',                  mapsTo: 'surface-muted' },
+  { alias: 'muted-foreground',       mapsTo: 'foreground-muted' },
+  { alias: 'accent',                 mapsTo: 'surface' },
+  { alias: 'accent-foreground',      mapsTo: 'foreground' },
+  { alias: 'popover',                mapsTo: 'surface-elevated' },
+  { alias: 'popover-foreground',     mapsTo: 'foreground' },
+  { alias: 'card',                   mapsTo: 'surface' },
+  { alias: 'card-foreground',        mapsTo: 'foreground' },
+  { alias: 'input',                  mapsTo: 'border' },
+  { alias: 'ring',                   mapsTo: 'outline' },
+]
+
+export function SectionHeader({ eyebrow, title, description }) {
+  return (
+    <header style={{ marginBottom: 16 }}>
+      {eyebrow ? (
+        <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--color-foreground-subtle)', textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 4 }}>
+          {eyebrow}
+        </div>
+      ) : null}
+      <h2 style={{ fontSize: 22, fontWeight: 600, color: 'var(--color-foreground)', margin: '0 0 6px 0' }}>{title}</h2>
+      <p style={{ fontSize: 13, color: 'var(--color-foreground-muted)', margin: 0, lineHeight: 1.55 }}>{description}</p>
+    </header>
+  )
+}
+
+export function Divider() {
+  return <hr style={{ border: 0, borderTop: '1px solid var(--color-border-muted)', margin: '40px 0' }} />
+}
+
+export function Swatch({ cssVar, label, sub }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+      <div style={{ width: 44, height: 44, borderRadius: 8, background: `var(${cssVar})`, border: '1px solid var(--color-border)', flexShrink: 0 }} aria-hidden />
+      <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        <code style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</code>
+        {sub ? (
+          <span style={{ fontSize: 11, color: 'var(--color-foreground-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{sub}</span>
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
+export function ThemePanel({ scheme, children }) {
+  const isDark = scheme === 'dark'
+  return (
+    <div className={isDark ? 'dark' : undefined} style={{ background: 'var(--color-background)', color: 'var(--color-foreground)', padding: 20, borderRadius: 12, border: '1px solid var(--color-border)' }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-foreground-muted)', marginBottom: 16, textTransform: 'uppercase', letterSpacing: 0.4 }}>
+        {isDark ? 'Dark mode' : 'Light mode'}
+      </div>
+      {children}
+    </div>
+  )
+}
+
+export function SemanticGroup({ group }) {
+  return (
+    <section style={{ marginBottom: 24 }}>
+      <h4 style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-foreground)', margin: '0 0 4px 0' }}>{group.title}</h4>
+      <p style={{ fontSize: 12, color: 'var(--color-foreground-muted)', margin: '0 0 12px 0' }}>{group.description}</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
+        {group.tokens.map((t) => (
+          <Swatch key={t.name} cssVar={`--color-${t.name}`} label={`--color-${t.name}`} sub={t.usage} />
+        ))}
+      </div>
+    </section>
+  )
+}
+
+export function ColorsDoc() {
+  return (
+    <div style={{ padding: 32, background: 'var(--color-background)', color: 'var(--color-foreground)', minHeight: '100vh', fontFamily: 'var(--font-sans)' }}>
+      <section>
+        <SectionHeader
+          eyebrow="섹션 1"
+          title="의미 토큰 (Semantic)"
+          description="컴포넌트가 직접 사용하는 토큰. Tailwind 유틸은 bg-background, text-foreground, border-border처럼 토큰 이름이 그대로 매핑됩니다. Dark 모드는 변수 이름은 동일하고 값만 교체됩니다."
+        />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+          <ThemePanel scheme="light">
+            {SEMANTIC_GROUPS.map((g) => (<SemanticGroup key={g.title} group={g} />))}
+          </ThemePanel>
+          <ThemePanel scheme="dark">
+            {SEMANTIC_GROUPS.map((g) => (<SemanticGroup key={g.title} group={g} />))}
+          </ThemePanel>
+        </div>
+      </section>
+
+      <Divider />
+
+      <section>
+        <SectionHeader
+          eyebrow="섹션 2"
+          title="프리미티브 팔레트 (Primitive)"
+          description="⚠️ 컴포넌트에서 직접 사용 금지. 의미 토큰을 통해서만 참조합니다. 5 팔레트 × 13 톤. Lightness는 모든 팔레트가 공유하며, chroma는 step 40에서 피크 후 양 끝으로 0에 수렴."
+        />
+        {PALETTES.map((p) => (
+          <div key={p} style={{ marginBottom: 24 }}>
+            <h4 style={{ fontSize: 14, fontWeight: 600, margin: '0 0 8px 0', textTransform: 'capitalize', color: 'var(--color-foreground)' }}>{p}</h4>
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${PALETTE_STEPS.length}, 1fr)`, gap: 4 }}>
+              {PALETTE_STEPS.map((step) => (
+                <div key={step} style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ height: 48, background: `var(--color-${p}-${step})`, borderRadius: 6, border: '1px solid var(--color-border-muted)' }} aria-label={`${p}-${step}`} />
+                  <code style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground-muted)', marginTop: 4, textAlign: 'center' }}>{step}</code>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      <section>
+        <SectionHeader
+          eyebrow="섹션 3"
+          title="shadcn 호환 alias"
+          description="기존 shadcn 컴포넌트의 클래스명을 의미 토큰에 매핑한 alias입니다. 신규 컴포넌트는 alias가 아닌 원본 의미 토큰을 직접 사용하세요 (예: bg-destructive ❌ → bg-error ✅)."
+        />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
+          {SHADCN_ALIASES.map((a) => (
+            <Swatch key={a.alias} cssVar={`--color-${a.alias}`} label={`--color-${a.alias}`} sub={`→ --color-${a.mapsTo}`} />
+          ))}
+        </div>
+      </section>
+    </div>
+  )
+}
+
+<ColorsDoc />

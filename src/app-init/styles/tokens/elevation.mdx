@@ -1,0 +1,111 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Foundations/Elevation & Z-index" />
+
+{/* ───────────────────────────────────────────────────────────────────────
+ * Foundations / Elevation & Z-index
+ * 토큰 정의: elevation.css
+ * ─────────────────────────────────────────────────────────────────────── */}
+
+export const ELEVATION_TOKENS = [
+  { level: 0, usage: '그림자 없음 — 평면 요소' },
+  { level: 1, usage: '기본 카드, 입력 필드' },
+  { level: 2, usage: '버튼 hover, 드롭다운 트리거' },
+  { level: 3, usage: '드롭다운 메뉴, 팝오버' },
+  { level: 4, usage: '모달, 다이얼로그' },
+  { level: 5, usage: '최상위 떠있는 요소 (드래그 중 카드 등)' },
+]
+
+export const Z_TOKENS = [
+  { key: 'base',     value: 0,    usage: '기본 콘텐츠 (z-index 미사용과 동일)' },
+  { key: 'sticky',   value: 100,  usage: '스크롤 시 고정되는 헤더/사이드바' },
+  { key: 'dropdown', value: 1000, usage: 'Select, Menu의 펼침 패널' },
+  { key: 'popover',  value: 1100, usage: 'Popover, Combobox 패널' },
+  { key: 'modal',    value: 1200, usage: 'Modal / Dialog 백드롭과 컨텐츠' },
+  { key: 'toast',    value: 1300, usage: 'Toast 알림 — 모달보다 위' },
+  { key: 'tooltip',  value: 1400, usage: 'Tooltip — 항상 최상단' },
+]
+
+export function SectionHeader({ eyebrow, title, description }) {
+  return (
+    <header style={{ marginBottom: 20 }}>
+      {eyebrow ? (
+        <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--color-foreground-subtle)', textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 4 }}>
+          {eyebrow}
+        </div>
+      ) : null}
+      <h2 style={{ fontSize: 22, fontWeight: 600, color: 'var(--color-foreground)', margin: '0 0 6px 0' }}>{title}</h2>
+      <p style={{ fontSize: 13, color: 'var(--color-foreground-muted)', margin: 0, lineHeight: 1.55 }}>{description}</p>
+    </header>
+  )
+}
+
+export function Divider() {
+  return <hr style={{ border: 0, borderTop: '1px solid var(--color-border-muted)', margin: '40px 0' }} />
+}
+
+export function ShadowCard({ level, usage, scheme }) {
+  return (
+    <div className={scheme === 'dark' ? 'dark' : undefined} style={{ background: 'var(--color-background)', padding: 24, borderRadius: 12 }}>
+      <div style={{ background: 'var(--color-surface-elevated)', padding: 24, borderRadius: 12, boxShadow: `var(--shadow-level-${level})`, color: 'var(--color-foreground)', minHeight: 100, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 4 }}>
+        <code style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground)' }}>shadow-level-{level}</code>
+        <span style={{ fontSize: 11, color: 'var(--color-foreground-muted)' }}>{usage}</span>
+      </div>
+    </div>
+  )
+}
+
+export function SchemeGrid({ scheme }) {
+  return (
+    <div className={scheme === 'dark' ? 'dark' : undefined} style={{ padding: 24, background: 'var(--color-surface)', borderRadius: 12, border: '1px solid var(--color-border)' }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-foreground-muted)', marginBottom: 16, textTransform: 'uppercase', letterSpacing: 0.4 }}>
+        {scheme === 'dark' ? 'Dark mode' : 'Light mode'}
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
+        {ELEVATION_TOKENS.map((t) => (
+          <ShadowCard key={t.level} level={t.level} usage={t.usage} scheme={scheme} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export function ElevationDoc() {
+  return (
+    <div style={{ padding: 32, background: 'var(--color-background)', color: 'var(--color-foreground)', minHeight: '100vh', fontFamily: 'var(--font-sans)' }}>
+      <section>
+        <SectionHeader
+          eyebrow="섹션 1"
+          title="Elevation (그림자)"
+          description="6 레벨로 표면의 떠 있는 정도를 표현합니다. 좌측은 light, 우측은 dark 모드의 같은 레벨을 나란히 보여줍니다. Dark 모드에서는 alpha가 자동으로 4~5배 커집니다."
+        />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+          <SchemeGrid scheme="light" />
+          <SchemeGrid scheme="dark" />
+        </div>
+      </section>
+
+      <Divider />
+
+      <section>
+        <SectionHeader
+          eyebrow="섹션 2"
+          title="Z-index 계층"
+          description="임의의 z-index 사용을 금지하고 항상 이 7단계 중 하나를 사용합니다. 사이 간격이 100으로 넓어 같은 레벨 내 미세 조정(±1, ±2)도 충돌 없이 가능합니다."
+        />
+        <div style={{ display: 'grid', gridTemplateColumns: '140px 80px 1fr', gap: 16, padding: '0 0 8px 0', borderBottom: '2px solid var(--color-border)', fontSize: 11, fontWeight: 600, color: 'var(--color-foreground-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+          <span>Token</span><span>값</span><span>주요 사용처</span>
+        </div>
+        {Z_TOKENS.map((t) => (
+          <div key={t.key} style={{ display: 'grid', gridTemplateColumns: '140px 80px 1fr', gap: 16, alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--color-border-muted)' }}>
+            <code style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground)' }}>z-{t.key}</code>
+            <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground-muted)' }}>{t.value}</span>
+            <span style={{ fontSize: 12, color: 'var(--color-foreground-muted)' }}>{t.usage}</span>
+          </div>
+        ))}
+      </section>
+    </div>
+  )
+}
+
+<ElevationDoc />

@@ -1,0 +1,287 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Foundations/인터랙션 (Interactions)" />
+
+{/* ───────────────────────────────────────────────────────────────────────
+ * Foundations / 인터랙션 (Interactions)
+ * 토큰 정의: semantic.css (light), dark.css (dark 오버라이드)
+ *
+ * 인터랙션 상태별 색상 + 포커스 링 + 비활성 상태.
+ * ─────────────────────────────────────────────────────────────────────── */}
+
+export const INTERACTIVE_GROUPS = [
+  { name: 'primary',   description: '기본 CTA 버튼, 가장 강한 액션',         baseToken: 'primary',   onToken: 'on-primary' },
+  { name: 'secondary', description: '보조 액션, primary 다음으로 강조',      baseToken: 'secondary', onToken: 'on-secondary' },
+  { name: 'error',     description: '파괴적 액션 (삭제, 취소 등), shadcn destructive', baseToken: 'error', onToken: 'on-error' },
+]
+
+export const STATES = [
+  { suffix: '',         label: 'Base',   pseudo: '기본 상태' },
+  { suffix: '-hover',   label: 'Hover',  pseudo: ':hover' },
+  { suffix: '-active',  label: 'Active', pseudo: ':active (눌림)' },
+]
+
+export const STATE_LAYER_OPACITY = [
+  { name: 'state-hover',    value: 0.08, usage: 'subtle hover (ghost 버튼, 리스트 행)' },
+  { name: 'state-pressed',  value: 0.12, usage: 'press / 눌림 오버레이' },
+  { name: 'state-focus',    value: 0.12, usage: '키보드 포커스 인디케이터' },
+  { name: 'state-selected', value: 0.16, usage: '선택된 상태 (체크박스, 라디오)' },
+  { name: 'state-disabled', value: 0.38, usage: '비활성 (전체 컴포넌트 opacity)' },
+]
+
+export function SectionHeader({ eyebrow, title, description }) {
+  return (
+    <header style={{ marginBottom: 20 }}>
+      {eyebrow ? (
+        <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--color-foreground-subtle)', textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 4 }}>
+          {eyebrow}
+        </div>
+      ) : null}
+      <h2 style={{ fontSize: 22, fontWeight: 600, color: 'var(--color-foreground)', margin: '0 0 6px 0' }}>{title}</h2>
+      <p style={{ fontSize: 13, color: 'var(--color-foreground-muted)', margin: 0, lineHeight: 1.55 }}>{description}</p>
+    </header>
+  )
+}
+
+export function Divider() {
+  return <hr style={{ border: 0, borderTop: '1px solid var(--color-border-muted)', margin: '40px 0' }} />
+}
+
+export function StateSwatch({ token, label, sub, onToken }) {
+  const bg = `var(--color-${token})`
+  const fg = onToken ? `var(--color-${onToken})` : 'var(--color-foreground)'
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ background: bg, color: fg, padding: '14px 16px', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 48, border: '1px solid var(--color-border-muted)' }}>
+        <span style={{ fontSize: 13, fontWeight: 500 }}>{label}</span>
+        <span style={{ fontSize: 11, opacity: 0.8 }}>{sub}</span>
+      </div>
+      <code style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground-muted)' }}>--color-{token}</code>
+    </div>
+  )
+}
+
+export function InteractiveStateRow({ group, scheme }) {
+  return (
+    <div className={scheme === 'dark' ? 'dark' : undefined} style={{ background: 'var(--color-background)', padding: 20, borderRadius: 12, border: '1px solid var(--color-border)' }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 12 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, margin: 0, textTransform: 'capitalize', color: 'var(--color-foreground)' }}>{group.name}</h4>
+        <span style={{ fontSize: 11, color: 'var(--color-foreground-muted)' }}>{scheme === 'dark' ? 'Dark' : 'Light'}</span>
+      </div>
+      <p style={{ fontSize: 12, color: 'var(--color-foreground-muted)', margin: '0 0 12px 0' }}>{group.description}</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+        {STATES.map((s) => (
+          <StateSwatch key={s.label} token={`${group.baseToken}${s.suffix}`} label={s.label} sub={s.pseudo} onToken={group.onToken} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export function SurfaceInteractionDemo({ scheme }) {
+  return (
+    <div className={scheme === 'dark' ? 'dark' : undefined} style={{ background: 'var(--color-background)', padding: 20, borderRadius: 12, border: '1px solid var(--color-border)' }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-foreground-muted)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: 0.4 }}>
+        {scheme === 'dark' ? 'Dark' : 'Light'}
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+        {[
+          { token: 'surface',        label: 'Base',   sub: '기본 카드 배경' },
+          { token: 'surface-hover',  label: 'Hover',  sub: ':hover' },
+          { token: 'surface-active', label: 'Active', sub: ':active' },
+        ].map((s) => (
+          <div key={s.token} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ background: `var(--color-${s.token})`, color: 'var(--color-foreground)', padding: 16, borderRadius: 8, minHeight: 56, border: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <span style={{ fontSize: 13, fontWeight: 500 }}>{s.label}</span>
+              <span style={{ fontSize: 11, color: 'var(--color-foreground-muted)', marginTop: 2 }}>{s.sub}</span>
+            </div>
+            <code style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground-muted)' }}>--color-{s.token}</code>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export function LiveButton({ variant, label }) {
+  const variantStyles = {
+    primary: { bg: 'var(--color-primary)', bgHover: 'var(--color-primary-hover)', bgActive: 'var(--color-primary-active)', fg: 'var(--color-on-primary)' },
+    secondary: { bg: 'var(--color-secondary)', bgHover: 'var(--color-secondary-hover)', bgActive: 'var(--color-secondary-active)', fg: 'var(--color-on-secondary)' },
+    error: { bg: 'var(--color-error)', bgHover: 'var(--color-error-hover)', bgActive: 'var(--color-error-active)', fg: 'var(--color-on-error)' },
+  }
+  const v = variantStyles[variant]
+  return (
+    <button
+      style={{
+        background: v.bg,
+        color: v.fg,
+        border: 'none',
+        padding: '10px 18px',
+        borderRadius: 'var(--radius-md)',
+        fontSize: 14,
+        fontWeight: 500,
+        cursor: 'pointer',
+        transition: 'background 120ms ease',
+        outline: 'none',
+      }}
+      onMouseEnter={(e) => { e.currentTarget.style.background = v.bgHover }}
+      onMouseLeave={(e) => { e.currentTarget.style.background = v.bg }}
+      onMouseDown={(e) => { e.currentTarget.style.background = v.bgActive }}
+      onMouseUp={(e) => { e.currentTarget.style.background = v.bgHover }}
+      onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 3px var(--color-focus-ring)` }}
+      onBlur={(e) => { e.currentTarget.style.boxShadow = 'none' }}
+    >
+      {label}
+    </button>
+  )
+}
+
+export function InteractionsDoc() {
+  return (
+    <div style={{ padding: 32, background: 'var(--color-background)', color: 'var(--color-foreground)', minHeight: '100vh', fontFamily: 'var(--font-sans)' }}>
+      <section>
+        <SectionHeader
+          eyebrow="섹션 1"
+          title="인터랙션 상태 컬러"
+          description="버튼/링크 등 클릭 가능한 요소가 사용자 입력에 반응할 때 사용하는 색상. 모든 인터랙티브 컬러(primary, secondary, error)는 base / hover / active 3단계로 정의됩니다. Light는 어둡게, Dark는 밝게 변화."
+        />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {INTERACTIVE_GROUPS.map((g) => (
+            <div key={g.name} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              <InteractiveStateRow group={g} scheme="light" />
+              <InteractiveStateRow group={g} scheme="dark" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <Divider />
+
+      <section>
+        <SectionHeader
+          eyebrow="섹션 2"
+          title="Surface 인터랙션"
+          description="클릭 가능한 카드, 리스트 행, 메뉴 아이템 등의 배경 인터랙션. Light에서는 더 어둡게, Dark에서는 더 밝게 변합니다."
+        />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          <SurfaceInteractionDemo scheme="light" />
+          <SurfaceInteractionDemo scheme="dark" />
+        </div>
+      </section>
+
+      <Divider />
+
+      <section>
+        <SectionHeader
+          eyebrow="섹션 3"
+          title="Focus Ring"
+          description="키보드 포커스 시 표시되는 반투명 ring. --color-focus-ring (alpha 0.4) 사용. 아래 버튼들에 Tab으로 포커스해보세요."
+        />
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center', padding: 24, background: 'var(--color-surface)', borderRadius: 12, border: '1px solid var(--color-border)' }}>
+          <LiveButton variant="primary" label="Primary 버튼" />
+          <LiveButton variant="secondary" label="Secondary 버튼" />
+          <LiveButton variant="error" label="삭제 (Error)" />
+        </div>
+        <pre style={{ marginTop: 16, padding: 16, background: 'var(--color-surface-muted)', border: '1px solid var(--color-border-muted)', borderRadius: 8, fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground)', overflow: 'auto' }}>
+{`/* CSS */
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+/* Tailwind */
+<button className="focus-visible:ring-3 focus-visible:ring-focus-ring">`}
+        </pre>
+      </section>
+
+      <Divider />
+
+      <section>
+        <SectionHeader
+          eyebrow="섹션 4"
+          title="State Layer Opacity"
+          description="Material Design 스타일의 state layer 오버레이용 alpha 값. 기존 컬러 위에 같은 색을 옅게 덮어 미세한 상태 표현이 필요할 때 사용 (예: ghost 버튼 hover)."
+        />
+        <div style={{ display: 'grid', gridTemplateColumns: '160px 80px 1fr', gap: 16, padding: '0 0 8px 0', borderBottom: '2px solid var(--color-border)', fontSize: 11, fontWeight: 600, color: 'var(--color-foreground-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+          <span>Token</span><span>값</span><span>주요 사용처</span>
+        </div>
+        {STATE_LAYER_OPACITY.map((s) => (
+          <div key={s.name} style={{ display: 'grid', gridTemplateColumns: '160px 80px 1fr', gap: 16, alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--color-border-muted)' }}>
+            <code style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground)' }}>--{s.name}</code>
+            <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground-muted)' }}>{s.value}</span>
+            <span style={{ fontSize: 12, color: 'var(--color-foreground-muted)' }}>{s.usage}</span>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      <section>
+        <SectionHeader
+          eyebrow="섹션 5"
+          title="Disabled 상태"
+          description="비활성화된 컴포넌트는 전체 opacity를 --state-disabled (0.38)로 낮춥니다. 컬러 자체를 변경하지 않고 시각적으로 비활성임을 알립니다."
+        />
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center', padding: 24, background: 'var(--color-surface)', borderRadius: 12, border: '1px solid var(--color-border)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <span style={{ fontSize: 11, color: 'var(--color-foreground-muted)' }}>활성</span>
+            <button disabled={false} style={{ background: 'var(--color-primary)', color: 'var(--color-on-primary)', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 14, fontWeight: 500 }}>
+              버튼
+            </button>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <span style={{ fontSize: 11, color: 'var(--color-foreground-muted)' }}>비활성 (opacity: var(--state-disabled))</span>
+            <button disabled style={{ background: 'var(--color-primary)', color: 'var(--color-on-primary)', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 14, fontWeight: 500, opacity: 'var(--state-disabled)', cursor: 'not-allowed' }}>
+              버튼
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <Divider />
+
+      <section>
+        <SectionHeader
+          eyebrow="섹션 6"
+          title="사용 예시 (CSS / Tailwind)"
+          description="컴포넌트 코드에서 인터랙션 토큰을 사용하는 표준 패턴."
+        />
+        <pre style={{ padding: 16, background: 'var(--color-surface-muted)', border: '1px solid var(--color-border-muted)', borderRadius: 8, fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground)', overflow: 'auto', lineHeight: 1.6 }}>
+{`/* 순수 CSS */
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.btn-primary:hover  { background: var(--color-primary-hover); }
+.btn-primary:active { background: var(--color-primary-active); }
+.btn-primary:focus-visible { box-shadow: 0 0 0 3px var(--color-focus-ring); }
+.btn-primary:disabled { opacity: var(--state-disabled); }
+
+/* Tailwind 유틸 */
+<button class="
+  bg-primary           text-on-primary
+  hover:bg-primary-hover
+  active:bg-primary-active
+  focus-visible:ring-3 focus-visible:ring-focus-ring
+  disabled:opacity-[var(--state-disabled)]
+  rounded-md px-4 py-2
+">
+  Primary 버튼
+</button>
+
+/* 클릭 가능한 카드 */
+<div class="
+  bg-surface
+  hover:bg-surface-hover
+  active:bg-surface-active
+  rounded-lg p-4 cursor-pointer
+">
+  카드 내용
+</div>`}
+        </pre>
+      </section>
+    </div>
+  )
+}
+
+<InteractionsDoc />

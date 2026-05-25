@@ -1,0 +1,153 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Foundations/개요 (Overview)" />
+
+# 디자인 토큰 시스템 개요
+
+이 디자인 시스템은 **3단계 계층 구조**를 가집니다. 위 단계는 아래 단계를 참조하며,
+**컴포넌트는 의미 토큰만 사용**합니다.
+
+```
+프리미티브 (palette.css)
+     ↓ 참조
+의미 토큰 (semantic.css)  ← 컴포넌트는 여기서만 사용
+     ↓ alias
+shadcn 호환 alias        ← 신규 코드 사용 지양
+```
+
+---
+
+## 토큰 파일 매니페스트
+
+좌측 사이드바 **Foundations** 그룹에서 각 카테고리의 시각화 페이지로 이동할 수 있습니다.
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">파일</th>
+      <th align="left">카테고리</th>
+      <th align="left">토큰 수</th>
+      <th align="left">직접 사용</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>palette.css</code>
+      </td>
+      <td>프리미티브 팔레트</td>
+      <td>65 (5 × 13)</td>
+      <td>❌ 금지</td>
+    </tr>
+    <tr>
+      <td>
+        <code>semantic.css</code>
+      </td>
+      <td>의미 토큰 (light)</td>
+      <td>30+</td>
+      <td>✅ 권장</td>
+    </tr>
+    <tr>
+      <td>
+        <code>dark.css</code>
+      </td>
+      <td>dark 오버라이드</td>
+      <td>30+</td>
+      <td>(자동 적용)</td>
+    </tr>
+    <tr>
+      <td>
+        <code>typography.css</code>
+      </td>
+      <td>타입 시스템</td>
+      <td>18 scales × 4 fields</td>
+      <td>✅ 권장</td>
+    </tr>
+    <tr>
+      <td>
+        <code>spacing.css</code>
+      </td>
+      <td>스페이싱 + 반경</td>
+      <td>9 + 6</td>
+      <td>✅ 권장</td>
+    </tr>
+    <tr>
+      <td>
+        <code>elevation.css</code>
+      </td>
+      <td>그림자 + z-index</td>
+      <td>6 + 7</td>
+      <td>✅ 권장</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## 사용 가이드 (Do / Don't)
+
+### ✅ Do
+
+```tsx
+// 의미 토큰 그대로 사용
+<div className="bg-background text-foreground border-border" />
+<button className="bg-primary text-on-primary rounded-md px-4 py-2" />
+<h1 className="text-headline-lg" />
+<div className="shadow-level-2 p-6 rounded-lg" />
+```
+
+### ❌ Don't
+
+```tsx
+// 프리미티브 직접 사용 — 의미 토큰으로 우회
+<div className="bg-neutral-99" />                  // ❌
+<div className="bg-background" />                  // ✅
+
+// 하드코딩된 값
+<div style={{ padding: "16px" }} />                // ❌
+<div className="p-4" />                            // ✅
+
+// 임의 z-index
+<div style={{ zIndex: 9999 }} />                   // ❌
+<div style={{ zIndex: "var(--z-modal)" }} />       // ✅
+```
+
+---
+
+## Dark 모드 동작
+
+`<html class="dark">` 클래스가 토글되면 **의미 토큰의 값만 교체**됩니다.
+변수 이름은 동일하므로 컴포넌트 코드는 변경 불필요.
+
+```tsx
+// 컴포넌트는 모드에 관여하지 않음
+<div className="bg-surface text-foreground" />
+// → light: 밝은 회색 표면 + 검은 텍스트
+// → dark : 어두운 표면 + 흰 텍스트
+```
+
+WCAG 대비 기준은 `semantic.css`와 `dark.css` 상단 주석에 모드별 비율로 기재돼 있습니다.
+
+---
+
+## OKLCH를 사용하는 이유
+
+이 시스템은 모든 색상을 **OKLCH**로 정의합니다 (`oklch(L C H)`).
+
+- **L** (lightness, 0~1) — 인지적 밝기. 같은 L 값이면 사람 눈에 비슷한 밝기로 인식됩니다.
+- **C** (chroma, 0~~0.4) — 채도. 0이면 완전한 회색.
+- **H** (hue, 0~360°) — 색상.
+
+장점:
+
+- 팔레트 톤 단계(40, 50, 60, ...)의 **명도가 일정**하게 유지됩니다.
+- Light/Dark 모드 변환 시 색상 의도가 보존됩니다.
+- 모든 모니터에서 일관된 인지적 색감을 보장합니다 (`sRGB`보다 우수).
+
+---
+
+## 토큰 수정 가이드
+
+1. **새 의미 토큰이 필요한가?** → 먼저 기존 토큰으로 가능한지 검토. 정말 필요하면 `semantic.css`에 추가하고 `dark.css`에도 짝을 추가.
+2. **새 팔레트가 필요한가?** → 거의 없는 경우. 보통 기존 hue로 충분. 추가 시 `palette.css`의 lightness/chroma 곡선을 그대로 따를 것.
+3. **이 문서는 자동 동기화** — CSS 변수 값을 바꾸면 이 페이지의 모든 시각화가 즉시 반영됩니다.

@@ -1,0 +1,126 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Foundations/스페이싱 & 반경 (Spacing & Radius)" />
+
+{/* ───────────────────────────────────────────────────────────────────────
+ * Foundations / 스페이싱 & 반경 (Spacing & Radius)
+ * 토큰 정의: spacing.css
+ * ─────────────────────────────────────────────────────────────────────── */}
+
+export const SPACING_TOKENS = [
+  { key: '1',  rem: '0.25rem', px: '4px',  usage: '최소 단위, 아이콘과 텍스트 사이' },
+  { key: '2',  rem: '0.5rem',  px: '8px',  usage: '버튼 내부 패딩, 작은 컴포넌트 간격' },
+  { key: '4',  rem: '1rem',    px: '16px', usage: '카드 내부 패딩, 일반적인 간격' },
+  { key: '6',  rem: '1.5rem',  px: '24px', usage: '섹션 내 그룹 간격' },
+  { key: '8',  rem: '2rem',    px: '32px', usage: '섹션과 섹션 사이' },
+  { key: '10', rem: '2.5rem',  px: '40px', usage: '큰 섹션 간격' },
+  { key: '12', rem: '3rem',    px: '48px', usage: '페이지 내 큰 구역 분리' },
+  { key: '16', rem: '4rem',    px: '64px', usage: '페이지 상단 여백' },
+  { key: '20', rem: '5rem',    px: '80px', usage: '랜딩 hero 영역 여백' },
+]
+
+export const RADIUS_TOKENS = [
+  { key: 'xs',   value: '4px',    usage: '태그, 작은 칩' },
+  { key: 'sm',   value: '6px',    usage: '작은 버튼, 입력 필드' },
+  { key: 'md',   value: '8px',    usage: '기본 버튼, 카드' },
+  { key: 'lg',   value: '12px',   usage: '큰 카드, 모달' },
+  { key: 'xl',   value: '16px',   usage: '히어로 카드, 대형 컨테이너' },
+  { key: 'full', value: '9999px', usage: '원형 아바타, 알약 버튼' },
+]
+
+export function SectionHeader({ eyebrow, title, description }) {
+  return (
+    <header style={{ marginBottom: 20 }}>
+      {eyebrow ? (
+        <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--color-foreground-subtle)', textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 4 }}>
+          {eyebrow}
+        </div>
+      ) : null}
+      <h2 style={{ fontSize: 22, fontWeight: 600, color: 'var(--color-foreground)', margin: '0 0 6px 0' }}>{title}</h2>
+      <p style={{ fontSize: 13, color: 'var(--color-foreground-muted)', margin: 0, lineHeight: 1.55 }}>{description}</p>
+    </header>
+  )
+}
+
+export function Divider() {
+  return <hr style={{ border: 0, borderTop: '1px solid var(--color-border-muted)', margin: '40px 0' }} />
+}
+
+export function SpacingBar({ token }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '120px 100px 1fr 1fr', gap: 16, alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--color-border-muted)' }}>
+      <code style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground)' }}>spacing-{token.key}</code>
+      <span style={{ fontSize: 12, color: 'var(--color-foreground-muted)' }}>{token.px} / {token.rem}</span>
+      <div style={{ height: 16, width: `var(--spacing-${token.key})`, background: 'var(--color-primary)', borderRadius: 2 }} aria-label={`${token.px} 너비 시각화`} />
+      <span style={{ fontSize: 12, color: 'var(--color-foreground-muted)' }}>{token.usage}</span>
+    </div>
+  )
+}
+
+export function RadiusTile({ token }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+      <div style={{ width: 96, height: 96, background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: `var(--radius-${token.key})` }} aria-hidden />
+      <div style={{ textAlign: 'center' }}>
+        <code style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground)', display: 'block' }}>radius-{token.key}</code>
+        <span style={{ fontSize: 11, color: 'var(--color-foreground-muted)' }}>{token.value}</span>
+        <p style={{ fontSize: 11, color: 'var(--color-foreground-subtle)', margin: '4px 0 0 0', maxWidth: 140 }}>{token.usage}</p>
+      </div>
+    </div>
+  )
+}
+
+export function SpacingDoc() {
+  return (
+    <div style={{ padding: 32, background: 'var(--color-background)', color: 'var(--color-foreground)', minHeight: '100vh', fontFamily: 'var(--font-sans)' }}>
+      <section>
+        <SectionHeader
+          eyebrow="섹션 1"
+          title="Spacing 스케일"
+          description="4px 기본 단위, 8px 그리드. 막대 너비는 실제 토큰 값을 그대로 적용해 비례 감각을 확인할 수 있습니다. p-, m-, gap-, space-x- 등 Tailwind 유틸로 자동 생성됩니다."
+        />
+        <div style={{ display: 'grid', gridTemplateColumns: '120px 100px 1fr 1fr', gap: 16, padding: '0 0 8px 0', borderBottom: '2px solid var(--color-border)', fontSize: 11, fontWeight: 600, color: 'var(--color-foreground-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+          <span>Token</span><span>값</span><span>크기</span><span>주요 사용처</span>
+        </div>
+        {SPACING_TOKENS.map((t) => (<SpacingBar key={t.key} token={t} />))}
+      </section>
+
+      <Divider />
+
+      <section>
+        <SectionHeader
+          eyebrow="섹션 2"
+          title="Radius 스케일"
+          description="컴포넌트 크기에 따라 한 단계씩 올리는 것이 기본 규칙입니다. 작은 버튼 = sm, 기본 버튼 = md, 카드 = lg."
+        />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 32 }}>
+          {RADIUS_TOKENS.map((t) => (<RadiusTile key={t.key} token={t} />))}
+        </div>
+      </section>
+
+      <Divider />
+
+      <section>
+        <SectionHeader
+          eyebrow="섹션 3"
+          title="8px 그리드 시각화"
+          description="디자인은 8px 그리드 위에서 구성됩니다 (예외적으로 아이콘/세부 요소는 4px 허용). 아래는 카드 컴포넌트가 어떤 토큰을 사용하는지 분해한 예시입니다."
+        />
+        <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--spacing-6)', maxWidth: 420, display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-1)' }}>
+            <h3 style={{ fontSize: 18, fontWeight: 600, margin: 0 }}>카드 제목</h3>
+            <p style={{ fontSize: 13, color: 'var(--color-foreground-muted)', margin: 0 }}>
+              카드 내부의 padding은 spacing-6, 요소 간 gap은 spacing-4, 제목과 부제목 사이는 spacing-1을 사용합니다.
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: 'var(--spacing-2)' }}>
+            <button style={{ padding: 'var(--spacing-2) var(--spacing-4)', borderRadius: 'var(--radius-md)', background: 'var(--color-primary)', color: 'var(--color-on-primary)', border: 'none', fontSize: 13, fontWeight: 500 }}>확인</button>
+            <button style={{ padding: 'var(--spacing-2) var(--spacing-4)', borderRadius: 'var(--radius-md)', background: 'transparent', color: 'var(--color-foreground)', border: '1px solid var(--color-border)', fontSize: 13, fontWeight: 500 }}>취소</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+<SpacingDoc />
