@@ -1,0 +1,64 @@
+/* ───────────────────────────────────────────────────────────────────────
+ * Elevation (Shadow) & Z-index
+ *
+ * Shadow: 2-layer recipe = ambient(넓고 옅음) + key(좁고 진함).
+ *         OKLCH alpha 사용. Dark 모드는 alpha 약 4~5배.
+ * Tailwind 유틸리티: shadow-level-0 ~ shadow-level-5
+ *
+ * Z-index: 단순 정수 hierarchy.
+ *   base(0) < sticky(100) < dropdown(1000) < popover(1100)
+ *   < modal(1200) < toast(1300) < tooltip(1400)
+ * ─────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* ── Shadow (Light defaults) ──────────────────────────────────────── */
+  --shadow-level-0: none;
+  --shadow-level-1:
+    0 1px 2px oklch(0 0 0 / 0.08), 0 1px 1px oklch(0 0 0 / 0.04);
+  --shadow-level-2: 0 2px 4px oklch(0 0 0 / 0.1), 0 1px 2px oklch(0 0 0 / 0.06);
+  --shadow-level-3:
+    0 4px 8px oklch(0 0 0 / 0.12), 0 2px 4px oklch(0 0 0 / 0.08);
+  --shadow-level-4:
+    0 8px 16px oklch(0 0 0 / 0.14), 0 4px 8px oklch(0 0 0 / 0.1);
+  --shadow-level-5:
+    0 16px 32px oklch(0 0 0 / 0.16), 0 8px 16px oklch(0 0 0 / 0.12);
+
+  /* ── Z-index ──────────────────────────────────────────────────────── */
+  --z-base: 0;
+  --z-sticky: 100;
+  --z-dropdown: 1000;
+  --z-popover: 1100;
+  --z-modal: 1200;
+  --z-toast: 1300;
+  --z-tooltip: 1400;
+}
+
+@layer base {
+  .dark {
+    --shadow-level-1:
+      0 1px 2px oklch(0 0 0 / 0.4), 0 1px 1px oklch(0 0 0 / 0.2);
+    --shadow-level-2:
+      0 2px 4px oklch(0 0 0 / 0.5), 0 1px 2px oklch(0 0 0 / 0.3);
+    --shadow-level-3:
+      0 4px 8px oklch(0 0 0 / 0.55), 0 2px 4px oklch(0 0 0 / 0.35);
+    --shadow-level-4:
+      0 8px 16px oklch(0 0 0 / 0.6), 0 4px 8px oklch(0 0 0 / 0.4);
+    --shadow-level-5:
+      0 16px 32px oklch(0 0 0 / 0.65), 0 8px 16px oklch(0 0 0 / 0.45);
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+ * Force-emit shadow-level + z-index variables
+ *
+ * shadow-level-* 는 production 컴포넌트에서 아직 사용되지 않아 가지치기
+ * 대상이며, z-* 는 Tailwind 기본 namespace와 다른 의미라 보존 필요.
+ * ─────────────────────────────────────────────────────────────────────── */
+@source inline("shadow-level-{0,1,2,3,4,5}");
+/* z-index 토큰은 Tailwind 유틸을 거치지 않고 var()로 참조되므로,
+   :root에 dummy 참조를 두어 Tailwind가 "사용됨"으로 인식하게 합니다. */
+:root {
+  --__keep-z-alive:
+    var(--z-base) var(--z-sticky) var(--z-dropdown) var(--z-popover)
+    var(--z-modal) var(--z-toast) var(--z-tooltip);
+}

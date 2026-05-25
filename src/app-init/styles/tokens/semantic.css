@@ -1,0 +1,127 @@
+/* ───────────────────────────────────────────────────────────────────────
+ * Semantic Tokens — Light mode defaults
+ *
+ * These are the ONLY color tokens components should use directly.
+ * (Tailwind utilities: bg-background, text-foreground, border-border, ...)
+ *
+ * Dark mode overrides live in dark.css.
+ * shadcn compatibility aliases at the bottom of this file.
+ *
+ * WCAG Contrast (Light, approximate, OKLCH L → relative Y):
+ *   foreground (L=0.12) on background (L=0.99)      ≈ 19.6:1  ✅ AAA
+ *   foreground-muted (L=0.32) on background          ≈ 12.3:1  ✅ AAA
+ *   foreground-subtle (L=0.55) on background         ≈  4.6:1  ✅ AA (large/UI)
+ *   on-primary (L=1.00) on primary (L=0.45)          ≈  7.5:1  ✅ AAA
+ *   on-secondary (L=1.00) on secondary (L=0.45)      ≈  7.5:1  ✅ AAA
+ *   on-error (L=1.00) on error (L=0.45)              ≈  7.5:1  ✅ AAA
+ *   on-success (L=1.00) on success (L=0.55)          ≈  4.6:1  ✅ AA
+ *   on-warning (L=0.15) on warning (L=0.70)          ≈  6.2:1  ✅ AAA
+ *   border (L=0.82) on background (L=0.99)           ≈  3.2:1  ✅ AA (UI)
+ * ─────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* ── Surface ─────────────────────────────────────────────────────── */
+  --color-background: oklch(0.99 0.001 260); /* = neutral-99 */
+  --color-surface: oklch(0.95 0.002 260); /* = neutral-95 */
+  --color-surface-muted: oklch(0.9 0.003 260); /* = neutral-90 */
+  --color-surface-elevated: oklch(1 0 260); /* = neutral-100 */
+  --color-surface-overlay: oklch(0.99 0.001 260 / 0.85);
+
+  /* ── Text / Foreground ───────────────────────────────────────────── */
+  --color-foreground: oklch(0.12 0.003 260); /* = neutral-10 */
+  --color-foreground-muted: oklch(0.32 0.008 260); /* = neutral-30 */
+  --color-foreground-subtle: oklch(0.55 0.01 260); /* = neutral-50 */
+  --color-foreground-inverse: oklch(0.99 0.001 260); /* = neutral-99 */
+
+  /* ── Border ──────────────────────────────────────────────────────── */
+  --color-border: oklch(0.82 0.014 275); /* = neutral-variant-80 */
+  --color-border-muted: oklch(0.9 0.008 275); /* = neutral-variant-90 */
+  --color-border-strong: oklch(0.65 0.023 275); /* = neutral-variant-60 */
+  --color-outline: oklch(0.65 0.023 275); /* = neutral-variant-60 */
+  --color-outline-variant: oklch(0.82 0.014 275); /* = neutral-variant-80 */
+
+  /* ── Interactive ─────────────────────────────────────────────────── */
+  --color-primary: oklch(0.45 0.2 260); /* = primary-40 */
+  --color-primary-hover: oklch(0.4 0.2 260); /* darker by ~0.05 L */
+  --color-primary-active: oklch(0.35 0.18 260); /* :active / pressed */
+  --color-on-primary: oklch(1 0 260); /* = primary-100 */
+
+  --color-secondary: oklch(0.45 0.16 165); /* = secondary-40 */
+  --color-secondary-hover: oklch(0.4 0.16 165);
+  --color-secondary-active: oklch(0.35 0.14 165);
+  --color-on-secondary: oklch(1 0 165); /* = secondary-100 */
+
+  /* ── Feedback ────────────────────────────────────────────────────── */
+  --color-error: oklch(0.45 0.2 25); /* = error-40 */
+  --color-error-hover: oklch(0.4 0.2 25);
+  --color-error-active: oklch(0.35 0.18 25);
+  --color-on-error: oklch(1 0 25); /* = error-100 */
+
+  --color-success: oklch(0.55 0.15 145);
+  --color-on-success: oklch(1 0 0);
+  --color-warning: oklch(0.7 0.16 75);
+  --color-on-warning: oklch(0.15 0 0);
+  --color-info: oklch(0.55 0.2 260); /* = primary-50 */
+  --color-on-info: oklch(1 0 260); /* = primary-100 */
+
+  /* ── Surface Interaction (클릭 가능한 카드, 리스트 행 등) ────────── */
+  --color-surface-hover: oklch(0.92 0.003 260); /* surface (0.95) - 0.03 */
+  --color-surface-active: oklch(0.88 0.005 260); /* surface (0.95) - 0.07 */
+
+  /* ── Focus Ring (반투명 ring 레이어용) ─────────────────────────── */
+  --color-focus-ring: oklch(0.55 0.2 260 / 0.4); /* primary-50 @ 40% */
+
+  /* ── State Layer (opacity only, no auto utility) ─────────────────── */
+  --state-hover: 0.08;
+  --state-pressed: 0.12;
+  --state-focus: 0.12;
+  --state-selected: 0.16;
+  --state-disabled: 0.38;
+
+  /* ── shadcn 호환 alias ────────────────────────────────────────────
+   * 기존 shadcn 컴포넌트가 사용하는 클래스명을 새 시스템에 매핑.
+   * 새 컴포넌트는 위쪽 semantic 이름을 직접 사용할 것 (이 alias 의존 금지). */
+  --color-primary-foreground: var(--color-on-primary);
+  --color-secondary-foreground: var(--color-on-secondary);
+  --color-destructive: var(--color-error);
+  --color-destructive-foreground: var(--color-on-error);
+  --color-muted: var(--color-surface-muted);
+  --color-muted-foreground: var(--color-foreground-muted);
+  --color-accent: var(--color-surface);
+  --color-accent-foreground: var(--color-foreground);
+  --color-popover: var(--color-surface-elevated);
+  --color-popover-foreground: var(--color-foreground);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-foreground);
+  --color-input: var(--color-border);
+  --color-ring: var(--color-outline);
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+ * Force-emit all semantic + shadcn alias color tokens
+ *
+ * Tailwind v4는 사용처가 없는 @theme 변수를 빌드에서 제거하므로,
+ * Storybook 토큰 문서가 var()로 참조하는 토큰들을 보존해야 합니다.
+ * 각 토큰당 한 종류의 유틸(bg-*)만 살려두어도 변수는 함께 emit됩니다.
+ * ─────────────────────────────────────────────────────────────────────── */
+@source inline(
+  "bg-{background,surface,surface-muted,surface-elevated,surface-overlay}"
+);
+@source inline(
+  "bg-{foreground,foreground-muted,foreground-subtle,foreground-inverse}"
+);
+@source inline("bg-{border,border-muted,border-strong,outline,outline-variant}");
+@source inline("bg-{primary,on-primary,secondary,on-secondary}");
+@source inline(
+  "bg-{error,on-error,success,on-success,warning,on-warning,info,on-info}"
+);
+/* 인터랙션 상태 (hover/active) + focus ring */
+@source inline(
+  "bg-{primary-hover,primary-active,secondary-hover,secondary-active,error-hover,error-active}"
+);
+@source inline("bg-{surface-hover,surface-active}");
+@source inline("bg-focus-ring");
+/* shadcn 호환 alias */
+@source inline(
+  "bg-{primary-foreground,secondary-foreground,destructive,destructive-foreground,muted,muted-foreground,accent,accent-foreground,popover,popover-foreground,card,card-foreground,input,ring}"
+);

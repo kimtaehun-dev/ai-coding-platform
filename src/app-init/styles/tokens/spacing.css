@@ -1,0 +1,40 @@
+/* ───────────────────────────────────────────────────────────────────────
+ * Spacing & Shape
+ *
+ * Base unit: 4px (0.25rem). 8px 그리드.
+ * Tailwind 유틸리티 자동 생성: p-1, m-2, gap-4, space-x-6, ...
+ *
+ * Radius는 GitHub aesthetic 기준 절제된 값.
+ * Tailwind 유틸리티: rounded-xs, rounded-sm, rounded-md, ...
+ * ─────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* ── Spacing (rem) ────────────────────────────────────────────────── */
+  --spacing-1: 0.25rem; /*  4px */
+  --spacing-2: 0.5rem; /*  8px */
+  --spacing-4: 1rem; /* 16px */
+  --spacing-6: 1.5rem; /* 24px */
+  --spacing-8: 2rem; /* 32px */
+  --spacing-10: 2.5rem; /* 40px */
+  --spacing-12: 3rem; /* 48px */
+  --spacing-16: 4rem; /* 64px */
+  --spacing-20: 5rem; /* 80px */
+
+  /* ── Radius ───────────────────────────────────────────────────────── */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+ * Force-emit spacing + radius variables
+ *
+ * 큰 스페이싱(10/12/16/20)과 사용 빈도가 낮은 radius는 자동 감지로는
+ * 누락될 수 있어 명시적으로 살려둡니다. p-{n}/rounded-{n} 하나만 살아도
+ * 모든 관련 유틸(m-, gap-, px-, py-, w-, h- 등)이 함께 활성화됩니다.
+ * ─────────────────────────────────────────────────────────────────────── */
+@source inline("p-{1,2,4,6,8,10,12,16,20}");
+@source inline("rounded-{xs,sm,md,lg,xl,full}");

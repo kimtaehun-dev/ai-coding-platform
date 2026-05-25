@@ -1,0 +1,140 @@
+/* ───────────────────────────────────────────────────────────────────────
+ * Typography — 18 scales × 5 fields (size, line-height, weight, letter-spacing, family)
+ *
+ * Tailwind v4가 --text-*에서 유틸리티(`text-display-lg` 등) 자동 생성.
+ * 페어 필드(`--text-*--line-height` 등)도 함께 적용됨.
+ *
+ * Families:
+ *   sans : Pretendard Variable (한국어 가독성 우선) — 한영 혼용 SaaS에 최적
+ *   mono : JetBrains Mono → Fira Code → system mono
+ *
+ * Scales (각 그룹별 lg/md/sm):
+ *   display  : 페이지 hero 영역
+ *   headline : 페이지 / 섹션 제목
+ *   title    : 카드 / 모달 제목
+ *   body     : 본문
+ *   label    : 버튼, 입력 레이블, 폼 보조 텍스트
+ *   utility  : caption, code, code-sm
+ * ─────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* ── Font families ────────────────────────────────────────────────── */
+  --font-sans:
+    'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, 'Helvetica Neue', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Inter',
+    sans-serif;
+  --font-mono:
+    'JetBrains Mono', 'Fira Code', ui-monospace, 'SF Mono', Menlo, Consolas,
+    monospace;
+
+  /* ── Display ──────────────────────────────────────────────────────── */
+  --text-display-lg: 3.5rem;
+  --text-display-lg--line-height: 1.15;
+  --text-display-lg--font-weight: 700;
+  --text-display-lg--letter-spacing: -0.02em;
+
+  --text-display-md: 2.75rem;
+  --text-display-md--line-height: 1.2;
+  --text-display-md--font-weight: 700;
+  --text-display-md--letter-spacing: -0.015em;
+
+  --text-display-sm: 2.25rem;
+  --text-display-sm--line-height: 1.25;
+  --text-display-sm--font-weight: 600;
+  --text-display-sm--letter-spacing: -0.01em;
+
+  /* ── Headline ─────────────────────────────────────────────────────── */
+  --text-headline-lg: 1.875rem;
+  --text-headline-lg--line-height: 1.3;
+  --text-headline-lg--font-weight: 600;
+  --text-headline-lg--letter-spacing: -0.005em;
+
+  --text-headline-md: 1.5rem;
+  --text-headline-md--line-height: 1.35;
+  --text-headline-md--font-weight: 600;
+  --text-headline-md--letter-spacing: -0.005em;
+
+  --text-headline-sm: 1.25rem;
+  --text-headline-sm--line-height: 1.4;
+  --text-headline-sm--font-weight: 600;
+  --text-headline-sm--letter-spacing: 0em;
+
+  /* ── Title ────────────────────────────────────────────────────────── */
+  --text-title-lg: 1.125rem;
+  --text-title-lg--line-height: 1.4;
+  --text-title-lg--font-weight: 600;
+  --text-title-lg--letter-spacing: 0em;
+
+  --text-title-md: 1rem;
+  --text-title-md--line-height: 1.45;
+  --text-title-md--font-weight: 500;
+  --text-title-md--letter-spacing: 0em;
+
+  --text-title-sm: 0.875rem;
+  --text-title-sm--line-height: 1.45;
+  --text-title-sm--font-weight: 500;
+  --text-title-sm--letter-spacing: 0em;
+
+  /* ── Body ─────────────────────────────────────────────────────────── */
+  --text-body-lg: 1rem;
+  --text-body-lg--line-height: 1.6;
+  --text-body-lg--font-weight: 400;
+  --text-body-lg--letter-spacing: 0em;
+
+  --text-body-md: 0.875rem;
+  --text-body-md--line-height: 1.6;
+  --text-body-md--font-weight: 400;
+  --text-body-md--letter-spacing: 0em;
+
+  --text-body-sm: 0.8125rem;
+  --text-body-sm--line-height: 1.55;
+  --text-body-sm--font-weight: 400;
+  --text-body-sm--letter-spacing: 0em;
+
+  /* ── Label ────────────────────────────────────────────────────────── */
+  --text-label-lg: 0.875rem;
+  --text-label-lg--line-height: 1.4;
+  --text-label-lg--font-weight: 500;
+  --text-label-lg--letter-spacing: 0.005em;
+
+  --text-label-md: 0.8125rem;
+  --text-label-md--line-height: 1.4;
+  --text-label-md--font-weight: 500;
+  --text-label-md--letter-spacing: 0.01em;
+
+  --text-label-sm: 0.75rem;
+  --text-label-sm--line-height: 1.35;
+  --text-label-sm--font-weight: 500;
+  --text-label-sm--letter-spacing: 0.015em;
+
+  /* ── Utility ──────────────────────────────────────────────────────── */
+  --text-caption: 0.6875rem;
+  --text-caption--line-height: 1.4;
+  --text-caption--font-weight: 400;
+  --text-caption--letter-spacing: 0.02em;
+
+  --text-code: 0.875rem;
+  --text-code--line-height: 1.6;
+  --text-code--font-weight: 400;
+  --text-code--letter-spacing: 0em;
+
+  --text-code-sm: 0.8125rem;
+  --text-code-sm--line-height: 1.55;
+  --text-code-sm--font-weight: 400;
+  --text-code-sm--letter-spacing: 0em;
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+ * Force-emit all typography utilities
+ *
+ * 동적으로 className을 구성(`text-${scale}`)하면 Tailwind의 content scan이
+ * 잡지 못해 변수가 출력되지 않습니다. 모든 18 스케일 + 폰트 패밀리 유틸을
+ * 명시적으로 살려둡니다.
+ * ─────────────────────────────────────────────────────────────────────── */
+@source inline("text-display-{lg,md,sm}");
+@source inline("text-headline-{lg,md,sm}");
+@source inline("text-title-{lg,md,sm}");
+@source inline("text-body-{lg,md,sm}");
+@source inline("text-label-{lg,md,sm}");
+@source inline("text-{caption,code,code-sm}");
+@source inline("font-sans font-mono");
