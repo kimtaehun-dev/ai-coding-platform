@@ -25,12 +25,13 @@ src/
 각 레이어 폴더에는 자체 `README.md`가 있고, 규칙과 슬라이스 템플릿이 담겨 있다. **해당 레이어에 코드를 추가하기 전에 그 레이어의 README를 먼저 읽는다.**
 
 ### FSD 공식 이름 ↔ 이 프로젝트 매핑
+
 외부 FSD 자료/예제를 참조할 때 이 표를 적용해서 폴더명을 치환한다.
 
-| FSD 공식 | 이 프로젝트   | rename 이유                          |
-| -------- | ------------- | ------------------------------------ |
-| `app`    | `app-init`    | Next.js `src/app/` 라우트와 충돌      |
-| `pages`  | `views`       | Next.js `pages/` 라우트와 충돌        |
+| FSD 공식 | 이 프로젝트 | rename 이유                      |
+| -------- | ----------- | -------------------------------- |
+| `app`    | `app-init`  | Next.js `src/app/` 라우트와 충돌 |
+| `pages`  | `views`     | Next.js `pages/` 라우트와 충돌   |
 
 다른 레이어(`widgets`, `features`, `entities`, `shared`)는 FSD 공식 이름 그대로 사용한다.
 
@@ -90,28 +91,30 @@ app  →  app-init  →  views  →  widgets  →  features  →  entities  → 
 **`shared/`는 예외**: 슬라이스 개념 없음, `index.ts` 배럴 없음. 깊은 경로로 직접 import (`@/shared/ui/button`).
 
 ### Public API 규칙
+
 외부 코드는 **슬라이스 루트**에서만 import한다.
+
 ```ts
 // ✅ OK
-import { LoginForm, useLogin } from "@/features/auth-login";
+import { LoginForm, useLogin } from '@/features/auth-login'
 
 // ❌ 금지
-import { LoginForm } from "@/features/auth-login/ui/login-form";
+import { LoginForm } from '@/features/auth-login/ui/login-form'
 ```
 
 ---
 
 ## 네이밍 컨벤션
 
-| 대상                  | 컨벤션                              | 예시                              |
-| --------------------- | ----------------------------------- | --------------------------------- |
-| 폴더 / 파일명         | `kebab-case`                        | `auth-login/`, `user-card.tsx`    |
+| 대상                  | 컨벤션                                 | 예시                           |
+| --------------------- | -------------------------------------- | ------------------------------ |
+| 폴더 / 파일명         | `kebab-case`                           | `auth-login/`, `user-card.tsx` |
 | Slice 이름 (features) | `<verb>-<noun>` 또는 `<domain>-<verb>` | `auth-login`, `post-create`    |
-| Slice 이름 (entities) | 단수 명사                           | `user`, `post`, `problem`         |
-| React 컴포넌트        | `PascalCase`                        | `LoginForm`, `UserCard`           |
-| 훅                    | `use<X>`                            | `useLogin`, `useDebounce`         |
-| 타입                  | `PascalCase`                        | `type User`, `interface Post`     |
-| Story 파일            | `<component>.stories.tsx`           | `button.stories.tsx`              |
+| Slice 이름 (entities) | 단수 명사                              | `user`, `post`, `problem`      |
+| React 컴포넌트        | `PascalCase`                           | `LoginForm`, `UserCard`        |
+| 훅                    | `use<X>`                               | `useLogin`, `useDebounce`      |
+| 타입                  | `PascalCase`                           | `type User`, `interface Post`  |
+| Story 파일            | `<component>.stories.tsx`              | `button.stories.tsx`           |
 
 ---
 
@@ -130,28 +133,33 @@ import { LoginForm } from "@/features/auth-login/ui/login-form";
 이 프로젝트는 [steiger](https://github.com/feature-sliced/steiger) + `@feature-sliced/steiger-plugin`으로 FSD 준수 여부를 자동 검증한다. ESLint는 코드 한 줄을, steiger는 **디렉토리 구조와 import 그래프 전체**를 본다.
 
 ### 실행
+
 ```bash
 pnpm fsd:lint     # 1회성 검사
 pnpm fsd:watch    # 파일 변경 감시
 ```
 
 ### 하네스 통합
+
 Claude Code는 **Stop hook**으로 `pnpm fsd:lint`를 자동 실행한다 ([.claude/settings.json](.claude/settings.json) 참조). 위반이 있으면 작업 종료가 차단되고, 위반 내용이 Claude에게 피드백되어 자동 수정을 유도한다.
 
 ### 활성 규칙
+
 [steiger.config.ts](steiger.config.ts)는 `fsd.configs.recommended`를 베이스로 다음 예외만 둔다.
+
 - `src/shared/**` — `fsd/public-api`, `fsd/segments-by-purpose` off (shared는 슬라이스 개념 없음, `types/` 명명 허용)
 - `src/app/**`, `src/app-init/**` — 전체 제외 (Next 라우트 / 전역 셋업)
 - `fsd/insignificant-slice` — `warn`으로 완화 (프로젝트 초반엔 production 참조 없는 slice 다수)
 
 ### 새 slice 추가 시 자주 걸리는 규칙
-| 규칙 | 의미 |
-|---|---|
-| `fsd/public-api` | slice 루트에 `index.ts` 누락 |
+
+| 규칙                         | 의미                                                   |
+| ---------------------------- | ------------------------------------------------------ |
+| `fsd/public-api`             | slice 루트에 `index.ts` 누락                           |
 | `fsd/no-public-api-sidestep` | `features/x/ui/foo`처럼 슬라이스 내부 깊은 경로 import |
-| `fsd/no-segmentless-slices` | slice 바로 아래에 `ui/`/`model/` 없이 파일 둠 |
-| `fsd/forbidden-imports` | 상위 레이어 또는 같은 레이어 다른 slice import |
-| `fsd/inconsistent-naming` | entities 단/복수 섞임 (`user` + `posts`) |
+| `fsd/no-segmentless-slices`  | slice 바로 아래에 `ui/`/`model/` 없이 파일 둠          |
+| `fsd/forbidden-imports`      | 상위 레이어 또는 같은 레이어 다른 slice import         |
+| `fsd/inconsistent-naming`    | entities 단/복수 섞임 (`user` + `posts`)               |
 
 ---
 

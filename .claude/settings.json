@@ -1,9 +1,6 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(pnpm fsd:lint*)",
-      "Bash(pnpm fsd:watch*)"
-    ]
+    "allow": ["Bash(pnpm fsd:lint*)", "Bash(pnpm fsd:watch*)"]
   },
   "hooks": {
     "Stop": [

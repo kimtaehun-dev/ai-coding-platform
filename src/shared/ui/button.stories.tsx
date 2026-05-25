@@ -1,39 +1,55 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
-import { Button } from "./button";
+import { Button } from './button'
 
 const meta = {
-  title: "UI/Button",
+  title: 'UI/Button',
   component: Button,
   args: {
-    children: "Button",
+    children: 'Button',
   },
   argTypes: {
     variant: {
-      control: "select",
-      options: ["default", "outline", "secondary", "ghost", "destructive", "link"],
+      control: 'select',
+      options: [
+        'default',
+        'outline',
+        'secondary',
+        'ghost',
+        'destructive',
+        'link',
+      ],
     },
     size: {
-      control: "select",
-      options: ["default", "xs", "sm", "lg", "icon", "icon-xs", "icon-sm", "icon-lg"],
+      control: 'select',
+      options: [
+        'default',
+        'xs',
+        'sm',
+        'lg',
+        'icon',
+        'icon-xs',
+        'icon-sm',
+        'icon-lg',
+      ],
     },
   },
-} satisfies Meta<typeof Button>;
+} satisfies Meta<typeof Button>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
-export const Default: Story = {};
+export const Default: Story = {}
 
 export const Secondary: Story = {
   args: {
-    variant: "secondary",
+    variant: 'secondary',
   },
-};
+}
 
 export const Outline: Story = {
   args: {
-    variant: "outline",
+    variant: 'outline',
   },
-};
+}
