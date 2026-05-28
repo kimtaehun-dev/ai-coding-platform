@@ -2,11 +2,7 @@ import type { StorybookConfig } from '@storybook/nextjs-vite'
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-  addons: [
-    '@storybook/addon-docs',
-    '@storybook/addon-themes',
-    'storybook-addon-pseudo-states',
-  ],
+  addons: ['@storybook/addon-docs', 'storybook-addon-pseudo-states'],
   framework: {
     name: '@storybook/nextjs-vite',
     options: {},
