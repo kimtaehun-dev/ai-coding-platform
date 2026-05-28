@@ -763,4 +763,12 @@ export const Showcase: Story = {
 export const Playground: Story = {
   parameters: { layout: 'centered' },
   args: { children: 'Button' },
+  render: (args) => (
+    <>
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+      <Button {...args} />
+    </>
+  ),
 }
