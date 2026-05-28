@@ -18,11 +18,18 @@ import { cn } from '@/shared/lib/utils'
  *   - disabled는 색상 대신 `--state-disabled` opacity로 처리
  *   - focus-visible은 `--color-focus-ring`를 box-shadow ring으로 렌더
  *
- * 외부 시그니처 유지: `Button`, `buttonVariants`, `asChild`, cva variants
+ * API:
+ *   - variant : 시각 스타일 (solid / surface / outline / ghost)
+ *   - color   : 의미 색상 (primary / secondary / error) — MD3 네이밍
+ *   - size    : sm / md / lg (+ icon-only 정사각 변형)
+ *
+ *   `surface` variant는 의도적으로 중립(neutral) 처리 — color prop 영향 없음.
+ *   (탭 트리거, 토글 그룹 같은 chrome 용 버튼)
+ *
+ * 외부 시그니처 유지: `Button`, `buttonVariants`, `asChild`
  */
 const buttonVariants = cva(
   // ─ Base ────────────────────────────────────────────────────────────────
-  // 레이아웃 / 전이 / 포커스 / disabled / 아이콘 슬롯
   [
     'group/button relative inline-flex shrink-0 items-center justify-center',
     'whitespace-nowrap select-none align-middle',
@@ -45,53 +52,30 @@ const buttonVariants = cva(
   ].join(' '),
   {
     variants: {
+      // ─ variant — 시각 스타일만 정의 (색상은 compoundVariants에서) ──
       variant: {
-        // 1) solid — primary 채움 (default)
-        solid: [
-          'bg-primary text-on-primary',
-          'hover:bg-primary-hover',
-          'active:bg-primary-active',
-          'shadow-level-1',
-        ].join(' '),
-
-        // 2) surface — surface 채움 + 1px border
-        surface: [
-          'bg-surface text-foreground border-border',
-          'hover:bg-surface-hover',
-          'active:bg-surface-active',
-        ].join(' '),
-
-        // 3) outline — transparent + border (호버 시 surface 오버레이로 인지)
-        outline: [
-          'bg-transparent text-foreground border-border',
-          'hover:bg-surface-hover hover:border-border-strong',
-          'active:bg-surface-active',
-        ].join(' '),
-
-        // 4) ghost — text-only, state-layer overlay (§7 보조 패턴)
-        // base가 transparent라 명시 hover 토큰 대신 currentColor 오버레이 사용
-        ghost: [
-          'bg-transparent text-foreground border-transparent',
-          'hover:bg-[color-mix(in_oklch,currentColor_calc(var(--state-hover)*100%),transparent)]',
-          'active:bg-[color-mix(in_oklch,currentColor_calc(var(--state-pressed)*100%),transparent)]',
-        ].join(' '),
+        solid: 'shadow-level-1',
+        surface: 'bg-surface text-foreground border-border hover:bg-surface-hover active:bg-surface-active',
+        outline: 'bg-transparent',
+        ghost: 'bg-transparent border-transparent',
+      },
+      // ─ color — 의미 색상 (MD3: primary / secondary / error) ─────────
+      color: {
+        primary: '',
+        secondary: '',
+        error: '',
       },
       size: {
         // h28 / label-sm / radius-md
         sm: [
           'h-7 gap-1.5 px-3 text-label-sm rounded-md',
-          "has-data-[icon=inline-start]:pl-2 has-data-[icon=inline-end]:pr-2",
           "[&_svg:not([class*='size-'])]:size-3.5",
         ].join(' '),
         // h36 / label-md / radius-md (default)
-        md: [
-          'h-9 gap-2 px-4 text-label-md rounded-md',
-          "has-data-[icon=inline-start]:pl-3 has-data-[icon=inline-end]:pr-3",
-        ].join(' '),
+        md: 'h-9 gap-2 px-4 text-label-md rounded-md',
         // h44 / label-lg / radius-lg
         lg: [
           'h-11 gap-2 px-5 text-label-lg rounded-lg',
-          "has-data-[icon=inline-start]:pl-4 has-data-[icon=inline-end]:pr-4",
           "[&_svg:not([class*='size-'])]:size-5",
         ].join(' '),
         // icon-only — 정사각
@@ -100,8 +84,80 @@ const buttonVariants = cva(
         'icon-lg': "size-11 rounded-lg p-0 [&_svg:not([class*='size-'])]:size-5",
       },
     },
+    compoundVariants: [
+      // ─ solid × color ─────────────────────────────────────────────────
+      {
+        variant: 'solid',
+        color: 'primary',
+        class: 'bg-primary text-on-primary hover:bg-primary-hover active:bg-primary-active',
+      },
+      {
+        variant: 'solid',
+        color: 'secondary',
+        class: 'bg-secondary text-on-secondary hover:bg-secondary-hover active:bg-secondary-active',
+      },
+      {
+        variant: 'solid',
+        color: 'error',
+        class: 'bg-error text-on-error hover:bg-error-hover active:bg-error-active',
+      },
+
+      // ─ outline × color ───────────────────────────────────────────────
+      // text + border가 의미 색상. hover는 currentColor 오버레이로 자동 틴팅.
+      {
+        variant: 'outline',
+        color: 'primary',
+        class:
+          'text-primary border-primary hover:bg-[color-mix(in_oklch,currentColor_calc(var(--state-hover)*100%),transparent)] active:bg-[color-mix(in_oklch,currentColor_calc(var(--state-pressed)*100%),transparent)]',
+      },
+      {
+        variant: 'outline',
+        color: 'secondary',
+        class:
+          'text-secondary border-secondary hover:bg-[color-mix(in_oklch,currentColor_calc(var(--state-hover)*100%),transparent)] active:bg-[color-mix(in_oklch,currentColor_calc(var(--state-pressed)*100%),transparent)]',
+      },
+      {
+        variant: 'outline',
+        color: 'error',
+        class:
+          'text-error border-error hover:bg-[color-mix(in_oklch,currentColor_calc(var(--state-hover)*100%),transparent)] active:bg-[color-mix(in_oklch,currentColor_calc(var(--state-pressed)*100%),transparent)]',
+      },
+
+      // ─ ghost × color ─────────────────────────────────────────────────
+      // text-only. hover overlay는 currentColor 사용 → color에 따라 자동 변경.
+      {
+        variant: 'ghost',
+        color: 'primary',
+        class:
+          'text-primary hover:bg-[color-mix(in_oklch,currentColor_calc(var(--state-hover)*100%),transparent)] active:bg-[color-mix(in_oklch,currentColor_calc(var(--state-pressed)*100%),transparent)]',
+      },
+      {
+        variant: 'ghost',
+        color: 'secondary',
+        class:
+          'text-secondary hover:bg-[color-mix(in_oklch,currentColor_calc(var(--state-hover)*100%),transparent)] active:bg-[color-mix(in_oklch,currentColor_calc(var(--state-pressed)*100%),transparent)]',
+      },
+      {
+        variant: 'ghost',
+        color: 'error',
+        class:
+          'text-error hover:bg-[color-mix(in_oklch,currentColor_calc(var(--state-hover)*100%),transparent)] active:bg-[color-mix(in_oklch,currentColor_calc(var(--state-pressed)*100%),transparent)]',
+      },
+
+      // ─ surface × * ───────────────────────────────────────────────────
+      // surface는 의도적으로 neutral chrome — color prop을 받아도 무시.
+      // 명시적으로 foreground 텍스트로 고정해 의도를 분명히 한다.
+      {
+        variant: 'surface',
+        class: 'text-foreground',
+      },
+
+      // ─ ghost — default neutral (color 없이도 동작하도록) ─────────────
+      // color 미지정 시 foreground 폴백
+    ],
     defaultVariants: {
       variant: 'solid',
+      color: 'primary',
       size: 'md',
     },
   },
@@ -117,6 +173,7 @@ type ButtonProps = React.ComponentProps<'button'> &
 function Button({
   className,
   variant = 'solid',
+  color = 'primary',
   size = 'md',
   asChild = false,
   loading = false,
@@ -130,11 +187,12 @@ function Button({
     <Comp
       data-slot="button"
       data-variant={variant}
+      data-color={color}
       data-size={size}
       data-loading={loading || undefined}
       aria-busy={loading || undefined}
       disabled={disabled || loading}
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, color, size, className }))}
       {...props}
     >
       <span data-slot="label" className="inline-flex items-center gap-[inherit]">

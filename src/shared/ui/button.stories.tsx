@@ -18,6 +18,7 @@ const meta = {
   args: {
     children: 'Button',
     variant: 'solid',
+    color: 'primary',
     size: 'md',
     disabled: false,
     loading: false,
@@ -26,6 +27,11 @@ const meta = {
     variant: {
       control: 'inline-radio',
       options: ['solid', 'surface', 'outline', 'ghost'],
+    },
+    color: {
+      control: 'inline-radio',
+      options: ['primary', 'secondary', 'error'],
+      description: 'MD3 semantic color. `surface` variant\uC740 \uC758\uB3C4\uC801\uC73C\uB85C \uC911\uB9BD\uC774\uB77C color\uAC00 \uBB34\uC2DC\uB429\uB2C8\uB2E4.',
     },
     size: {
       control: 'select',
@@ -119,28 +125,40 @@ const Icon = {
 const ForceStateStyle = () => (
   <style>{`
     /* hover ─────────────────────────────────────────────── */
-    .force-hover [data-slot="button"][data-variant="solid"] {
+    /* solid \xD7 color */
+    .force-hover [data-slot="button"][data-variant="solid"][data-color="primary"] {
       background-color: var(--color-primary-hover) !important;
     }
+    .force-hover [data-slot="button"][data-variant="solid"][data-color="secondary"] {
+      background-color: var(--color-secondary-hover) !important;
+    }
+    .force-hover [data-slot="button"][data-variant="solid"][data-color="error"] {
+      background-color: var(--color-error-hover) !important;
+    }
+    /* surface (neutral) */
     .force-hover [data-slot="button"][data-variant="surface"] {
       background-color: var(--color-surface-hover) !important;
     }
-    .force-hover [data-slot="button"][data-variant="outline"] {
-      background-color: var(--color-surface-hover) !important;
-      border-color: var(--color-border-strong) !important;
-    }
+    /* outline / ghost \u2014 currentColor overlay (\uC0C9\uC0C1\uAC00 \uC790\uB3D9 \uD2B0\uD305) */
+    .force-hover [data-slot="button"][data-variant="outline"],
     .force-hover [data-slot="button"][data-variant="ghost"] {
       background-color: color-mix(in oklch, currentColor calc(var(--state-hover) * 100%), transparent) !important;
     }
 
     /* pressed ───────────────────────────────────────────── */
-    .force-pressed [data-slot="button"][data-variant="solid"] {
+    .force-pressed [data-slot="button"][data-variant="solid"][data-color="primary"] {
       background-color: var(--color-primary-active) !important;
     }
-    .force-pressed [data-slot="button"][data-variant="surface"],
-    .force-pressed [data-slot="button"][data-variant="outline"] {
+    .force-pressed [data-slot="button"][data-variant="solid"][data-color="secondary"] {
+      background-color: var(--color-secondary-active) !important;
+    }
+    .force-pressed [data-slot="button"][data-variant="solid"][data-color="error"] {
+      background-color: var(--color-error-active) !important;
+    }
+    .force-pressed [data-slot="button"][data-variant="surface"] {
       background-color: var(--color-surface-active) !important;
     }
+    .force-pressed [data-slot="button"][data-variant="outline"],
     .force-pressed [data-slot="button"][data-variant="ghost"] {
       background-color: color-mix(in oklch, currentColor calc(var(--state-pressed) * 100%), transparent) !important;
     }
@@ -167,7 +185,7 @@ const SectionHeader = ({
   title: string
   desc: React.ReactNode
 }) => (
-  <div className="flex items-baseline gap-4 mb-8">
+  <div className="flex items-baseline gap-3 mb-7">
     <span className="font-mono text-caption text-foreground-subtle tracking-wider">
       {num}
     </span>
@@ -191,10 +209,10 @@ const Card = ({
 }) => (
   <div className="rounded-lg border border-border bg-surface-elevated overflow-hidden">
     {title ? (
-      <div className="px-6 py-4 border-b border-border bg-surface">
+      <div className="px-5 py-3 border-b border-border bg-surface">
         <div className="text-label-md text-foreground font-semibold">{title}</div>
         {desc ? (
-          <div className="font-mono text-caption text-foreground-subtle mt-1">
+          <div className="font-mono text-caption text-foreground-subtle mt-0.5">
             {desc}
           </div>
         ) : null}
@@ -227,7 +245,7 @@ const ThemeToggle = () => {
           onClick={() => setTheme(t)}
           aria-pressed={theme === t}
           className={[
-            'font-sans text-label-sm font-medium px-4 py-2 rounded-[5px] cursor-pointer transition-colors outline-none',
+            'font-sans text-label-sm font-medium px-3 py-1.5 rounded-[5px] cursor-pointer transition-colors outline-none',
             theme === t
               ? 'bg-surface-elevated text-foreground shadow-level-1'
               : 'text-foreground-muted hover:text-foreground bg-transparent border-0',
@@ -266,13 +284,13 @@ const VariantSizeMatrix = () => {
         style={{ gridTemplateColumns: '96px repeat(4, 1fr)' }}
       >
         {/* Head */}
-        <div className="px-6 py-4 bg-surface border-b border-border border-r border-border-muted" />
+        <div className="px-4 py-3 bg-surface border-b border-border border-r border-border-muted" />
         {(['sm — h28', 'md — h36 (default)', 'lg — h44', 'icon-only'] as const).map(
           (h, i, arr) => (
             <div
               key={h}
               className={[
-                'px-6 py-4 bg-surface border-b border-border font-mono text-caption text-foreground-subtle flex items-center justify-center whitespace-nowrap',
+                'px-4 py-3 bg-surface border-b border-border font-mono text-caption text-foreground-subtle flex items-center',
                 i < arr.length - 1 ? 'border-r border-border-muted' : '',
               ].join(' ')}
             >
@@ -289,7 +307,7 @@ const VariantSizeMatrix = () => {
             <React.Fragment key={v}>
               <div
                 className={[
-                  'px-6 py-4 bg-surface border-r border-border font-mono text-label-sm text-foreground-muted flex items-center',
+                  'px-4 py-4 bg-surface border-r border-border font-mono text-label-sm text-foreground-muted flex items-center',
                   rowBorder,
                 ].join(' ')}
               >
@@ -299,7 +317,7 @@ const VariantSizeMatrix = () => {
                 <div
                   key={s}
                   className={[
-                    'px-6 py-4 border-r border-border-muted flex items-center justify-center',
+                    'px-4 py-4 border-r border-border-muted flex items-center',
                     rowBorder,
                   ].join(' ')}
                 >
@@ -309,10 +327,9 @@ const VariantSizeMatrix = () => {
                 </div>
               ))}
               <div
-                className={[
-                  'px-6 py-4 flex items-center justify-center gap-4',
-                  rowBorder,
-                ].join(' ')}
+                className={['px-4 py-4 flex items-center gap-2.5', rowBorder].join(
+                  ' ',
+                )}
               >
                 <Button variant={v} size="icon-sm" aria-label={labels[v]}>
                   {iconFor[v]}
@@ -327,6 +344,73 @@ const VariantSizeMatrix = () => {
             </React.Fragment>
           )
         })}
+      </div>
+    </Card>
+  )
+}
+
+const ColorMatrix = () => {
+  const variants = ['solid', 'outline', 'ghost'] as const // surface는 중립
+  const colors = ['primary', 'secondary', 'error'] as const
+  const labelFor: Record<(typeof colors)[number], string> = {
+    primary: 'Submit',
+    secondary: 'Continue',
+    error: 'Delete',
+  }
+
+  return (
+    <Card>
+      <div
+        className="grid"
+        style={{ gridTemplateColumns: '110px repeat(3, 1fr)' }}
+      >
+        <div className="px-3 py-3 bg-surface border-b border-border border-r border-border-muted" />
+        {colors.map((c, i) => (
+          <div
+            key={c}
+            className={[
+              'px-3 py-3 bg-surface border-b border-border font-mono text-caption text-foreground-subtle',
+              i < colors.length - 1 ? 'border-r border-border-muted' : '',
+            ].join(' ')}
+          >
+            {c}
+            {c === 'primary' ? ' (default)' : ''}
+          </div>
+        ))}
+
+        {variants.map((v, vi) => {
+          const isLast = vi === variants.length - 1
+          const rowBorder = isLast ? '' : 'border-b border-border-muted'
+          return (
+            <React.Fragment key={v}>
+              <div
+                className={[
+                  'px-4 py-4 bg-surface border-r border-border font-mono text-label-sm text-foreground-muted flex items-center',
+                  rowBorder,
+                ].join(' ')}
+              >
+                {v}
+              </div>
+              {colors.map((c, ci) => (
+                <div
+                  key={c}
+                  className={[
+                    'px-3 py-4 flex items-center justify-center',
+                    ci < colors.length - 1 ? 'border-r border-border-muted' : '',
+                    rowBorder,
+                  ].join(' ')}
+                >
+                  <Button variant={v} color={c}>
+                    {labelFor[c]}
+                  </Button>
+                </div>
+              ))}
+            </React.Fragment>
+          )
+        })}
+      </div>
+      <div className="px-5 py-3 border-t border-border-muted bg-surface font-mono text-caption text-foreground-subtle">
+        ※ <code>surface</code> variant는 neutral chrome 용이라 color prop의 영향을 받지 않습니다.
       </div>
     </Card>
   )
@@ -352,14 +436,14 @@ const StateMatrix = () => {
     <Card>
       <div
         className="grid"
-        style={{ gridTemplateColumns: '112px repeat(5, 1fr)' }}
+        style={{ gridTemplateColumns: '110px repeat(5, 1fr)' }}
       >
-        <div className="px-6 py-4 bg-surface border-b border-border border-r border-border-muted" />
+        <div className="px-3 py-3 bg-surface border-b border-border border-r border-border-muted" />
         {states.map((s, i) => (
           <div
             key={s.key}
             className={[
-              'px-6 py-4 bg-surface border-b border-border font-mono text-caption text-foreground-subtle',
+              'px-3 py-3 bg-surface border-b border-border font-mono text-caption text-foreground-subtle',
               i < states.length - 1 ? 'border-r border-border-muted' : '',
             ].join(' ')}
           >
@@ -374,7 +458,7 @@ const StateMatrix = () => {
             <React.Fragment key={v}>
               <div
                 className={[
-                  'px-6 py-4 bg-surface border-r border-border font-mono text-label-sm text-foreground-muted flex items-center',
+                  'px-4 py-4 bg-surface border-r border-border font-mono text-label-sm text-foreground-muted flex items-center',
                   rowBorder,
                 ].join(' ')}
               >
@@ -387,7 +471,7 @@ const StateMatrix = () => {
                   <div
                     key={s.key}
                     className={[
-                      'px-6 py-4 flex items-center justify-center',
+                      'px-3 py-4 flex items-center justify-center',
                       border,
                       rowBorder,
                       s.cls,
@@ -408,9 +492,9 @@ const StateMatrix = () => {
 }
 
 const SlotShowcase = () => (
-  <div className="grid grid-cols-2 gap-6">
+  <div className="grid grid-cols-2 gap-4">
     <Card title="Leading icon + label" desc="아이콘이 라벨 앞에 위치">
-      <div className="px-6 py-6 flex flex-wrap gap-4 items-center">
+      <div className="px-5 py-6 flex flex-wrap gap-3 items-center">
         <Button variant="solid">
           <Icon.Plus />
           New problem
@@ -427,7 +511,7 @@ const SlotShowcase = () => (
     </Card>
 
     <Card title="Label + trailing icon" desc="아이콘이 라벨 뒤에 위치">
-      <div className="px-6 py-6 flex flex-wrap gap-4 items-center">
+      <div className="px-5 py-6 flex flex-wrap gap-3 items-center">
         <Button variant="solid">
           Continue
           <Icon.ChevronRight />
@@ -444,7 +528,7 @@ const SlotShowcase = () => (
     </Card>
 
     <Card title="Icon-only" desc="aria-label 필수">
-      <div className="px-6 py-6 flex flex-wrap gap-4 items-center">
+      <div className="px-5 py-6 flex flex-wrap gap-3 items-center">
         <Button variant="solid" size="icon-md" aria-label="Save">
           <Icon.Save />
         </Button>
@@ -461,7 +545,7 @@ const SlotShowcase = () => (
     </Card>
 
     <Card title="Loading" desc='data-loading="true" — 너비 유지, 라벨 숨김'>
-      <div className="px-6 py-6 flex flex-wrap gap-4 items-center">
+      <div className="px-5 py-6 flex flex-wrap gap-3 items-center">
         <Button variant="solid" loading>
           Submit
         </Button>
@@ -523,11 +607,11 @@ const TokenMap = () => {
           <div
             key={c.title}
             className={[
-              'px-6 py-4',
+              'px-5 py-4',
               i < cols.length - 1 ? 'border-r border-border-muted' : '',
             ].join(' ')}
           >
-            <h4 className="font-mono text-caption text-foreground-subtle tracking-wider m-0 mb-2 font-medium">
+            <h4 className="font-mono text-caption text-foreground-subtle tracking-wider m-0 mb-2.5 font-medium">
               {c.title}
             </h4>
             {c.items.map((it) => (
@@ -554,19 +638,30 @@ const TokenMap = () => {
 }
 
 const InContextSample = () => (
-  <Card title="문제 제출 — Action bar" desc="primary action + outline + ghost cancel">
-    <div className="px-6 py-6 flex items-center justify-end gap-4">
-      <Button variant="ghost">취소</Button>
-      <Button variant="outline">
-        <Icon.Save />
-        임시 저장
-      </Button>
-      <Button variant="solid">
-        제출하기
-        <Icon.ChevronRight />
-      </Button>
-    </div>
-  </Card>
+  <div className="grid grid-cols-2 gap-4">
+    <Card title="문제 제출 — Action bar" desc="primary CTA + outline secondary + ghost cancel">
+      <div className="px-5 py-5 flex items-center justify-end gap-3">
+        <Button variant="ghost">취소</Button>
+        <Button variant="outline">
+          <Icon.Save />
+          임시 저장
+        </Button>
+        <Button variant="solid">
+          제출하기
+          <Icon.ChevronRight />
+        </Button>
+      </div>
+    </Card>
+
+    <Card title="문제 삭제 — Confirm dialog" desc='destructive action — color="error"'>
+      <div className="px-5 py-5 flex items-center justify-end gap-3">
+        <Button variant="ghost">취소</Button>
+        <Button variant="solid" color="error">
+          영구 삭제
+        </Button>
+      </div>
+    </Card>
+  </div>
 )
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -582,8 +677,8 @@ export const Showcase: Story = {
   render: () => (
     <>
       <ForceStateStyle />
-      <div className="min-h-screen bg-background text-foreground font-sans flex justify-center">
-        <div className="w-full max-w-[1120px] px-20 pt-16 pb-20">
+      <div className="min-h-screen bg-background text-foreground font-sans">
+        <div className="max-w-[1280px] mx-auto px-12 pt-14 pb-24">
           <header className="flex items-start justify-between gap-6 pb-8 border-b border-border mb-12">
             <div>
               <h1 className="text-headline-lg text-foreground m-0">Button</h1>
@@ -591,11 +686,11 @@ export const Showcase: Story = {
                 Design-token 기반 베이스 버튼. 4 variants × 3 sizes (+ icon-only),
                 5 states. semantic 토큰만 사용 · OKLCH only · light/dark 자동 대응.
               </p>
-              <div className="flex gap-2 mt-4">
+              <div className="flex gap-2 mt-3.5">
                 {['src/shared/ui/button.tsx', 'cva', 'WCAG AA+'].map((c) => (
                   <code
                     key={c}
-                    className="font-mono text-caption bg-surface border border-border text-foreground-muted px-2 py-1 rounded-sm"
+                    className="font-mono text-caption bg-surface border border-border text-foreground-muted px-2 py-0.5 rounded-sm"
                   >
                     {c}
                   </code>
@@ -605,7 +700,7 @@ export const Showcase: Story = {
             <ThemeToggle />
           </header>
 
-          <section className="mb-20" style={{ marginBottom: 80 }}>
+          <section className="mb-18" style={{ marginBottom: 72 }}>
             <SectionHeader
               num="01"
               title="Variants × Sizes"
@@ -614,27 +709,36 @@ export const Showcase: Story = {
             <VariantSizeMatrix />
           </section>
 
-          <section style={{ marginBottom: 80 }}>
+          <section style={{ marginBottom: 72 }}>
             <SectionHeader
               num="02"
+              title="Colors"
+              desc='MD3 semantic 색상 — primary (default) / secondary / destructive="error". surface variant는 의도적으로 중립.'
+            />
+            <ColorMatrix />
+          </section>
+
+          <section style={{ marginBottom: 72 }}>
+            <SectionHeader
+              num="03"
               title="Interaction States"
               desc="design-token.md §6 매핑 그대로. opacity modifier 없이 명시 토큰(primary-hover, primary-active) 사용."
             />
             <StateMatrix />
           </section>
 
-          <section style={{ marginBottom: 80 }}>
+          <section style={{ marginBottom: 72 }}>
             <SectionHeader
-              num="03"
+              num="04"
               title="Slots"
               desc="leading-icon + label / label + trailing-icon / icon-only / loading spinner."
             />
             <SlotShowcase />
           </section>
 
-          <section style={{ marginBottom: 80 }}>
+          <section style={{ marginBottom: 72 }}>
             <SectionHeader
-              num="04"
+              num="05"
               title="Token Map"
               desc="각 variant가 참조하는 semantic 토큰. 모두 light/dark 자동 매핑."
             />
@@ -643,7 +747,7 @@ export const Showcase: Story = {
 
           <section>
             <SectionHeader
-              num="05"
+              num="06"
               title="In context"
               desc="실제 액션 바 예시. 호버 · 포커스 · 눌림 모두 인터랙티브."
             />
@@ -657,6 +761,6 @@ export const Showcase: Story = {
 
 /** Controls 패널로 props 자유 조합 (디버깅 / 빠른 확인용). */
 export const Playground: Story = {
-  args: { children: 'Button' },
   parameters: { layout: 'centered' },
+  args: { children: 'Button' },
 }
