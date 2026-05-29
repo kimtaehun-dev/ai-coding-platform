@@ -31,7 +31,8 @@ const meta = {
     color: {
       control: 'inline-radio',
       options: ['primary', 'secondary', 'error'],
-      description: 'MD3 semantic color. `surface` variant\uC740 \uC758\uB3C4\uC801\uC73C\uB85C \uC911\uB9BD\uC774\uB77C color\uAC00 \uBB34\uC2DC\uB429\uB2C8\uB2E4.',
+      description:
+        'MD3 semantic color. `surface` variant\uC740 \uC758\uB3C4\uC801\uC73C\uB85C \uC911\uB9BD\uC774\uB77C color\uAC00 \uBB34\uC2DC\uB429\uB2C8\uB2E4.',
     },
     size: {
       control: 'select',
@@ -52,54 +53,108 @@ type Story = StoryObj<typeof meta>
  * ──────────────────────────────────────────────────────────────────────── */
 const Icon = {
   Plus: () => (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+    >
       <path d="M8 3v10M3 8h10" />
     </svg>
   ),
   ChevronRight: () => (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+    >
       <path d="M6 3l5 5-5 5" />
     </svg>
   ),
   ChevronDown: () => (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    >
       <path d="M4 6l4 4 4-4" />
     </svg>
   ),
   ChevronLeft: () => (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    >
       <path d="M10 3L4 8l6 5" />
     </svg>
   ),
   Search: () => (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    >
       <circle cx="7" cy="7" r="4" />
       <path d="M10 10l3 3" strokeLinecap="round" />
     </svg>
   ),
   Filter: () => (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    >
       <path d="M2.5 4h11M5 8h6M7 12h2" />
     </svg>
   ),
   Settings: () => (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    >
       <circle cx="8" cy="8" r="2" />
       <path d="M8 1.5v1.7M8 12.8v1.7M14.5 8h-1.7M3.2 8H1.5M12.6 3.4l-1.2 1.2M4.6 11.4l-1.2 1.2M12.6 12.6l-1.2-1.2M4.6 4.6L3.4 3.4" />
     </svg>
   ),
   Save: () => (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round">
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinejoin="round"
+    >
       <path d="M3 3h8l2 2v8H3V3zM5 3v4h6V3M5 13v-4h6v4" />
     </svg>
   ),
   Edit: () => (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    >
       <path d="M11 2l3 3-8 8H3v-3l8-8z" />
     </svg>
   ),
   Close: () => (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+    >
       <path d="M4 4l8 8M12 4l-8 8" />
     </svg>
   ),
@@ -111,7 +166,12 @@ const Icon = {
     </svg>
   ),
   Sort: () => (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    >
       <path d="M4 6l4-3 4 3M4 10l4 3 4-3" />
     </svg>
   ),
@@ -210,7 +270,9 @@ const Card = ({
   <div className="rounded-lg border border-border bg-surface-elevated overflow-hidden">
     {title ? (
       <div className="px-5 py-3 border-b border-border bg-surface">
-        <div className="text-label-md text-foreground font-semibold">{title}</div>
+        <div className="text-label-md text-foreground font-semibold">
+          {title}
+        </div>
         {desc ? (
           <div className="font-mono text-caption text-foreground-subtle mt-0.5">
             {desc}
@@ -228,7 +290,9 @@ const Card = ({
 const ThemeToggle = () => {
   const [theme, setTheme] = React.useState<'light' | 'dark'>(() => {
     if (typeof document === 'undefined') return 'light'
-    return document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+    return document.documentElement.classList.contains('dark')
+      ? 'dark'
+      : 'light'
   })
   React.useEffect(() => {
     const root = document.documentElement
@@ -285,19 +349,19 @@ const VariantSizeMatrix = () => {
       >
         {/* Head */}
         <div className="px-4 py-3 bg-surface border-b border-border border-r border-border-muted" />
-        {(['sm — h28', 'md — h36 (default)', 'lg — h44', 'icon-only'] as const).map(
-          (h, i, arr) => (
-            <div
-              key={h}
-              className={[
-                'px-4 py-3 bg-surface border-b border-border font-mono text-caption text-foreground-subtle flex items-center',
-                i < arr.length - 1 ? 'border-r border-border-muted' : '',
-              ].join(' ')}
-            >
-              {h}
-            </div>
-          ),
-        )}
+        {(
+          ['sm — h28', 'md — h36 (default)', 'lg — h44', 'icon-only'] as const
+        ).map((h, i, arr) => (
+          <div
+            key={h}
+            className={[
+              'px-4 py-3 bg-surface border-b border-border font-mono text-caption text-foreground-subtle flex items-center',
+              i < arr.length - 1 ? 'border-r border-border-muted' : '',
+            ].join(' ')}
+          >
+            {h}
+          </div>
+        ))}
 
         {/* Rows */}
         {variants.map((v, vi) => {
@@ -327,9 +391,10 @@ const VariantSizeMatrix = () => {
                 </div>
               ))}
               <div
-                className={['px-4 py-4 flex items-center gap-2.5', rowBorder].join(
-                  ' ',
-                )}
+                className={[
+                  'px-4 py-4 flex items-center gap-2.5',
+                  rowBorder,
+                ].join(' ')}
               >
                 <Button variant={v} size="icon-sm" aria-label={labels[v]}>
                   {iconFor[v]}
@@ -396,7 +461,9 @@ const ColorMatrix = () => {
                   key={c}
                   className={[
                     'px-3 py-4 flex items-center justify-center',
-                    ci < colors.length - 1 ? 'border-r border-border-muted' : '',
+                    ci < colors.length - 1
+                      ? 'border-r border-border-muted'
+                      : '',
                     rowBorder,
                   ].join(' ')}
                 >
@@ -410,7 +477,8 @@ const ColorMatrix = () => {
         })}
       </div>
       <div className="px-5 py-3 border-t border-border-muted bg-surface font-mono text-caption text-foreground-subtle">
-        ※ <code>surface</code> variant는 neutral chrome 용이라 color prop의 영향을 받지 않습니다.
+        ※ <code>surface</code> variant는 neutral chrome 용이라 color prop의
+        영향을 받지 않습니다.
       </div>
     </Card>
   )
@@ -466,7 +534,8 @@ const StateMatrix = () => {
               </div>
               {states.map((s, si) => {
                 const isDisabled = s.key === 'disabled'
-                const border = si < states.length - 1 ? 'border-r border-border-muted' : ''
+                const border =
+                  si < states.length - 1 ? 'border-r border-border-muted' : ''
                 return (
                   <div
                     key={s.key}
@@ -568,7 +637,10 @@ const TokenMap = () => {
         { label: 'bg → primary', color: 'var(--color-primary)' },
         { label: 'fg → on-primary', color: 'var(--color-on-primary)' },
         { label: 'hover → primary-hover', color: 'var(--color-primary-hover)' },
-        { label: 'active → primary-active', color: 'var(--color-primary-active)' },
+        {
+          label: 'active → primary-active',
+          color: 'var(--color-primary-active)',
+        },
       ],
     },
     {
@@ -586,7 +658,10 @@ const TokenMap = () => {
         { label: 'bg → transparent', color: 'transparent' },
         { label: 'fg → foreground', color: 'var(--color-foreground)' },
         { label: 'border → border', color: 'var(--color-border)' },
-        { label: 'hover-border → border-strong', color: 'var(--color-border-strong)' },
+        {
+          label: 'hover-border → border-strong',
+          color: 'var(--color-border-strong)',
+        },
       ],
     },
     {
@@ -639,7 +714,10 @@ const TokenMap = () => {
 
 const InContextSample = () => (
   <div className="grid grid-cols-2 gap-4">
-    <Card title="문제 제출 — Action bar" desc="primary CTA + outline secondary + ghost cancel">
+    <Card
+      title="문제 제출 — Action bar"
+      desc="primary CTA + outline secondary + ghost cancel"
+    >
       <div className="px-5 py-5 flex items-center justify-end gap-3">
         <Button variant="ghost">취소</Button>
         <Button variant="outline">
@@ -653,7 +731,10 @@ const InContextSample = () => (
       </div>
     </Card>
 
-    <Card title="문제 삭제 — Confirm dialog" desc='destructive action — color="error"'>
+    <Card
+      title="문제 삭제 — Confirm dialog"
+      desc='destructive action — color="error"'
+    >
       <div className="px-5 py-5 flex items-center justify-end gap-3">
         <Button variant="ghost">취소</Button>
         <Button variant="solid" color="error">
@@ -683,8 +764,9 @@ export const Showcase: Story = {
             <div>
               <h1 className="text-headline-lg text-foreground m-0">Button</h1>
               <p className="text-body-md text-foreground-muted mt-2 max-w-[56ch]">
-                Design-token 기반 베이스 버튼. 4 variants × 3 sizes (+ icon-only),
-                5 states. semantic 토큰만 사용 · OKLCH only · light/dark 자동 대응.
+                Design-token 기반 베이스 버튼. 4 variants × 3 sizes (+
+                icon-only), 5 states. semantic 토큰만 사용 · OKLCH only ·
+                light/dark 자동 대응.
               </p>
               <div className="flex gap-2 mt-3.5">
                 {['src/shared/ui/button.tsx', 'cva', 'WCAG AA+'].map((c) => (

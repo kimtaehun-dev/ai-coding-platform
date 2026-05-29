@@ -55,7 +55,8 @@ const buttonVariants = cva(
       // ─ variant — 시각 스타일만 정의 (색상은 compoundVariants에서) ──
       variant: {
         solid: 'shadow-level-1',
-        surface: 'bg-surface text-foreground border-border hover:bg-surface-hover active:bg-surface-active',
+        surface:
+          'bg-surface text-foreground border-border hover:bg-surface-hover active:bg-surface-active',
         outline: 'bg-transparent',
         ghost: 'bg-transparent border-transparent',
       },
@@ -79,9 +80,11 @@ const buttonVariants = cva(
           "[&_svg:not([class*='size-'])]:size-5",
         ].join(' '),
         // icon-only — 정사각
-        'icon-sm': "size-7 rounded-md p-0 [&_svg:not([class*='size-'])]:size-3.5",
+        'icon-sm':
+          "size-7 rounded-md p-0 [&_svg:not([class*='size-'])]:size-3.5",
         'icon-md': 'size-9 rounded-md p-0',
-        'icon-lg': "size-11 rounded-lg p-0 [&_svg:not([class*='size-'])]:size-5",
+        'icon-lg':
+          "size-11 rounded-lg p-0 [&_svg:not([class*='size-'])]:size-5",
       },
     },
     compoundVariants: [
@@ -89,17 +92,20 @@ const buttonVariants = cva(
       {
         variant: 'solid',
         color: 'primary',
-        class: 'bg-primary text-on-primary hover:bg-primary-hover active:bg-primary-active',
+        class:
+          'bg-primary text-on-primary hover:bg-primary-hover active:bg-primary-active',
       },
       {
         variant: 'solid',
         color: 'secondary',
-        class: 'bg-secondary text-on-secondary hover:bg-secondary-hover active:bg-secondary-active',
+        class:
+          'bg-secondary text-on-secondary hover:bg-secondary-hover active:bg-secondary-active',
       },
       {
         variant: 'solid',
         color: 'error',
-        class: 'bg-error text-on-error hover:bg-error-hover active:bg-error-active',
+        class:
+          'bg-error text-on-error hover:bg-error-hover active:bg-error-active',
       },
 
       // ─ outline × color ───────────────────────────────────────────────
@@ -195,7 +201,10 @@ function Button({
       className={cn(buttonVariants({ variant, color, size, className }))}
       {...props}
     >
-      <span data-slot="label" className="inline-flex items-center gap-[inherit]">
+      <span
+        data-slot="label"
+        className="inline-flex items-center gap-[inherit]"
+      >
         {children}
       </span>
       {loading ? (
