@@ -115,6 +115,11 @@
 @source inline(
   "bg-{error,on-error,success,on-success,warning,on-warning,info,on-info}"
 );
+/* on-* 컬러 토큰은 text-* 로 자주 쓰이므로 함께 force-emit (content scan 누락 방어) */
+@source inline(
+  "text-{on-primary,on-secondary,on-error,on-success,on-warning,on-info}"
+);
+@source inline("text-{foreground,foreground-muted,foreground-subtle,foreground-inverse}");
 /* 인터랙션 상태 (hover/active) + focus ring */
 @source inline(
   "bg-{primary-hover,primary-active,secondary-hover,secondary-active,error-hover,error-active}"

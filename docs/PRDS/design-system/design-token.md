@@ -26,7 +26,7 @@
 
 - [/docs/design-system/design-token.md](/docs/design-system/design-token.md) — **시스템 정의·파일 레이아웃·다크 모드 메커니즘**
 - [/docs/PRDS/design-system/index.md](/docs/PRDS/design-system/index.md) — 디자인 철학
-- [/CLAUDE.md](/CLAUDE.md) — FSD 구조 (app-init 위치 확인용)
+- [/AGENTS.md](/AGENTS.md) — FSD 구조 (app-init 위치 확인용)
 
 위 문서의 규칙은 이 브리프에 다시 적지 않아도 그대로 적용된다. 이 브리프는 그 위에 **생성 절차·시드·검증**만 추가한다.
 
