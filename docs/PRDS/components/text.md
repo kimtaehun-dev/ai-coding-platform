@@ -8,7 +8,7 @@
 ## ⚑ Procedure (클로드 디자인이 반드시 이 순서로)
 
 1. **이 PRD 전체를 먼저 읽는다.** §Pre-decided + §Decided는 모두 확정값이므로 의뢰자에게 묻지 않는다.
-2. **§Pre-read의 하네스 문서를 모두 읽는다.** 거기 정의된 공통 룰(FSD 위치, 토큰 규칙, 코드 산출 기대치, 컴포넌트 의뢰서 템플릿)은 이 PRD에 다시 적지 않아도 그대로 적용된다.
+2. **§Pre-read의 하네스 문서를 모두 읽는다.** 거기 정의된 공통 룰(FSD 위치, 토큰 규칙, 코드 산출 기대치, 컴포넌트 의뢰서 템플릿)이 이 PRD의 토대.
 3. §Deliverables에 따라 산출.
 4. §Post-handoff Checklist를 모두 통과한 뒤 종료.
 
@@ -16,12 +16,12 @@
 
 ## ⚑ Pre-read (필독)
 
-작업 시작 전 아래를 모두 읽는다. 위 문서의 규칙은 이 PRD에 다시 적지 않아도 그대로 적용된다.
+작업 시작 전 아래를 모두 읽는다.
 
 - [/docs/agents/claude-design.md](/docs/agents/claude-design.md) — 공통 하네스 (FSD 위치 §1, base 인벤토리 §2, 코드 산출 기대치 §3)
 - [/docs/agents/claude-design-component.md](/docs/agents/claude-design-component.md) — 컴포넌트 의뢰 절차/템플릿
 - [/docs/design-system/index.md](/docs/design-system/index.md) — 디자인 철학
-- [/docs/design-system/design-token.md](/docs/design-system/design-token.md) — 토큰 정의·불변 제약 (§6 Typography 18 스케일, §9 제약)
+- [/docs/design-system/design-token.md](/docs/design-system/design-token.md) — 토큰 정의·불변 제약 (§Token Categories Typography, §시스템 불변 제약)
 - [/src/app-init/styles/tokens/typography.css](/src/app-init/styles/tokens/typography.css) — 실제 토큰 변수 (18 스케일 × 5필드, font-sans/mono)
 
 ---
@@ -32,7 +32,7 @@
 
 - 시각 스케일(hierarchy/size)과 semantic element(h1~h6, p, span) **분리**
 - foreground 계열 색만 노출, 강조색은 부모가 주입
-- design-token.md §9 제약 100% 준수 (semantic 토큰만, hex/rgb 금지, light/dark 자동)
+- design-token.md §시스템 불변 제약 100% 준수 (semantic 토큰만, hex/rgb 금지, light/dark 자동)
 
 ---
 
