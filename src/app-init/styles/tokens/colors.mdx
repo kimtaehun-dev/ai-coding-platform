@@ -5,13 +5,13 @@ import { Meta } from '@storybook/addon-docs/blocks'
 {/* ───────────────────────────────────────────────────────────────────────
  * Foundations / 색상 (Colors)
  * 토큰 정의:
- *   - palette.css   : 프리미티브 팔레트 (5 × 13 = 65 토큰)
+ *   - palette.css   : 프리미티브 팔레트 (7 × 13 = 91 토큰 · success는 primary 승계, 별도 palette 없음)
  *   - semantic.css  : 의미 토큰 (light 기본) + shadcn alias
  *   - dark.css      : 의미 토큰의 dark 오버라이드
  * ─────────────────────────────────────────────────────────────────────── */}
 
 export const PALETTE_STEPS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100]
-export const PALETTES = ['primary', 'secondary', 'neutral', 'neutral-variant', 'error']
+export const PALETTES = ['primary', 'secondary', 'neutral', 'neutral-variant', 'error', 'warning', 'info']
 
 export const SEMANTIC_GROUPS = [
   { title: 'Surface (배경)', description: '페이지와 컴포넌트의 배경면. 깊이감은 surface → elevated 순서.',
@@ -48,17 +48,17 @@ export const SEMANTIC_GROUPS = [
     tokens: [
       { name: 'error',      usage: '에러, 파괴적 액션',  primitive: { light: 'error-40',  dark: 'error-70' } },
       { name: 'on-error',   usage: 'error 위 텍스트',    primitive: { light: 'error-100', dark: 'error-10' } },
-      { name: 'success',    usage: '성공 상태',          primitive: null },
-      { name: 'on-success', usage: 'success 위 텍스트',  primitive: null },
-      { name: 'warning',    usage: '주의 상태',          primitive: null },
-      { name: 'on-warning', usage: 'warning 위 텍스트',  primitive: null },
-      { name: 'info',       usage: '정보성 상태',        primitive: { light: 'primary-50',  dark: 'primary-60' } },
-      { name: 'on-info',    usage: 'info 위 텍스트',     primitive: { light: 'primary-100', dark: 'primary-10' } },
+      { name: 'success',    usage: '성공 상태 (primary 승계)',  primitive: { light: 'primary-40',  dark: 'primary-70' } },
+      { name: 'on-success', usage: 'success 위 텍스트',  primitive: { light: 'primary-100', dark: 'primary-10' } },
+      { name: 'warning',    usage: '주의 상태',          primitive: { light: 'warning-40',  dark: 'warning-70' } },
+      { name: 'on-warning', usage: 'warning 위 텍스트',  primitive: { light: 'warning-100', dark: 'warning-10' } },
+      { name: 'info',       usage: '정보성 상태',        primitive: { light: 'info-40',  dark: 'info-60' } },
+      { name: 'on-info',    usage: 'info 위 텍스트',     primitive: { light: 'info-100', dark: 'info-10' } },
     ] },
 ]
 
 {/* `*` = palette stop 사이 보간값 (neutral-15, neutral-25 등 정의된 stop 외).
-    primitive: null = 5개 팔레트 밖의 커스텀 hue (success/warning) 또는 단색. */}
+    success 는 별도 palette 없이 primary palette 를 승계 (디자인 결정). */}
 
 export const SHADCN_ALIASES = [
   { alias: 'primary-foreground',     mapsTo: 'on-primary' },
@@ -171,7 +171,7 @@ export function ColorsDoc() {
         <SectionHeader
           eyebrow="섹션 2"
           title="프리미티브 팔레트 (Primitive)"
-          description="⚠️ 컴포넌트에서 직접 사용 금지. 의미 토큰을 통해서만 참조합니다. 5 팔레트 × 13 톤. Lightness는 모든 팔레트가 공유하며, chroma는 step 40에서 피크 후 양 끝으로 0에 수렴."
+          description="⚠️ 컴포넌트에서 직접 사용 금지. 의미 토큰을 통해서만 참조합니다. 7 팔레트 × 13 톤 (success는 별도 palette 없이 primary를 승계). Lightness는 모든 팔레트가 공유하며, chroma는 step 40에서 피크 후 양 끝으로 0에 수렴."
         />
         {PALETTES.map((p) => (
           <div key={p} style={{ marginBottom: 24 }}>

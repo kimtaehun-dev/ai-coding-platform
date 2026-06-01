@@ -13,6 +13,9 @@ export const INTERACTIVE_GROUPS = [
   { name: 'primary',   description: '기본 CTA 버튼, 가장 강한 액션',         baseToken: 'primary',   onToken: 'on-primary' },
   { name: 'secondary', description: '보조 액션, primary 다음으로 강조',      baseToken: 'secondary', onToken: 'on-secondary' },
   { name: 'error',     description: '파괴적 액션 (삭제, 취소 등), shadcn destructive', baseToken: 'error', onToken: 'on-error' },
+  { name: 'success',   description: '성공 상태 — primary palette 승계 (별도 hue 없음)', baseToken: 'success', onToken: 'on-success' },
+  { name: 'warning',   description: '주의 상태 (amber, h=85)',                baseToken: 'warning',   onToken: 'on-warning' },
+  { name: 'info',      description: '정보성 상태 (sky blue, h=220)',           baseToken: 'info',      onToken: 'on-info' },
 ]
 
 export const STATES = [
@@ -143,7 +146,7 @@ export function InteractionsDoc() {
         <SectionHeader
           eyebrow="섹션 1"
           title="인터랙션 상태 컬러"
-          description="버튼/링크 등 클릭 가능한 요소가 사용자 입력에 반응할 때 사용하는 색상. 모든 인터랙티브 컬러(primary, secondary, error)는 base / hover / active 3단계로 정의됩니다. Light는 어둡게, Dark는 밝게 변화."
+          description="버튼/링크 등 클릭 가능한 요소가 사용자 입력에 반응할 때 사용하는 색상. 모든 인터랙티브 컬러(primary, secondary, error, success, warning, info)는 base / hover / active 3단계로 정의됩니다. success는 primary 변형을 그대로 승계합니다. Light는 어둡게, Dark는 밝게 변화."
         />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {INTERACTIVE_GROUPS.map((g) => (
