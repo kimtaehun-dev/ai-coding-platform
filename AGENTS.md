@@ -172,6 +172,17 @@ Claude Code는 **Stop hook**으로 `pnpm fsd:lint`를 자동 실행한다 ([.cla
 
 ---
 
+## 에이전트 운영 로그 (필수)
+
+작업 중 다음 둘 중 하나가 발생하면 **즉시 `docs/agents/logs/`에 사건 파일 1건 생성**한다. 선택 아님.
+
+1. **harness-conflict** — PRD 간 / 하네스 문서 간 / 하네스↔코드 컨벤션 간 충돌로 작업이 막히거나 임의 결정이 필요해짐.
+2. **clarification-question** — PRD `§Open ⬜`로 미리 정의되지 않은 질문을 의뢰자에게 던지게 됨.
+
+파일명·템플릿·작성 룰은 [docs/agents/logs/README.md](docs/agents/logs/README.md) 참조. Claude Code, Codex 모두 이 룰을 따른다 (Claude Design은 자체 하네스 `docs/agents/claude-design.md §0`에 같은 룰).
+
+---
+
 ## 참고 파일 (비자명한 항목만)
 
 - [tsconfig.json](tsconfig.json) — 개발/IDE/Storybook용 (stories 포함)
