@@ -434,7 +434,7 @@ const ColorMatrix = () => {
     <Card>
       <div
         className="grid"
-        style={{ gridTemplateColumns: '110px repeat(3, 1fr)' }}
+        style={{ gridTemplateColumns: '110px repeat(4, 1fr)' }}
       >
         <div className="px-3 py-3 bg-surface border-b border-b-border border-r border-r-border-muted" />
         {colors.map((c, i) => (
