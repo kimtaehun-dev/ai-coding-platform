@@ -1,25 +1,10 @@
 # Design Token System — 사용 가이드
 
-> 이 문서는 **앞으로 컴포넌트를 만들거나 수정할 때마다 참조**하는 시스템 정의다.
-> 토큰의 구조, 위치, 사용법, 다크 모드 동작을 모두 다룬다.
-> 토큰 값 자체의 **생성 절차**는 `/docs/PRDS/design-system/design-token.md`를 참조.
+이 문서는 디자인 토큰 시스템의 **shape**(어떤 카테고리·룰·패턴이 존재하는가)를 정의한다. 구체 값·개수·경로·도구 선택 등 instance 콘텐츠는 별도 PRD에서 다룬다.
 
 ---
 
-## 1. Purpose
-
-이 시스템은 모든 UI 컴포넌트가 따르는 **단일 시각 진실 소스(single source of visual truth)**다.
-
-목적:
-
-- shadcn 컴포넌트와 자체 컴포넌트가 같은 토큰 사용
-- light / dark 모드 자동 전환
-- WCAG 접근성 보장
-- 디자인 변경 시 토큰 한 곳만 수정하면 전체 반영
-
----
-
-## 2. Architecture
+## Architecture
 
 ```
 Primitive Palette
@@ -35,11 +20,15 @@ Component Tokens (필요 시)
 | **Semantic**  | 컴포넌트가 사용하는 **유일한** 레이어 | `primary`, `background` |
 | **Component** | 컴포넌트 전용 변형 필요 시만          | `button-primary-bg`     |
 
-**규칙: 컴포넌트는 semantic 이름만 사용한다.** primitive를 직접 호출하면 PR에서 거부된다.
+**규칙 1**: 컴포넌트는 semantic 이름만 사용한다. primitive를 직접 호출하면 PR에서 거부된다.
+
+**규칙 2**: semantic은 반드시 primitive palette의 한 stop을 `var()`로 참조한다. literal oklch 값을 `semantic.css` / `dark.css`에 직접 박지 않는다. 새 hue가 필요하면 palette에 13 stop 풀 ramp를 먼저 정의한 후 alias한다.
+
+**규칙 3**: PRD는 이 하네스를 의존할 수 있지만, 핵심 제약을 "하네스 참조"로 생략할 수 없다. PRD는 자기충족이어야 하며, 의존 항목 중 핵심 룰은 PRD에도 짧게 재진술한다.
 
 ---
 
-## 3. 색공간
+## 색공간
 
 모든 색은 **OKLCH**로 표기한다.
 
@@ -52,346 +41,173 @@ Component Tokens (필요 시)
 --color-primary: rgb(46 91 255);
 ```
 
-이유:
-
-- Tailwind v4 표준
-- 광색역(P3) 호환
-- lightness 축이 시각적 균일성에 가까움 → tonal scale 자연스러움
-
 ---
 
-## 4. File Layout
+## Token Categories (Shape)
 
-```
-src/app/globals.css                       # Next/Tailwind 진입점. 모든 토큰 파일 @import
-src/app-init/styles/tokens/
-├── palette.css                           # @theme — primitive palette 5종 × 13단계
-├── semantic.css                          # @theme — light mode semantic 토큰
-├── dark.css                              # @layer base { .dark { ... } } — dark 오버라이드
-├── typography.css                        # @theme — 18개 typography 스케일
-├── spacing.css                           # @theme — spacing + radius
-└── elevation.css                         # @theme — shadow + z-index
-```
+각 카테고리의 **구조**를 정의한다. 실제 토큰 이름·값·개수는 PRD가 결정.
 
-### `globals.css` 상단에 manifest 코멘트 (에이전트 진입점)
+### Color
 
-```css
-/* ───────────────────────────────────────────
- * Design Token Manifest
- * 토큰 추가 시 카테고리에 맞는 파일에 작성.
- * - palette.css     : primitive color palette
- * - semantic.css    : semantic tokens (light defaults)
- * - dark.css        : dark mode overrides
- * - typography.css  : type scale
- * - spacing.css     : spacing + radius
- * - elevation.css   : shadow + z-index
- * ─────────────────────────────────────────── */
-@import 'tailwindcss';
-@import '../app-init/styles/tokens/palette.css';
-@import '../app-init/styles/tokens/semantic.css';
-@import '../app-init/styles/tokens/typography.css';
-@import '../app-init/styles/tokens/spacing.css';
-@import '../app-init/styles/tokens/elevation.css';
-@import '../app-init/styles/tokens/dark.css';
-```
+**Primitive Palette**: tonal ramp의 집합. 각 ramp은 lightness 단계를 공유하며 chroma는 중간 톤 근처 peak에서 양 끝으로 점감.
 
----
+활성 palette 카테고리는 PRD가 선택. 일반 분류:
 
-## 5. Dark Mode 메커니즘
+- **Brand**: 제품 정체성 — primary, secondary 등
+- **구조**: 표면/텍스트/보더 — neutral, neutral-variant 등
+- **Feedback**: 상태 알림 — error, success, warning, info 등
 
-### 전략: class-based (`<html class="dark">`)
+**Semantic Tokens**: primitive를 참조하는 의미 토큰. 다음 그룹으로 묶임:
 
-- 라이브러리: **`next-themes`** 권장 (시스템 prefers + 수동 토글 모두 지원)
-- Tailwind v4의 `@custom-variant`로 `dark:` 유틸리티 활성화
+| 그룹                   | 의미                                |
+| ---------------------- | ----------------------------------- |
+| **Surface**            | 배경 표면 계층                      |
+| **Foreground**         | 텍스트 · 아이콘                     |
+| **Border**             | 경계 · 구분                         |
+| **Interactive**        | 사용자가 액션 트리거하는 색         |
+| **Feedback**           | 상태 표현 색                        |
+| **Interaction States** | hover/active/focus/disabled 변형    |
 
-### `semantic.css` 형태
+각 그룹의 구체 토큰 이름·primitive 매핑은 PRD가 결정.
 
-```css
-/* light mode가 기본값 */
-@theme {
-  --color-background: oklch(0.99 0.005 260);
-  --color-foreground: oklch(0.12 0.01 260);
-  --color-primary: oklch(0.45 0.18 260);
-  /* ... */
-}
-```
+### Typography
 
-### `dark.css` 형태
+각 typography 스케일은 5 필드로 구성:
 
-```css
-@custom-variant dark (&:where(.dark, .dark *));
+- `font-size`
+- `line-height`
+- `font-weight`
+- `letter-spacing`
+- `font-family` (예: sans / mono)
 
-@layer base {
-  .dark {
-    --color-background: oklch(0.12 0.01 260);
-    --color-foreground: oklch(0.95 0.005 260);
-    --color-primary: oklch(0.75 0.14 260);
-    /* ... */
-  }
-}
-```
-
-→ `@theme`은 변수 정의 + Tailwind 유틸리티 자동 생성, `.dark`는 변수 값만 덮어씀.
-→ 결과: `bg-primary` 한 클래스가 라이트/다크에서 자동으로 다른 색 사용.
-
----
-
-## 6. Token Categories (전체 목록)
-
-### Primitive Palette (65개)
-
-- `primary-{0..100}` × 13단계
-- `secondary-{0..100}` × 13단계
-- `neutral-{0..100}` × 13단계
-- `neutral-variant-{0..100}` × 13단계
-- `error-{0..100}` × 13단계
-
-### Semantic — Surface
-
-`background` · `surface` · `surface-muted` · `surface-elevated` · `surface-overlay`
-
-### Semantic — Text (Foreground)
-
-`foreground` · `foreground-muted` · `foreground-subtle` · `foreground-inverse`
-
-### Semantic — Border
-
-`border` · `border-muted` · `border-strong` · `outline` · `outline-variant`
-
-### Semantic — Interactive
-
-`primary` · `on-primary` · `secondary` · `on-secondary`
-
-### Semantic — Feedback
-
-`error` · `on-error` · `success` · `on-success` · `warning` · `on-warning` · `info` · `on-info`
-
-### Semantic — Interaction States
-
-클릭 가능한 요소가 사용자 입력에 반응할 때 사용. `:hover`, `:active`(눌림) 의사 클래스에 1:1 매핑한다.
-
-| 카테고리       | 토큰                                                      | 비고                                       |
-| -------------- | --------------------------------------------------------- | ------------------------------------------ |
-| primary 상태   | `primary-hover` · `primary-active`                        | base = `primary`                           |
-| secondary 상태 | `secondary-hover` · `secondary-active`                    | base = `secondary`                         |
-| error 상태     | `error-hover` · `error-active`                            | shadcn `destructive`와도 호환              |
-| surface 상태   | `surface-hover` · `surface-active`                        | 클릭 가능한 카드 / 리스트 행 / 메뉴 아이템 |
-| focus          | `focus-ring`                                              | 반투명(alpha 0.4). box-shadow ring으로 적용 |
-| disabled       | `--state-disabled` (= 0.38)                               | 색상 대신 opacity로 처리                    |
-
-**모드별 변화 방향**
-
-- light → 더 어둡게 (L 감소): 눌리는 느낌
-- dark → 더 밝게 (L 증가): 올라오는 느낌
-
-두 모드 모두 "더 강해진" 인지 효과로 통일된다.
-
-### State Layer Opacity (Material 스타일 오버레이)
-
-위의 명시적 토큰으로 커버되지 않는 케이스(예: ghost 버튼)에서 같은 hue를 옅게 덮어쓰기 위한 alpha 값.
-
-`--state-hover (0.08)` · `--state-pressed (0.12)` · `--state-focus (0.12)` · `--state-selected (0.16)` · `--state-disabled (0.38)`
-
-> ⚠️ 신규 버튼/링크 컴포넌트는 위의 명시 토큰(`primary-hover` 등)을 우선 사용한다. State layer는 보조용.
-
-### Typography (18개)
-
-- Display: `display-lg/md/sm`
-- Headline: `headline-lg/md/sm`
-- Title: `title-lg/md/sm`
-- Body: `body-lg/md/sm`
-- Label: `label-lg/md/sm`
-- Utility: `caption` · `code` · `code-sm`
-
-### Shape
-
-`radius-xs/sm/md/lg/xl/full`
+스케일 그룹(Display/Headline/Title/Body/Label/Utility 등)과 개수는 PRD가 선택.
 
 ### Spacing
 
-`space-1/2/4/6/8/10/12/16/20`
+선형 스케일. 4px 또는 8px 그리드 기반 권장. 개수·이름·값은 PRD가 결정.
+
+### Shape (Radius)
+
+코너 반경 스케일. `radius-full`(원형) 포함 권장. 개수·값은 PRD가 결정.
 
 ### Elevation
 
-`level-0/1/2/3/4/5`
+다층 shadow 레시피. 각 level은 ambient(넓고 옅음) + key(좁고 진함) 두 그림자의 조합. dark 모드는 alpha 강화(통상 4~5배). level 개수·구체 recipe는 PRD가 결정.
 
 ### Z-index
 
-`z-base/sticky/dropdown/popover/modal/toast/tooltip`
+레이어 계층. 일반 권장 순서: base < sticky < dropdown < popover < modal < toast < tooltip. 구체 토큰명·값은 PRD가 결정.
 
 ---
 
-## 7. 컴포넌트에서 사용하기
+## Naming Patterns
 
-### Tailwind 유틸리티 (자동 생성)
+토큰 이름을 구성하는 패턴. 시스템 일관성 확보가 목적.
 
-`@theme`에 정의된 `--color-*`, `--text-*`, `--spacing-*` 등은 Tailwind가 유틸리티 클래스로 자동 변환한다.
+### `on-<color>` — 컬러 표면 위 텍스트/아이콘
 
-| CSS 변수             | 생성되는 유틸리티                                              |
-| -------------------- | -------------------------------------------------------------- |
-| `--color-primary`    | `bg-primary`, `text-primary`, `border-primary`, `ring-primary` |
-| `--color-foreground` | `text-foreground`, `bg-foreground`                             |
-| `--text-headline-lg` | `text-headline-lg`                                             |
-| `--spacing-4`        | `p-4`, `m-4`, `gap-4`, `space-x-4`                             |
-| `--radius-md`        | `rounded-md`                                                   |
-| `--shadow-level-2`   | `shadow-level-2`                                               |
+해당 컬러 위에 올라가는 contrasted 컬러. 대비 검증 필수.
 
-### shadcn 호환
+예: `on-primary` = primary 표면 위 텍스트 색
 
-shadcn 컴포넌트는 이미 `bg-primary`, `text-primary-foreground`, `border-border` 등을 사용한다.
-이 시스템은 **동일한 변수명**으로 정의하므로 별도 변환 없이 자동 호환된다.
+### `<base>-<state>` — 상태 변형
 
-> 예외: shadcn은 `text-primary-foreground`라는 이름을 쓰지만 이 시스템은 `on-primary`다.
-> `semantic.css`에서 `--color-primary-foreground: var(--color-on-primary);` 같은 alias로 양쪽 모두 지원.
+base 토큰의 상태 변형. 표준 state: `hover`, `active`, `focus`, `disabled`, `selected`.
 
-### 인터랙션 상태 적용 (표준 패턴)
+예: `primary-hover`, `surface-active`
 
-기본 인터랙티브 컬러는 **명시적 상태 토큰**(`-hover`, `-active`)으로 처리한다. `color-mix`나 opacity modifier(`/80`)는 사용하지 않는다.
+명시 상태 토큰을 우선 사용. `color-mix`, opacity modifier(`/80`)는 보조.
 
-```tsx
-// 권장: 명시적 상태 토큰
-<button
-  className="
-    bg-primary           text-on-primary
-    hover:bg-primary-hover
-    active:bg-primary-active
-    focus-visible:outline-none
-    focus-visible:ring-3 focus-visible:ring-focus-ring
-    disabled:opacity-[var(--state-disabled)]
-    rounded-md px-4 py-2
-  "
->
-  Submit
-</button>
-```
+### `<token> / <alpha>` — Alpha alias
 
-**클릭 가능한 카드**:
+기존 토큰에 alpha를 추가해 반투명 의미 토큰 생성.
 
-```tsx
-<div className="bg-surface hover:bg-surface-hover active:bg-surface-active rounded-lg p-4 cursor-pointer">
-  ...
-</div>
-```
+예: `surface-overlay = neutral-99 / 0.85`
 
-**Focus Ring**: `--color-focus-ring`은 alpha 0.4의 반투명 색이라 box-shadow ring으로 그릴 때 가장 잘 보인다.
+### Off-ramp step — 비표준 stop
 
-```css
-.btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--color-focus-ring);
-}
-```
-
-**State Layer (보조 패턴)**: ghost / outlined 버튼처럼 base 컬러가 transparent인 경우, 명시 토큰 대신 `--state-*` opacity를 사용한 오버레이로 처리한다.
-
-```tsx
-// ghost 버튼 — base가 transparent라 명시 토큰이 없음
-<button className="hover:bg-[color-mix(in_oklch,currentColor_8%,transparent)]">
-  Ghost
-</button>
-```
+13-step 외 중간 톤이 필요하면 step 번호를 13-step 표 밖으로 확장 가능 (예: `neutral-15`). 보간 식은 인접 stop의 평균. PRD에 보간 식 + 정당화 명시 필수.
 
 ---
 
-## 8. 사용 예시
+## Mode Strategy
 
-### ✅ 올바름
+PRD가 어떤 mode를 지원하는지 선언: `light only` / `dark only` / `both`.
 
-```tsx
-// 인터랙티브 버튼 — 명시적 상태 토큰 사용
-<button className="
-  bg-primary text-on-primary
-  hover:bg-primary-hover active:bg-primary-active
-  focus-visible:ring-3 focus-visible:ring-focus-ring
-  disabled:opacity-[var(--state-disabled)]
-  px-4 py-2 rounded-md shadow-level-1
-">
-  Submit
-</button>
+`both` 선택 시: 모든 semantic 토큰은 light + dark 두 값 보유. 변수 이름 동일, 값만 교체.
 
-// 정적 카드
-<div className="bg-surface border border-border rounded-lg p-6">
-  <h3 className="text-headline-md text-foreground">Card title</h3>
-  <p className="text-body-md text-foreground-muted">Description</p>
-</div>
+**구현 전략 (선택)**:
 
-// 클릭 가능한 카드 — surface 상태 토큰 사용
-<div className="
-  bg-surface hover:bg-surface-hover active:bg-surface-active
-  border border-border rounded-lg p-6 cursor-pointer
-">
-  ...
-</div>
-```
+| 전략             | 트리거                              | 트레이드오프                                                |
+| ---------------- | ----------------------------------- | ----------------------------------------------------------- |
+| **class-based**  | `<html class="dark">` 토글          | 사용자 토글 가능. 시스템 prefers + 수동 조합 가능. 라이브러리 필요 |
+| **media query**  | `prefers-color-scheme: dark`        | 자동, 라이브러리 불필요. 사용자 수동 토글 불가              |
 
-### ❌ 금지
-
-```tsx
-{
-  /* primitive 직접 사용 */
-}
-;<button className="bg-primary-40 text-primary-100">…</button>
-
-{
-  /* hex/rgb 인라인 */
-}
-;<div style={{ background: '#2E5BFF' }}>…</div>
-
-{
-  /* 시멘틱 이름에 숫자 */
-}
-;<div className="text-foreground-2">…</div>
-
-{
-  /* opacity modifier로 hover 표현 — 명시적 상태 토큰 사용할 것 */
-}
-;<button className="bg-primary hover:bg-primary/80">…</button>
-
-{
-  /* 임의의 hex로 focus ring 색상 지정 */
-}
-;<button className="focus-visible:ring-[#3b82f6]">…</button>
-```
+PRD가 전략 + (필요 시) 라이브러리 선택.
 
 ---
 
-## 9. 시스템 불변 제약
+## State System
+
+### Naming model
+
+base 컬러 상태 변형은 `<base>-hover`, `<base>-active`. focus는 별도 `focus-ring`(반투명) 토큰. disabled는 opacity 토큰(`--state-disabled`).
+
+### L 변화 방향
+
+모드별 방향은 반대지만 인지 효과는 동일.
+
+| Mode  | hover/active 방향 | 인지 효과   |
+| ----- | ----------------- | ----------- |
+| Light | L 감소 (어두워짐) | 눌리는 느낌 |
+| Dark  | L 증가 (밝아짐)   | 올라오는 느낌 |
+
+### State Layer Opacity (보조)
+
+명시 상태 토큰으로 커버 안 되는 케이스(ghost/outlined 버튼 등)에선 alpha 오버레이 사용 (Material 스타일).
+
+`--state-hover`, `--state-pressed`, `--state-focus`, `--state-selected`, `--state-disabled` — alpha 값만 정의, color 없음. 구체 수치는 PRD가 결정.
+
+### 적용 우선순위
+
+신규 컴포넌트는 명시 토큰(`primary-hover` 등) 우선. State Layer는 base가 transparent인 경우 보조용.
+
+---
+
+## 시스템 불변 제약
 
 - **OKLCH only** — 모든 색 표기
-- **WCAG AA 이상** — 모든 (foreground, background) 페어
-  - 본문 ≥ 4.5:1
-  - 큰 글자 / UI 요소 ≥ 3:1
-  - 본문 강조 ≥ 7:1 (권장)
-- **light/dark pair** — 모든 semantic 토큰 (자동: `@theme` 기본 + `.dark` 오버라이드)
-- **No primitive in components** — `primary-40`을 컴포넌트가 직접 참조 금지
+- **Contrast tier 선언 필수** — PRD가 WCAG tier(AA/AAA) 선언. 모든 (foreground, background) 페어가 그 tier 통과
+  - 본문 ≥ 4.5:1 (AA) · 큰 글자/UI ≥ 3:1 (AA) · 본문 강조 ≥ 7:1 (AAA)
+- **No primitive in components** — primitive 토큰을 컴포넌트가 직접 참조 금지
+- **Semantic = primitive alias only** — 모든 semantic 색 토큰은 palette stop을 `var()`로 참조. literal oklch는 palette에만 존재
+- **Palette before alias** — palette에 없는 hue가 필요하면 풀 ramp를 palette에 먼저 정의한 후 semantic alias 작성
+- **Mode pair coverage** — `both` 모드 선택 시 모든 semantic 토큰은 light + dark 두 값 보유
 - **No numbers in semantic names** — semantic 이름에 숫자 금지
-- **reduced-motion** — `prefers-reduced-motion: reduce` 사용자에게는 모션 토큰 적용 안 함
+- **Off-ramp justification** — 비표준 stop 도입 시 PRD에 보간 식 + 사용 정당화 기록
+- **Palette cardinality is PRD-owned** — palette 수 · stop 수 · 토큰 개수는 PRD가 결정. 하네스에 하드코딩 금지
+- **reduced-motion** — `prefers-reduced-motion: reduce` 사용자에게 모션 토큰 적용 안 함
 
 ---
 
-## 10. 검증
+## 검증
 
-### 시각 검증
+### Visual verification
 
-- Storybook **Foundations** 그룹에 모든 카테고리가 시각화되어 있다 (`src/app-init/styles/tokens/*.mdx`)
-  - `개요 (Overview)` — 시스템 전체 구조
-  - `색상 (Colors)` — 의미 토큰 light/dark + 프리미티브 팔레트 + shadcn alias
-  - `타이포그래피 (Typography)` — 18 스케일 + 폰트 패밀리 + Weight
-  - `스페이싱 & 반경 (Spacing & Radius)` — spacing + radius + 8px 그리드 예시
-  - `Elevation & Z-index` — shadow level light/dark + z-index 계층
-  - `인터랙션 (Interactions)` — 상태 컬러(base/hover/active) + focus ring + disabled + state layer
-- 모든 스와치는 런타임에 CSS 변수를 읽어 렌더 → 토큰 값 변경 시 자동 동기화
+각 토큰 카테고리는 런타임 시각 검증 표면을 가져야 한다. 검증 표면은 CSS 변수를 직접 읽어 렌더 → 토큰 값 변경 시 자동 동기화. 도구 선택은 PRD.
 
-### 코드 검증
+### Contrast verification
 
-- `pnpm lint` — ESLint 규칙
-- `pnpm fsd:lint` — Steiger 아키텍처 검증
-- 새 토큰 추가 시 manifest 코멘트 갱신
+토큰 추가/변경 시:
 
-### 대비 검증
+- (foreground, background) 페어 전체 대비 표 작성
+- PRD가 선언한 contrast tier 통과 명시
+- 결과는 토큰 CSS 파일 상단 주석에 표 형태로 기록
 
-- 토큰 생성 시 `/docs/PRDS/design-system/design-token.md`의 self-verification checklist를 통과해야 함
-- 결과는 `semantic.css` 또는 `dark.css` 상단 코멘트에 표기
+### Code verification
+
+- 린트 통과 (ESLint + 아키텍처 린터)
+- 빌드 통과 (build + visual verification 빌드)
 
 ---
 

@@ -1,48 +1,5 @@
 # Runtime Motion System
 
-## Overview
-
-이 문서는 Runtime Design System을 정의한다.
-
-이 시스템은 Framer Motion 기반 interaction architecture를 정의한다.
-
-motion은 decoration이 아니라 UX 시스템의 일부다.
-
----
-
-## Principles
-
-### Purposeful
-
-모든 motion은 목적이 있어야 한다.
-
-예:
-
-- feedback
-- state transition
-- hierarchy communication
-- navigation continuity
-
----
-
-### Responsive
-
-interaction은 즉각적으로 반응해야 한다.
-
----
-
-### Consistent
-
-컴포넌트마다 제각각 motion 사용 금지
-
----
-
-### Non-Distracting
-
-과한 animation 금지
-
----
-
 # 1. Motion Tokens
 
 TypeScript runtime token으로 관리
@@ -244,11 +201,7 @@ preset 재사용 우선
 
 ## Rule 3
 
-inline animate 남발 금지
-
-금지:
-
-random transition object
+inline transition object 작성 금지. preset 또는 motion token 조합으로만 합성한다.
 
 ---
 
