@@ -1,17 +1,16 @@
 # Component Spec: Text — 타이포그래피 wrapper 의뢰서
 
-> 이 문서는 **클로드 디자인의 진입점**이다. 사용자가 _"docs/PRDS/design-system/component-text.md 따라 의뢰"_ 한 줄만 보내면, 아래 §Procedure 순서로 진행한다.
+> 이 문서는 **클로드 디자인의 진입점**이다. 사용자가 _"docs/PRDS/components/text.md 따라 의뢰"_ 한 줄만 보내면, 아래 §Procedure 순서로 진행한다.
 > 산출물: `src/shared/ui/text.tsx` + `text.stories.tsx` + claude-design.md §2 인벤토리 한 블록 append.
 
 ---
 
 ## ⚑ Procedure (클로드 디자인이 반드시 이 순서로)
 
-1. **이 PRD 전체를 먼저 읽는다.** §Pre-decided는 PRD가 결정한 답이므로 의뢰자에게 묻지 않는다.
+1. **이 PRD 전체를 먼저 읽는다.** §Pre-decided + §Decided는 모두 확정값이므로 의뢰자에게 묻지 않는다.
 2. **§Pre-read의 하네스 문서를 모두 읽는다.** 거기 정의된 공통 룰(FSD 위치, 토큰 규칙, 코드 산출 기대치, 컴포넌트 의뢰서 템플릿)은 이 PRD에 다시 적지 않아도 그대로 적용된다.
-3. **§Open ⬜를 묶음별로 사용자에게 질문**해 채운다. 임의 추정 금지.
-4. 모든 ⬜가 채워지면 §Deliverables에 따라 산출.
-5. §Post-handoff Checklist를 모두 통과한 뒤 종료.
+3. §Deliverables에 따라 산출.
+4. §Post-handoff Checklist를 모두 통과한 뒤 종료.
 
 ---
 
@@ -53,7 +52,7 @@ size:      'lg' | 'md' | 'sm'                                    // 3
 ```
 
 - 5 × 3 = 메인 15 스케일을 커버
-- utility 그룹(caption, code, code-sm)의 노출 방식은 §Open ⬜ 1에서 확정
+- utility 그룹(caption, code, code-sm)의 노출 방식은 §Decided 1 참조 (hierarchy 확장)
 
 ### 2. color prop — foreground 계열만 + inherit
 
@@ -90,12 +89,12 @@ as?: ElementType  // default 'p'
   ```
 - **자동 매핑 금지**: hierarchy='display' → `<h1>` 강제 같은 거 절대 하지 않는다. 페이지 outline은 소비자가 `as`로 명시 책임.
 
-> **⚠ 일관성 메모**: 현재 [Button](/src/shared/ui/button.tsx)은 `asChild`(Radix Slot)을 쓰고 있다. 본 PRD가 `as` prop을 채택함에 따라 Button → `as` 마이그레이션이 별도 작업으로 필요. Text 작업 범위에는 포함하지 않는다.
+> **Button 패턴 차이 (의도된 결정)**: [Button](/src/shared/ui/button.tsx)은 `asChild`(Radix Slot)을 그대로 유지한다. Button은 Link로 자주 감싸는 패턴(`<Button asChild><Link/></Button>`)이라 `asChild`가 적합하고, Text는 렌더 태그만 바꾸는 게 99%라 `as`가 적합. 두 패턴이 코드베이스에 공존하는 건 컴포넌트 성격상 자연스러운 선택.
 
 ### 4. font family 자동 매핑
 
 - 기본: `font-sans` (Pretendard Variable — 한영 혼용 최적)
-- **code 스케일은 자동 `font-mono` 강제** (§Open ⬜ 1에서 code를 노출하는 경우)
+- **code 스케일은 자동 `font-mono` 강제** (§Decided 1에서 code 노출 확정)
 - 소비자가 family를 prop으로 오버라이드 불가 — 디자인 시스템 일관성 우선
 
 ### 5. truncate 정책
@@ -122,28 +121,27 @@ truncate?: boolean | 1 | 2 | 3
 
 ---
 
-## ⚑ Open ⬜ (의뢰자에게 물을 것 — 묶음별, 임의 추정 금지)
+## ⚑ Decided (의뢰자 응답 — 확정값)
 
-### 묶음 1. utility 스케일(caption, code, code-sm) 노출 방식
+### 묶음 1. utility 스케일(caption, code, code-sm) 노출 방식 → **(a) hierarchy 확장**
 
-⬜ 셋 중 선택:
+`hierarchy` enum에 `'caption' | 'code'`를 추가하여 단일 컴포넌트 유지.
 
-- **(a) hierarchy 확장** — `hierarchy: 'caption' | 'code'` 추가, `code`는 `size: 'md' | 'sm'`. `caption`은 size 무시. 단일 컴포넌트 유지. **(이 PRD 권장)**
-- **(b) 별도 컴포넌트 분리** — `<Caption>`, `<Code>` primitive 분리 생성. 의미가 또렷해지지만 인벤토리·import가 늘어남.
-- **(c) variant override** — `<Text variant="caption">`이 hierarchy/size를 무시. 두 가지 API가 한 컴포넌트에 공존 → 권장 안 함.
+```ts
+hierarchy: 'display' | 'headline' | 'title' | 'body' | 'label'  // main 15 (× lg/md/sm)
+        | 'caption' | 'code'                                     // utility
+```
 
-### 묶음 2. weight override 허용 여부
+- `caption`: `size` 무시 (토큰이 size 분기 없음 — `--text-caption` 단일).
+- `code`: `size: 'md' | 'sm'` 만 허용 (lg 토큰 없음). `font-mono` 자동 강제 — §Pre-decided §4 적용.
 
-⬜ 둘 중 선택:
+### 묶음 2. weight override 허용 여부 → **(a) 허용 안 함**
 
-- **(a) 허용 안 함** — 스케일에 내장된 weight(typography.css `--text-*--font-weight`)만 사용. 디자인 시스템 일관성 우선. **(이 PRD 권장)**
-- **(b) `weight: 'regular' | 'medium' | 'semibold' | 'bold'` prop 추가** — 같은 hierarchy 안에서 강조 변형 가능. 자유도↑ 일관성↓.
+스케일에 내장된 weight(typography.css `--text-*--font-weight`)만 사용. `weight` prop 노출하지 않음. 강조가 필요하면 hierarchy를 바꾸거나(`body` → `title`) 부모 컴포넌트가 색·배경으로 처리.
 
-### 묶음 3. 참고 컴포넌트
+### 묶음 3. 참고 컴포넌트 → **없음, 알아서 제안**
 
-⬜ 답:
-
-- shadcn Typography? Radix Themes Text? MUI Typography? "없음, 알아서 제안"?
+특정 참고 라이브러리 지정 없음. §Pre-decided + §Decided + design-token.md + typography.css 만 보고 클로드 디자인이 자체 제안.
 
 ---
 
@@ -156,7 +154,7 @@ claude-design.md §3 "코드 산출 기대치"를 그대로 적용한 위에 다
 - `src/shared/ui/text.tsx`
 - `src/shared/ui/text.stories.tsx`
 
-### 시그니처 (Pre-decided + Open ⬜ 확정 후 최종)
+### 시그니처 (Pre-decided + Decided 반영 후 최종)
 
 ```ts
 type TextProps = React.ComponentProps<'p'> &
@@ -178,7 +176,7 @@ export type { TextProps }
 | Polymorphic (as)      | h1~h6, p, span, div 각 1케이스                            |
 | Truncate              | 1/2/3 케이스 + 짧은 본문(잘리지 않음) 1케이스             |
 | **한영 혼용**          | "안녕하세요 Hello World 2026" 같은 본문 1케이스 **필수**  |
-| Code 스케일            | mono family 강제 확인 케이스 (§Open ⬜ 1이 a 채택 시)     |
+| Code 스케일            | mono family 강제 확인 케이스 (lg 없음, md/sm만)           |
 
 ---
 
@@ -194,12 +192,12 @@ export type { TextProps }
   ```markdown
   ### `@/shared/ui/Text`
   - 외부 시그니처: `Text`, `textVariants`, `as` prop
-  - hierarchy: display · headline · title · body · label (+ utility는 §Open ⬜ 1 결정 반영)
+  - hierarchy: display · headline · title · body · label · caption · code
   - size: lg · md · sm
   - color: default · muted · subtle · inverse · inherit
   - polymorphic: `as` prop (default 'p')
   - 토큰: typography.css 18 스케일 + foreground 계열만
-  - 자세한 제약: 파일 상단 docblock + docs/PRDS/design-system/component-text.md
+  - 자세한 제약: 파일 상단 docblock + docs/PRDS/components/text.md
   ```
 
 ---
