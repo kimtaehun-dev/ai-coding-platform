@@ -46,7 +46,7 @@
 - variant: `solid`(default) · `surface` · `outline` · `ghost`
 - size: `sm` · `md`(default) · `lg`
 - 토큰: semantic 토큰만 사용 (primitive 직접 호출 금지)
-- 자세한 제약: 파일 상단 docblock + `docs/design-system/design-token.md` §6 §9
+- 자세한 제약: 파일 상단 docblock + `docs/design-system/design-token.md` §Token Categories · §시스템 불변 제약
 
 (이후 컴포넌트 추가 시 동일 양식으로 한 블록 append)
 
@@ -67,6 +67,30 @@
 - **RSC default**. `'use client'`는 실제 인터랙션 필요한 컴포넌트에만.
 - 다크/라이트 모두 토큰 변수로 자동 처리 (자체 미디어 쿼리 작성 금지).
 - **네이밍**: 컴포넌트 파일 = `PascalCase` (예: `HeroSection.tsx`, `HeroSection.stories.tsx`), 그 외 파일 = `kebab-case` (예: `use-toggle.ts`, `utils.ts`), 폴더 = `kebab-case` (예: `hero-section/`), React 컴포넌트 이름 = `PascalCase` (예: `HeroSection`), 훅 = `use<X>`.
+
+### 토큰 적용 패턴
+
+- **Tailwind 자동 매핑**: `@theme` 정의된 `--color-*`, `--text-*`, `--spacing-*`, `--radius-*`, `--shadow-*`는 같은 이름의 유틸리티(`bg-primary`, `text-headline-lg`, `p-4`, `rounded-md`, `shadow-level-2`)로 자동 변환됨.
+- **인터랙션 상태**: 명시 토큰 사용 — `hover:bg-primary-hover`, `active:bg-primary-active`. opacity modifier(`/80`)나 `color-mix`로 hover 표현 금지.
+- **Focus ring**: `focus-visible:ring-3 focus-visible:ring-focus-ring` 패턴. 임의 hex로 ring 색 지정 금지.
+- **Ghost / outlined 변형** (base가 transparent): 명시 상태 토큰 대신 `--state-hover` opacity 오버레이 사용 (예: `bg-[color-mix(in_oklch,currentColor_8%,transparent)]`).
+- **금지 패턴**: `bg-primary-40` ❌ (primitive 직접) · `style={{background:'#2E5BFF'}}` ❌ (hex 인라인) · `text-foreground-2` ❌ (semantic에 숫자) · `hover:bg-primary/80` ❌ (opacity로 hover) · `focus-visible:ring-[#3b82f6]` ❌ (임의 hex).
+
+```tsx
+// 표준 인터랙티브 버튼
+<button
+  className="
+    bg-primary text-on-primary
+    hover:bg-primary-hover active:bg-primary-active
+    focus-visible:outline-none
+    focus-visible:ring-3 focus-visible:ring-focus-ring
+    disabled:opacity-(--state-disabled)
+    px-4 py-2 rounded-md
+  "
+>
+  Submit
+</button>
+```
 
 ---
 
