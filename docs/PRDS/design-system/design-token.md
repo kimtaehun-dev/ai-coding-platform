@@ -17,9 +17,9 @@
 
 ## ⚑ Goal
 
-8개 palette × 13단계의 primitive에서 다음을 모두 도출한다.
+7개 palette × 13단계의 primitive에서 다음을 모두 도출한다.
 
-1. **104개 OKLCH primitive 색** (8 palette × 13 단계)
+1. **91개 OKLCH primitive 색** (7 palette × 13 단계). success는 별도 palette 없이 primary palette를 승계
 2. light + dark 두 벌의 semantic 토큰 (interaction state 변형 포함)
 3. typography 18개 스케일 (각 5필드)
 4. shape · spacing · elevation · z-index 토큰
@@ -29,13 +29,13 @@
 
 ## ⚑ Project Decisions (instance 선언)
 
-| 항목                            | 이 프로젝트 선택                              | 근거 (한 줄)                                         |
-| ------------------------------- | --------------------------------------------- | ---------------------------------------------------- |
-| **Mode**                        | `both` (light + dark)                         | 사용자 시스템 prefers + 수동 토글 모두 지원          |
-| **Mode strategy**               | class-based (`<html class="dark">`)           | 사용자 토글 가능. 라이브러리: **`next-themes`**      |
-| **Contrast tier**               | WCAG **AA**                                   | 본문 ≥ 4.5:1, 큰 글자/UI ≥ 3:1, 본문 강조 ≥ 7:1 (권장) |
-| **Palette cardinality**         | **8 palette × 13 stop = 104 primitive 토큰**  | Brand(primary, secondary) + 구조(neutral, neutral-variant) + Feedback(error, success, warning, info) |
-| **External library compat**     | **shadcn/ui**                                 | alias 레이어로 변수명 매핑 (§External Library Aliases) |
+| 항목                        | 이 프로젝트 선택                             | 근거 (한 줄)                                                                                         |
+| --------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **Mode**                    | `both` (light + dark)                        | 사용자 시스템 prefers + 수동 토글 모두 지원                                                          |
+| **Mode strategy**           | class-based (`<html class="dark">`)          | 사용자 토글 가능. 라이브러리: **`next-themes`**                                                      |
+| **Contrast tier**           | WCAG **AA**                                  | 본문 ≥ 4.5:1, 큰 글자/UI ≥ 3:1, 본문 강조 ≥ 7:1 (권장)                                               |
+| **Palette cardinality**     | **7 palette × 13 stop = 91 primitive 토큰**  | Brand(primary, secondary) + 구조(neutral, neutral-variant) + Feedback(error, warning, info). **success는 primary palette 승계** (별도 palette 없음) |
+| **External library compat** | **shadcn/ui**                                | alias 레이어로 변수명 매핑 (§External Library Aliases)                                               |
 
 ### 자기충족 핵심 룰 요약
 
@@ -52,17 +52,20 @@
 
 ## ⚑ Seed (확정)
 
-| Field              | Value                                                        |
-| ------------------ | ------------------------------------------------------------ |
-| `seed.primary`     | **`oklch(0.58 0.20 260)`** (= `#2E5BFF`)                     |
-| `seed.secondary`   | _파생_ (`primary.hue + 60 = 320`, 즉 `oklch(0.58 0.18 320)`) |
-| `seed.neutral.hue` | `260` (primary.hue 유지 → 살짝 푸른 회색)                    |
-| `seed.error.hue`   | `25` (red-orange)                                            |
-| `seed.success.hue` | `145` (green)                                                |
-| `seed.warning.hue` | `75` (amber)                                                 |
-| `seed.info.hue`    | `250` (primary 260과 살짝 다른 blue)                         |
+브랜드 시드 컬러 `#2E5BFF`를 [Material Theme Builder](https://material-foundation.github.io/material-theme-builder/)에 입력해 추출한 hue 값. MD3 표준 알고리즘 산출 결과이므로 그대로 채택 (계산식 hue rotation 같은 휴리스틱 사용 안 함).
 
-> 시드는 절대 변경하지 않는다. 다른 hue를 사용하려면 이 브리프를 갱신한 뒤 재실행한다.
+| Palette           | Hue          | 출처                  | 비고                                                            |
+| ----------------- | ------------ | --------------------- | --------------------------------------------------------------- |
+| `primary`         | **276.82**   | MTB (seed `#2E5BFF`)  | 브랜드 메인. signature                                          |
+| `secondary`       | **276.35**   | MTB                   | 브랜드 보조. primary와 hue 거의 동일, **chroma로 시각 분리**    |
+| `neutral`         | **271.38**   | MTB                   | 표면 / 텍스트 (저채도)                                          |
+| `neutral-variant` | **276.38**   | MTB                   | 보더 / outline (저채도)                                         |
+| `error`           | **24.89**    | MTB                   | red-orange                                                      |
+| `warning`         | **85**       | 추천                  | amber. error(24.89)와 시각 분리                                 |
+| `info`            | **220**      | 추천                  | sky blue. primary(276.82)와 시각 분리                           |
+| `success`         | **(승계)**   | primary palette 재사용 | signature 색이 곧 success. 별도 palette 없음 (semantic만 alias) |
+
+> 시드는 절대 변경하지 않는다. 다른 hue가 필요하면 MTB에서 재추출 후 이 표를 갱신한 뒤 재실행한다.
 
 ---
 
@@ -84,16 +87,17 @@
 
 **Palette별 hue + chroma peak (step 40):**
 
-| Palette           | Hue | Chroma peak  | 비고                          |
-| ----------------- | --- | ------------ | ----------------------------- |
-| `primary`         | 260 | 0.20         | brand                         |
-| `secondary`       | 320 | 0.18         | brand (primary + 60° rotate)  |
-| `neutral`         | 260 | 0.015 (저채도) | 표면 / 텍스트                 |
-| `neutral-variant` | 275 | 0.030 (저채도) | 보더 / outline                |
-| `error`           | 25  | 0.20         | red-orange                    |
-| `success`         | 145 | 0.18         | green                         |
-| `warning`         | 75  | 0.18         | amber                         |
-| `info`            | 250 | 0.20         | primary와 분리된 blue (정보성) |
+| Palette           | Hue    | Chroma peak    | 비고                                                       |
+| ----------------- | ------ | -------------- | ---------------------------------------------------------- |
+| `primary`         | 276.82 | 0.20           | brand. signature                                           |
+| `secondary`       | 276.35 | **0.08**       | brand 보조. primary와 hue 거의 같음, **chroma 낮춰 muted** |
+| `neutral`         | 271.38 | 0.015 (저채도) | 표면 / 텍스트                                              |
+| `neutral-variant` | 276.38 | 0.030 (저채도) | 보더 / outline                                             |
+| `error`           | 24.89  | 0.20           | red-orange                                                 |
+| `warning`         | 85     | 0.18           | amber                                                      |
+| `info`            | 220    | 0.18           | sky blue                                                   |
+
+> **success palette는 별도 생성하지 않음.** success semantic은 primary palette를 alias한다 (예: `--color-success: var(--color-primary-40)`). signature 색이 곧 success 의미라는 디자인 결정.
 
 #### Chroma 곡선 (모든 palette 공통)
 
@@ -139,8 +143,8 @@ neutral / neutral-variant는 같은 곡선을 저채도 peak로 적용. 디자�
 | `on-secondary`       | `secondary-100`      |
 | `error`              | `error-40`           |
 | `on-error`           | `error-100`          |
-| `success`            | `success-40`         |
-| `on-success`         | `success-100`        |
+| `success`            | `primary-40` (승계)  |
+| `on-success`         | `primary-100` (승계) |
 | `warning`            | `warning-40`         |
 | `on-warning`         | `warning-100`        |
 | `info`               | `info-40`            |
@@ -170,8 +174,8 @@ neutral / neutral-variant는 같은 곡선을 저채도 peak로 적용. 디자�
 | `on-secondary`       | `secondary-10`       |
 | `error`              | `error-70`           |
 | `on-error`           | `error-10`           |
-| `success`            | `success-70`         |
-| `on-success`         | `success-10`         |
+| `success`            | `primary-70` (승계)  |
+| `on-success`         | `primary-10` (승계)  |
 | `warning`            | `warning-70`         |
 | `on-warning`         | `warning-10`         |
 | `info`               | `info-60`            |
@@ -197,22 +201,22 @@ base 컬러의 hover / active 변형. focus는 별도 `focus-ring`(반투명). d
 | `primary-40`   | `primary-50`   | `primary-60`   |
 | `secondary-40` | `secondary-50` | `secondary-60` |
 | `error-40`     | `error-50`     | `error-60`     |
-| `success-40`   | `success-50`   | `success-60`   |
 | `warning-40`   | `warning-50`   | `warning-60`   |
 | `info-40`      | `info-50`      | `info-60`      |
 | `surface`      | `neutral-92`\* | `neutral-88`\* |
 
 **Dark mode** — L 증가 방향 (올라오는 느낌):
 
-| Base           | Hover          | Active         |
-| -------------- | -------------- | -------------- |
-| `primary-70`   | `primary-80`   | `primary-88`\* |
+| Base           | Hover          | Active           |
+| -------------- | -------------- | ---------------- |
+| `primary-70`   | `primary-80`   | `primary-88`\*   |
 | `secondary-70` | `secondary-80` | `secondary-88`\* |
-| `error-70`     | `error-80`     | `error-88`\*   |
-| `success-70`   | `success-80`   | `success-88`\* |
-| `warning-70`   | `warning-80`   | `warning-88`\* |
-| `info-60`      | `info-70`      | `info-80`      |
-| `surface`      | `neutral-27`\* | `neutral-32`\* |
+| `error-70`     | `error-80`     | `error-88`\*     |
+| `warning-70`   | `warning-80`   | `warning-88`\*   |
+| `info-60`      | `info-70`      | `info-80`        |
+| `surface`      | `neutral-27`\* | `neutral-32`\*   |
+
+> **success의 hover / active는 primary 변형을 그대로 승계** — 별도 row 없음. semantic 매핑에서 `--color-success-hover: var(--color-primary-50)`, `--color-success-active: var(--color-primary-60)` (light 기준).
 
 `*` = off-ramp step (보간식 적용).
 
@@ -316,22 +320,22 @@ base 컬러의 hover / active 변형. focus는 별도 `focus-ring`(반투명). d
 
 shadcn 컴포넌트가 사용하는 클래스명을 이 시스템 semantic 이름에 매핑. `semantic.css`에 `var()` alias로 정의 (양 모드 자동 적용).
 
-| shadcn alias                     | 매핑 대상 (semantic)             |
-| -------------------------------- | -------------------------------- |
-| `--color-primary-foreground`     | `var(--color-on-primary)`        |
-| `--color-secondary-foreground`   | `var(--color-on-secondary)`      |
-| `--color-destructive`            | `var(--color-error)`             |
-| `--color-destructive-foreground` | `var(--color-on-error)`          |
-| `--color-muted`                  | `var(--color-surface-muted)`     |
-| `--color-muted-foreground`       | `var(--color-foreground-muted)`  |
-| `--color-accent`                 | `var(--color-surface)`           |
-| `--color-accent-foreground`      | `var(--color-foreground)`        |
-| `--color-popover`                | `var(--color-surface-elevated)`  |
-| `--color-popover-foreground`     | `var(--color-foreground)`        |
-| `--color-card`                   | `var(--color-surface)`           |
-| `--color-card-foreground`        | `var(--color-foreground)`        |
-| `--color-input`                  | `var(--color-border)`            |
-| `--color-ring`                   | `var(--color-outline)`           |
+| shadcn alias                     | 매핑 대상 (semantic)            |
+| -------------------------------- | ------------------------------- |
+| `--color-primary-foreground`     | `var(--color-on-primary)`       |
+| `--color-secondary-foreground`   | `var(--color-on-secondary)`     |
+| `--color-destructive`            | `var(--color-error)`            |
+| `--color-destructive-foreground` | `var(--color-on-error)`         |
+| `--color-muted`                  | `var(--color-surface-muted)`    |
+| `--color-muted-foreground`       | `var(--color-foreground-muted)` |
+| `--color-accent`                 | `var(--color-surface)`          |
+| `--color-accent-foreground`      | `var(--color-foreground)`       |
+| `--color-popover`                | `var(--color-surface-elevated)` |
+| `--color-popover-foreground`     | `var(--color-foreground)`       |
+| `--color-card`                   | `var(--color-surface)`          |
+| `--color-card-foreground`        | `var(--color-foreground)`       |
+| `--color-input`                  | `var(--color-border)`           |
+| `--color-ring`                   | `var(--color-outline)`          |
 
 > 신규 컴포넌트는 alias가 아닌 원본 semantic 토큰(`on-primary`, `error` 등) 직접 사용. alias는 기존 shadcn 컴포넌트 호환용.
 
@@ -361,9 +365,9 @@ src/app-init/styles/tokens/
 ```css
 /* Primitive Palette — DO NOT use directly in components. Use semantic tokens. */
 @theme {
-  --color-primary-0: oklch(0 0 260);
-  --color-primary-10: oklch(0.12 0.06 260);
-  /* ... 13단계 × 8 palette = 104 entries ... */
+  --color-primary-0: oklch(0 0 276.82);
+  --color-primary-10: oklch(0.12 0.06 276.82);
+  /* ... 13단계 × 7 palette = 91 entries (success palette 없음 — semantic만 primary 승계) ... */
 }
 ```
 
@@ -386,7 +390,13 @@ src/app-init/styles/tokens/
   --color-primary-hover: var(--color-primary-50);
   --color-primary-active: var(--color-primary-60);
   --color-on-primary: var(--color-primary-100);
-  /* ... 같은 패턴으로 secondary/error/success/warning/info ... */
+  /* ... 같은 패턴으로 secondary/error/warning/info ... */
+
+  /* success는 primary 승계 (별도 palette 없음) */
+  --color-success: var(--color-primary-40);
+  --color-success-hover: var(--color-primary-50);
+  --color-success-active: var(--color-primary-60);
+  --color-on-success: var(--color-primary-100);
 
   /* shadcn 호환 alias */
   --color-primary-foreground: var(--color-on-primary);
@@ -509,7 +519,7 @@ src/app-init/styles/tokens/
 이 프로젝트 instance에만 적용. 하네스 §시스템 불변 제약과 별개로 위반 시 출력 거부:
 
 - (foreground, background) 페어 **WCAG AA** 통과 결과를 각 CSS 파일 상단 주석에 표 형태로 기록
-- `palette.css`에 8 palette × 13 stop **= 104 토큰** 모두 정의
+- `palette.css`에 7 palette × 13 stop **= 91 토큰** 모두 정의 (success palette 생성 안 함 — semantic만 primary alias)
 - shadcn alias **14개** 누락 금지 (§External Library Aliases 전체)
 - off-ramp step(`neutral-15`, `neutral-25`, `primary-88` 등) 도입 시 §3·§4 인접 위치에 계산식 코멘트 박아둠
 
@@ -517,11 +527,11 @@ src/app-init/styles/tokens/
 
 ## ⚑ Self-Verification Checklist (제출 전)
 
-- [ ] **8 palette × 13 stop = 104개 primitive 토큰** 모두 채움
+- [ ] **7 palette × 13 stop = 91개 primitive 토큰** 모두 채움 (success는 palette 생성 안 함)
 - [ ] 모든 OKLCH가 `L C H` 3필드 + (alpha 있을 때) `/ A` 형식
 - [ ] 모든 semantic 토큰이 light + dark 페어 보유
 - [ ] (foreground, background) 페어 대비 계산표 작성 + AA 통과 명시
-- [ ] hover / active 변형: primary / secondary / error / success / warning / info / surface 모두 light + dark 페어
+- [ ] hover / active 변형: primary / secondary / error / warning / info / surface 모두 light + dark 페어 (success는 primary 변형 alias로 자동 승계)
 - [ ] focus-ring 토큰 정의 (primary-50 @ 40% alpha)
 - [ ] off-ramp step 보간식 코멘트 박힘 (`neutral-15`, `neutral-25`, hover/active의 `*88`, `*92` 등)
 - [ ] State Layer Opacity 5개 (color 없음, opacity 숫자만)
