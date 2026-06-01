@@ -8,19 +8,19 @@ import { cn } from '@/shared/lib/utils'
  * Button — design-token 기반 베이스 컴포넌트
  *
  * 기준 문서:
- *   - docs/design-system/index.md         디자인 철학 / 원칙
- *   - docs/design-system/design-token.md  토큰 정의 + §6 Interaction States + §9 불변 제약
+ *   - docs/design-system/index.md         디자인 컨텍스트
+ *   - docs/design-system/design-token.md  토큰 정의 + §State System + §시스템 불변 제약
  *
- * 제약(§9) 준수:
+ * 제약(§시스템 불변 제약) 준수:
  *   - semantic 토큰만 사용 (primitive 직접 호출 금지)
  *   - 상태는 명시 토큰(`-hover`, `-active`)로 처리 (opacity modifier `/80` 금지)
- *   - ghost variant만 §7 보조 패턴인 state-layer overlay 사용
+ *   - ghost variant만 §State System 보조 패턴인 state-layer overlay 사용
  *   - disabled는 색상 대신 `--state-disabled` opacity로 처리
  *   - focus-visible은 `--color-focus-ring`를 box-shadow ring으로 렌더
  *
  * API:
  *   - variant : 시각 스타일 (solid / surface / outline / ghost)
- *   - color   : 의미 색상 (primary / secondary / error) — MD3 네이밍
+ *   - color   : 의미 색상 (primary / secondary / error / warning) — MD3 네이밍
  *   - size    : sm / md / lg (+ icon-only 정사각 변형)
  *
  *   `surface` variant는 의도적으로 중립(neutral) 처리 — color prop 영향 없음.
@@ -41,7 +41,7 @@ const buttonVariants = cva(
     // pressed micro-translate (단, 메뉴 트리거는 제외)
     'active:not-aria-[haspopup]:translate-y-px',
     // disabled
-    'disabled:pointer-events-none disabled:opacity-[var(--state-disabled)]',
+    'disabled:pointer-events-none disabled:opacity-(--state-disabled)',
     // aria-invalid → 폼 검증 실패 표시 (error 토큰)
     'aria-invalid:border-error aria-invalid:ring-3 aria-invalid:ring-error/30',
     // 아이콘 슬롯 기본 사이즈
@@ -60,11 +60,12 @@ const buttonVariants = cva(
         outline: 'bg-transparent',
         ghost: 'bg-transparent border-transparent',
       },
-      // ─ color — 의미 색상 (MD3: primary / secondary / error) ─────────
+      // ─ color — 의미 색상 (MD3: primary / secondary / error / warning) ─────────
       color: {
         primary: '',
         secondary: '',
         error: '',
+        warning: '',
       },
       size: {
         // h28 / label-sm / radius-md
@@ -107,6 +108,12 @@ const buttonVariants = cva(
         class:
           'bg-error text-on-error hover:bg-error-hover active:bg-error-active',
       },
+      {
+        variant: 'solid',
+        color: 'warning',
+        class:
+          'bg-warning text-on-warning hover:bg-warning-hover active:bg-warning-active',
+      },
 
       // ─ outline × color ───────────────────────────────────────────────
       // text + border가 의미 색상. hover는 currentColor 오버레이로 자동 틴팅.
@@ -128,6 +135,12 @@ const buttonVariants = cva(
         class:
           'text-error border-error hover:bg-[color-mix(in_oklch,currentColor_calc(var(--state-hover)*100%),transparent)] active:bg-[color-mix(in_oklch,currentColor_calc(var(--state-pressed)*100%),transparent)]',
       },
+      {
+        variant: 'outline',
+        color: 'warning',
+        class:
+          'text-warning border-warning hover:bg-[color-mix(in_oklch,currentColor_calc(var(--state-hover)*100%),transparent)] active:bg-[color-mix(in_oklch,currentColor_calc(var(--state-pressed)*100%),transparent)]',
+      },
 
       // ─ ghost × color ─────────────────────────────────────────────────
       // text-only. hover overlay는 currentColor 사용 → color에 따라 자동 변경.
@@ -148,6 +161,12 @@ const buttonVariants = cva(
         color: 'error',
         class:
           'text-error hover:bg-[color-mix(in_oklch,currentColor_calc(var(--state-hover)*100%),transparent)] active:bg-[color-mix(in_oklch,currentColor_calc(var(--state-pressed)*100%),transparent)]',
+      },
+      {
+        variant: 'ghost',
+        color: 'warning',
+        class:
+          'text-warning hover:bg-[color-mix(in_oklch,currentColor_calc(var(--state-hover)*100%),transparent)] active:bg-[color-mix(in_oklch,currentColor_calc(var(--state-pressed)*100%),transparent)]',
       },
 
       // ─ surface × * ───────────────────────────────────────────────────

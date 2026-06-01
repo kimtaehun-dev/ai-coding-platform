@@ -30,7 +30,7 @@ const meta = {
     },
     color: {
       control: 'inline-radio',
-      options: ['primary', 'secondary', 'error'],
+      options: ['primary', 'secondary', 'error', 'warning'],
       description:
         'MD3 semantic color. `surface` variant\uC740 \uC758\uB3C4\uC801\uC73C\uB85C \uC911\uB9BD\uC774\uB77C color\uAC00 \uBB34\uC2DC\uB429\uB2C8\uB2E4.',
     },
@@ -195,6 +195,9 @@ const ForceStateStyle = () => (
     .force-hover [data-slot="button"][data-variant="solid"][data-color="error"] {
       background-color: var(--color-error-hover) !important;
     }
+    .force-hover [data-slot="button"][data-variant="solid"][data-color="warning"] {
+      background-color: var(--color-warning-hover) !important;
+    }
     /* surface (neutral) */
     .force-hover [data-slot="button"][data-variant="surface"] {
       background-color: var(--color-surface-hover) !important;
@@ -214,6 +217,9 @@ const ForceStateStyle = () => (
     }
     .force-pressed [data-slot="button"][data-variant="solid"][data-color="error"] {
       background-color: var(--color-error-active) !important;
+    }
+    .force-pressed [data-slot="button"][data-variant="solid"][data-color="warning"] {
+      background-color: var(--color-warning-active) !important;
     }
     .force-pressed [data-slot="button"][data-variant="surface"] {
       background-color: var(--color-surface-active) !important;
@@ -301,7 +307,7 @@ const ThemeToggle = () => {
   }, [theme])
 
   return (
-    <div className="inline-flex p-[3px] bg-surface border border-border rounded-md gap-0">
+    <div className="inline-flex p-0.75 bg-surface border border-border rounded-md gap-0">
       {(['light', 'dark'] as const).map((t) => (
         <button
           key={t}
@@ -348,7 +354,7 @@ const VariantSizeMatrix = () => {
         style={{ gridTemplateColumns: '96px repeat(4, 1fr)' }}
       >
         {/* Head */}
-        <div className="px-4 py-3 bg-surface border-b border-border border-r border-border-muted" />
+        <div className="px-4 py-3 bg-surface border-b border-b-border border-r border-r-border-muted" />
         {(
           ['sm — h28', 'md — h36 (default)', 'lg — h44', 'icon-only'] as const
         ).map((h, i, arr) => (
@@ -416,11 +422,12 @@ const VariantSizeMatrix = () => {
 
 const ColorMatrix = () => {
   const variants = ['solid', 'outline', 'ghost'] as const // surface는 중립
-  const colors = ['primary', 'secondary', 'error'] as const
+  const colors = ['primary', 'secondary', 'error', 'warning'] as const
   const labelFor: Record<(typeof colors)[number], string> = {
     primary: 'Submit',
     secondary: 'Continue',
     error: 'Delete',
+    warning: 'Reset',
   }
 
   return (
@@ -429,7 +436,7 @@ const ColorMatrix = () => {
         className="grid"
         style={{ gridTemplateColumns: '110px repeat(3, 1fr)' }}
       >
-        <div className="px-3 py-3 bg-surface border-b border-border border-r border-border-muted" />
+        <div className="px-3 py-3 bg-surface border-b border-b-border border-r border-r-border-muted" />
         {colors.map((c, i) => (
           <div
             key={c}
@@ -506,7 +513,7 @@ const StateMatrix = () => {
         className="grid"
         style={{ gridTemplateColumns: '110px repeat(5, 1fr)' }}
       >
-        <div className="px-3 py-3 bg-surface border-b border-border border-r border-border-muted" />
+        <div className="px-3 py-3 bg-surface border-b border-b-border border-r border-r-border-muted" />
         {states.map((s, i) => (
           <div
             key={s.key}
@@ -759,7 +766,7 @@ export const Showcase: Story = {
     <>
       <ForceStateStyle />
       <div className="min-h-screen bg-background text-foreground font-sans">
-        <div className="max-w-[1280px] mx-auto px-12 pt-14 pb-24">
+        <div className="max-w-7xl mx-auto px-12 pt-14 pb-24">
           <header className="flex items-start justify-between gap-6 pb-8 border-b border-border mb-12">
             <div>
               <h1 className="text-headline-lg text-foreground m-0">Button</h1>
@@ -795,7 +802,7 @@ export const Showcase: Story = {
             <SectionHeader
               num="02"
               title="Colors"
-              desc='MD3 semantic 색상 — primary (default) / secondary / destructive="error". surface variant는 의도적으로 중립.'
+              desc='MD3 semantic 색상 — primary (default) / secondary / destructive="error" / warning. surface variant는 의도적으로 중립.'
             />
             <ColorMatrix />
           </section>
@@ -804,7 +811,7 @@ export const Showcase: Story = {
             <SectionHeader
               num="03"
               title="Interaction States"
-              desc="design-token.md §6 매핑 그대로. opacity modifier 없이 명시 토큰(primary-hover, primary-active) 사용."
+              desc="design-token.md §State System 매핑 그대로. opacity modifier 없이 명시 토큰(primary-hover, primary-active) 사용."
             />
             <StateMatrix />
           </section>
