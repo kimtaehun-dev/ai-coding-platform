@@ -88,7 +88,7 @@ app  →  app-init  →  views  →  widgets  →  features  →  entities  → 
 └── index.ts        # PUBLIC API — 외부에 노출할 것만
 ```
 
-**`shared/`는 예외**: 슬라이스 개념 없음, `index.ts` 배럴 없음. 깊은 경로로 직접 import (`@/shared/ui/button`).
+**`shared/`는 예외**: 슬라이스 개념 없음, `index.ts` 배럴 없음. 깊은 경로로 직접 import (`@/shared/ui/Button`).
 
 ### Public API 규칙
 
@@ -106,15 +106,17 @@ import { LoginForm } from '@/features/auth-login/ui/login-form'
 
 ## 네이밍 컨벤션
 
-| 대상                  | 컨벤션                                 | 예시                           |
-| --------------------- | -------------------------------------- | ------------------------------ |
-| 폴더 / 파일명         | `kebab-case`                           | `auth-login/`, `user-card.tsx` |
-| Slice 이름 (features) | `<verb>-<noun>` 또는 `<domain>-<verb>` | `auth-login`, `post-create`    |
-| Slice 이름 (entities) | 단수 명사                              | `user`, `post`, `problem`      |
-| React 컴포넌트        | `PascalCase`                           | `LoginForm`, `UserCard`        |
-| 훅                    | `use<X>`                               | `useLogin`, `useDebounce`      |
-| 타입                  | `PascalCase`                           | `type User`, `interface Post`  |
-| Story 파일            | `<component>.stories.tsx`              | `button.stories.tsx`           |
+| 대상                  | 컨벤션                                 | 예시                                |
+| --------------------- | -------------------------------------- | ----------------------------------- |
+| 폴더                  | `kebab-case`                           | `auth-login/`, `user-card/`         |
+| 컴포넌트 파일 (.tsx)  | `PascalCase`                           | `Button.tsx`, `UserCard.tsx`        |
+| 그 외 파일 (.ts/.css) | `kebab-case`                           | `query-client.ts`, `use-login.ts`   |
+| Slice 이름 (features) | `<verb>-<noun>` 또는 `<domain>-<verb>` | `auth-login`, `post-create`         |
+| Slice 이름 (entities) | 단수 명사                              | `user`, `post`, `problem`           |
+| React 컴포넌트 이름   | `PascalCase`                           | `LoginForm`, `UserCard`             |
+| 훅                    | `use<X>`                               | `useLogin`, `useDebounce`           |
+| 타입                  | `PascalCase`                           | `type User`, `interface Post`       |
+| Story 파일            | `<Component>.stories.tsx`              | `Button.stories.tsx`                |
 
 ---
 

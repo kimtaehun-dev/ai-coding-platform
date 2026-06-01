@@ -89,7 +89,7 @@ as?: ElementType  // default 'p'
   ```
 - **자동 매핑 금지**: hierarchy='display' → `<h1>` 강제 같은 거 절대 하지 않는다. 페이지 outline은 소비자가 `as`로 명시 책임.
 
-> **Button 패턴 차이 (의도된 결정)**: [Button](/src/shared/ui/button.tsx)은 `asChild`(Radix Slot)을 그대로 유지한다. Button은 Link로 자주 감싸는 패턴(`<Button asChild><Link/></Button>`)이라 `asChild`가 적합하고, Text는 렌더 태그만 바꾸는 게 99%라 `as`가 적합. 두 패턴이 코드베이스에 공존하는 건 컴포넌트 성격상 자연스러운 선택.
+> **Button 패턴 차이 (의도된 결정)**: [Button](/src/shared/ui/Button.tsx)은 `asChild`(Radix Slot)을 그대로 유지한다. Button은 Link로 자주 감싸는 패턴(`<Button asChild><Link/></Button>`)이라 `asChild`가 적합하고, Text는 렌더 태그만 바꾸는 게 99%라 `as`가 적합. 두 패턴이 코드베이스에 공존하는 건 컴포넌트 성격상 자연스러운 선택.
 
 ### 4. font family 자동 매핑
 

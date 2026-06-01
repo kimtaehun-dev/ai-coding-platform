@@ -66,7 +66,7 @@
 - **TypeScript** 필수. `any` 금지.
 - **RSC default**. `'use client'`는 실제 인터랙션 필요한 컴포넌트에만.
 - 다크/라이트 모두 토큰 변수로 자동 처리 (자체 미디어 쿼리 작성 금지).
-- **네이밍**: 파일 = `kebab-case` (예: `hero-section.tsx`), React 컴포넌트 = `PascalCase` (예: `HeroSection`), 훅 = `use<X>`.
+- **네이밍**: 컴포넌트 파일 = `PascalCase` (예: `HeroSection.tsx`, `HeroSection.stories.tsx`), 그 외 파일 = `kebab-case` (예: `use-toggle.ts`, `utils.ts`), 폴더 = `kebab-case` (예: `hero-section/`), React 컴포넌트 이름 = `PascalCase` (예: `HeroSection`), 훅 = `use<X>`.
 
 ---
 
