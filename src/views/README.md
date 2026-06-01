@@ -12,10 +12,10 @@
 
 ```
 views/<page-name>/
-├── ui/
-│   ├── home-view.tsx
-│   └── home-view.stories.tsx
-├── model/                    # 페이지 전용 상태/로더 (옵션)
+├── ui/                       # PascalCase
+│   ├── HomeView.tsx
+│   └── HomeView.stories.tsx
+├── model/                    # 페이지 전용 상태/로더 (옵션, *.ts kebab-case)
 └── index.ts                  # PUBLIC API
 ```
 

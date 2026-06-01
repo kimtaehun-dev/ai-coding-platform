@@ -12,12 +12,12 @@
 
 ```
 entities/<entity-name>/
-├── ui/                       # 표현용 컴포넌트 (card, badge, avatar)
-│   ├── user-card.tsx
-│   └── user-card.stories.tsx
-├── model/                    # 타입, 스키마, selector, atom/store
+├── ui/                       # 표현용 컴포넌트 — PascalCase
+│   ├── UserCard.tsx
+│   └── UserCard.stories.tsx
+├── model/                    # 타입, 스키마, selector, atom/store — kebab-case
 │   └── types.ts
-├── api/                      # endpoint, query key, fetcher
+├── api/                      # endpoint, query key, fetcher — kebab-case
 │   └── user-api.ts
 ├── lib/                      # 엔티티 전용 헬퍼 (옵션)
 └── index.ts                  # PUBLIC API — 외부 노출 항목만
@@ -32,7 +32,7 @@ entities/<entity-name>/
 import { UserCard, type User } from '@/entities/user'
 
 // ❌ 금지 — 깊은 경로 import는 public 계약을 우회한다
-import { UserCard } from '@/entities/user/ui/user-card'
+import { UserCard } from '@/entities/user/ui/UserCard'
 ```
 
 ## 여기 속하지 않는 것

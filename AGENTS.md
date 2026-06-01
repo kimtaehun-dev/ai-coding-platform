@@ -88,7 +88,7 @@ app  →  app-init  →  views  →  widgets  →  features  →  entities  → 
 └── index.ts        # PUBLIC API — 외부에 노출할 것만
 ```
 
-**`shared/`는 예외**: 슬라이스 개념 없음, `index.ts` 배럴 없음. 깊은 경로로 직접 import (`@/shared/ui/button`).
+**`shared/`는 예외**: 슬라이스 개념 없음, `index.ts` 배럴 없음. 깊은 경로로 직접 import (`@/shared/ui/Button`).
 
 ### Public API 규칙
 
@@ -106,15 +106,17 @@ import { LoginForm } from '@/features/auth-login/ui/login-form'
 
 ## 네이밍 컨벤션
 
-| 대상                  | 컨벤션                                 | 예시                           |
-| --------------------- | -------------------------------------- | ------------------------------ |
-| 폴더 / 파일명         | `kebab-case`                           | `auth-login/`, `user-card.tsx` |
-| Slice 이름 (features) | `<verb>-<noun>` 또는 `<domain>-<verb>` | `auth-login`, `post-create`    |
-| Slice 이름 (entities) | 단수 명사                              | `user`, `post`, `problem`      |
-| React 컴포넌트        | `PascalCase`                           | `LoginForm`, `UserCard`        |
-| 훅                    | `use<X>`                               | `useLogin`, `useDebounce`      |
-| 타입                  | `PascalCase`                           | `type User`, `interface Post`  |
-| Story 파일            | `<component>.stories.tsx`              | `button.stories.tsx`           |
+| 대상                  | 컨벤션                                 | 예시                                |
+| --------------------- | -------------------------------------- | ----------------------------------- |
+| 폴더                  | `kebab-case`                           | `auth-login/`, `user-card/`         |
+| 컴포넌트 파일 (.tsx)  | `PascalCase`                           | `Button.tsx`, `UserCard.tsx`        |
+| 그 외 파일 (.ts/.css) | `kebab-case`                           | `query-client.ts`, `use-login.ts`   |
+| Slice 이름 (features) | `<verb>-<noun>` 또는 `<domain>-<verb>` | `auth-login`, `post-create`         |
+| Slice 이름 (entities) | 단수 명사                              | `user`, `post`, `problem`           |
+| React 컴포넌트 이름   | `PascalCase`                           | `LoginForm`, `UserCard`             |
+| 훅                    | `use<X>`                               | `useLogin`, `useDebounce`           |
+| 타입                  | `PascalCase`                           | `type User`, `interface Post`       |
+| Story 파일            | `<Component>.stories.tsx`              | `Button.stories.tsx`                |
 
 ---
 
@@ -169,6 +171,17 @@ Claude Code는 **Stop hook**으로 `pnpm fsd:lint`를 자동 실행한다 ([.cla
 - [ ] 새 UI 컴포넌트에는 `.stories.tsx`를 co-locate
 - [ ] `index.ts`에 public API만 export
 - [ ] 커밋 전 `pnpm lint` + `pnpm fsd:lint` 실행 (Stop hook이 후자는 자동 실행)
+
+---
+
+## 에이전트 운영 로그 (필수)
+
+작업 중 다음 둘 중 하나가 발생하면 **즉시 `docs/agents/logs/`에 사건 파일 1건 생성**한다. 선택 아님.
+
+1. **harness-conflict** — PRD 간 / 하네스 문서 간 / 하네스↔코드 컨벤션 간 충돌로 작업이 막히거나 임의 결정이 필요해짐.
+2. **clarification-question** — PRD `§Open ⬜`로 미리 정의되지 않은 질문을 의뢰자에게 던지게 됨.
+
+파일명·템플릿·작성 룰은 [docs/agents/logs/README.md](docs/agents/logs/README.md) 참조. Claude Code, Codex 모두 이 룰을 따른다 (Claude Design은 자체 하네스 `docs/agents/claude-design.md §0`에 같은 룰).
 
 ---
 
