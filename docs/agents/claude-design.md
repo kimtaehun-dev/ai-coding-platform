@@ -61,6 +61,7 @@
 - **Tailwind v4 + 프로젝트 토큰만** 사용 (예: `bg-primary`, `text-on-surface`). 하드코딩 hex/rgb 금지.
 - 기존 primitive (`@/shared/ui/*`) 최대 재사용. §2 인벤토리 항목은 절대 재생성 금지.
 - 각 컴포넌트에 **co-located `*.stories.tsx`** 페어 산출. production 코드에서 stories import 금지.
+- 스토리 분할·각 케이스의 props 조합은 클로드 디자인이 만든 **시안 쇼케이스 프레임을 1:1로 옮긴다** (임의 추가/누락 금지).
 - **TypeScript** 필수. `any` 금지.
 - **RSC default**. `'use client'`는 실제 인터랙션 필요한 컴포넌트에만.
 - 다크/라이트 모두 토큰 변수로 자동 처리 (자체 미디어 쿼리 작성 금지).
