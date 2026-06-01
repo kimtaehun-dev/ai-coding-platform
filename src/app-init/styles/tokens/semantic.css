@@ -4,74 +4,112 @@
  * These are the ONLY color tokens components should use directly.
  * (Tailwind utilities: bg-background, text-foreground, border-border, ...)
  *
+ * ⚠️  INVARIANT: semantic = primitive alias only.
+ *     literal oklch 는 palette.css 에만 존재. 여기서는 var(--color-*) 만 사용.
+ *     off-ramp(neutral-92/88 등 비표준 stop)은 인접 primitive 의 color-mix 로 보간.
+ *
  * Dark mode overrides live in dark.css.
  * shadcn compatibility aliases at the bottom of this file.
  *
  * WCAG Contrast (Light, approximate, OKLCH L → relative Y):
- *   foreground (L=0.12) on background (L=0.99)      ≈ 19.6:1  ✅ AAA
- *   foreground-muted (L=0.32) on background          ≈ 12.3:1  ✅ AAA
- *   foreground-subtle (L=0.55) on background         ≈  4.6:1  ✅ AA (large/UI)
- *   on-primary (L=1.00) on primary (L=0.45)          ≈  7.5:1  ✅ AAA
- *   on-secondary (L=1.00) on secondary (L=0.45)      ≈  7.5:1  ✅ AAA
- *   on-error (L=1.00) on error (L=0.45)              ≈  7.5:1  ✅ AAA
- *   on-success (L=1.00) on success (L=0.55)          ≈  4.6:1  ✅ AA
- *   on-warning (L=0.15) on warning (L=0.70)          ≈  6.2:1  ✅ AAA
- *   border (L=0.82) on background (L=0.99)           ≈  3.2:1  ✅ AA (UI)
+ *   foreground (neutral-10) on background (neutral-99)   ≈ 19.6:1  ✅ AAA
+ *   foreground-muted (neutral-30) on background           ≈ 12.3:1  ✅ AAA
+ *   foreground-subtle (neutral-50) on background          ≈  4.6:1  ✅ AA (large/UI)
+ *   on-primary (primary-100) on primary (primary-40)      ≈  7.5:1  ✅ AAA
+ *   on-secondary (secondary-100) on secondary-40          ≈  7.6:1  ✅ AAA
+ *   on-error (error-100) on error (error-40)              ≈  7.5:1  ✅ AAA
+ *   on-success (primary-100) on success (primary-40)      ≈  7.5:1  ✅ AAA (primary 승계)
+ *   on-warning (warning-100) on warning (warning-40)      ≈  4.7:1  ✅ AA
+ *   on-info (info-100) on info (info-40)                  ≈  5.2:1  ✅ AA
+ *   border (neutral-variant-80) on background             ≈  3.2:1  ✅ AA (UI)
  * ─────────────────────────────────────────────────────────────────────── */
 
 @theme {
   /* ── Surface ─────────────────────────────────────────────────────── */
-  --color-background: oklch(0.99 0.001 260); /* = neutral-99 */
-  --color-surface: oklch(0.95 0.002 260); /* = neutral-95 */
-  --color-surface-muted: oklch(0.9 0.003 260); /* = neutral-90 */
-  --color-surface-elevated: oklch(1 0 260); /* = neutral-100 */
-  --color-surface-overlay: oklch(0.99 0.001 260 / 0.85);
+  --color-background: var(--color-neutral-99);
+  --color-surface: var(--color-neutral-95);
+  --color-surface-muted: var(--color-neutral-90);
+  --color-surface-elevated: var(--color-neutral-100);
+  /* surface-overlay = neutral-99 @ 0.85 alpha (color-mix 로 alpha 부여) */
+  --color-surface-overlay: color-mix(
+    in oklab,
+    var(--color-neutral-99) 85%,
+    transparent
+  );
 
   /* ── Text / Foreground ───────────────────────────────────────────── */
-  --color-foreground: oklch(0.12 0.003 260); /* = neutral-10 */
-  --color-foreground-muted: oklch(0.32 0.008 260); /* = neutral-30 */
-  --color-foreground-subtle: oklch(0.55 0.01 260); /* = neutral-50 */
-  --color-foreground-inverse: oklch(0.99 0.001 260); /* = neutral-99 */
+  --color-foreground: var(--color-neutral-10);
+  --color-foreground-muted: var(--color-neutral-30);
+  --color-foreground-subtle: var(--color-neutral-50);
+  --color-foreground-inverse: var(--color-neutral-99);
 
   /* ── Border ──────────────────────────────────────────────────────── */
-  --color-border: oklch(0.82 0.014 275); /* = neutral-variant-80 */
-  --color-border-muted: oklch(0.9 0.008 275); /* = neutral-variant-90 */
-  --color-border-strong: oklch(0.65 0.023 275); /* = neutral-variant-60 */
-  --color-outline: oklch(0.65 0.023 275); /* = neutral-variant-60 */
-  --color-outline-variant: oklch(0.82 0.014 275); /* = neutral-variant-80 */
+  --color-border: var(--color-neutral-variant-80);
+  --color-border-muted: var(--color-neutral-variant-90);
+  --color-border-strong: var(--color-neutral-variant-60);
+  --color-outline: var(--color-neutral-variant-60);
+  --color-outline-variant: var(--color-neutral-variant-80);
 
-  /* ── Interactive ─────────────────────────────────────────────────── */
-  --color-primary: oklch(0.45 0.2 260); /* = primary-40 */
-  --color-primary-hover: oklch(0.4 0.2 260); /* darker by ~0.05 L */
-  --color-primary-active: oklch(0.35 0.18 260); /* :active / pressed */
-  --color-on-primary: oklch(1 0 260); /* = primary-100 */
+  /* ── Interactive — primary ───────────────────────────────────────── */
+  --color-primary: var(--color-primary-40);
+  --color-primary-hover: var(--color-primary-50);
+  --color-primary-active: var(--color-primary-60);
+  --color-on-primary: var(--color-primary-100);
 
-  --color-secondary: oklch(0.45 0.16 165); /* = secondary-40 */
-  --color-secondary-hover: oklch(0.4 0.16 165);
-  --color-secondary-active: oklch(0.35 0.14 165);
-  --color-on-secondary: oklch(1 0 165); /* = secondary-100 */
+  /* ── Interactive — secondary ─────────────────────────────────────── */
+  --color-secondary: var(--color-secondary-40);
+  --color-secondary-hover: var(--color-secondary-50);
+  --color-secondary-active: var(--color-secondary-60);
+  --color-on-secondary: var(--color-secondary-100);
 
-  /* ── Feedback ────────────────────────────────────────────────────── */
-  --color-error: oklch(0.45 0.2 25); /* = error-40 */
-  --color-error-hover: oklch(0.4 0.2 25);
-  --color-error-active: oklch(0.35 0.18 25);
-  --color-on-error: oklch(1 0 25); /* = error-100 */
+  /* ── Feedback — error ────────────────────────────────────────────── */
+  --color-error: var(--color-error-40);
+  --color-error-hover: var(--color-error-50);
+  --color-error-active: var(--color-error-60);
+  --color-on-error: var(--color-error-100);
 
-  --color-success: oklch(0.55 0.15 145);
-  --color-on-success: oklch(1 0 0);
-  --color-warning: oklch(0.7 0.16 75);
-  --color-on-warning: oklch(0.15 0 0);
-  --color-info: oklch(0.55 0.2 260); /* = primary-50 */
-  --color-on-info: oklch(1 0 260); /* = primary-100 */
+  /* ── Feedback — success (primary palette 승계 · 별도 palette 없음) ── */
+  --color-success: var(--color-primary-40);
+  --color-success-hover: var(--color-primary-50);
+  --color-success-active: var(--color-primary-60);
+  --color-on-success: var(--color-primary-100);
 
-  /* ── Surface Interaction (클릭 가능한 카드, 리스트 행 등) ────────── */
-  --color-surface-hover: oklch(0.92 0.003 260); /* surface (0.95) - 0.03 */
-  --color-surface-active: oklch(0.88 0.005 260); /* surface (0.95) - 0.07 */
+  /* ── Feedback — warning ──────────────────────────────────────────── */
+  --color-warning: var(--color-warning-40);
+  --color-warning-hover: var(--color-warning-50);
+  --color-warning-active: var(--color-warning-60);
+  --color-on-warning: var(--color-warning-100);
 
-  /* ── Focus Ring (반투명 ring 레이어용) ─────────────────────────── */
-  --color-focus-ring: oklch(0.55 0.2 260 / 0.4); /* primary-50 @ 40% */
+  /* ── Feedback — info ─────────────────────────────────────────────── */
+  --color-info: var(--color-info-40);
+  --color-info-hover: var(--color-info-50);
+  --color-info-active: var(--color-info-60);
+  --color-on-info: var(--color-info-100);
 
-  /* ── State Layer (opacity only, no auto utility) ─────────────────── */
+  /* ── Surface Interaction (클릭 가능한 카드 / 리스트 행 등) ──────────
+   * off-ramp stop — 인접 primitive 보간 (literal 금지 규칙 준수):
+   *   surface-hover  ≈ neutral-92  (L≈0.92, neutral-90↔95 사이 40%)
+   *   surface-active ≈ neutral-88  (L≈0.88, neutral-80↔90 사이 75%) */
+  --color-surface-hover: color-mix(
+    in oklab,
+    var(--color-neutral-90),
+    var(--color-neutral-95) 40%
+  );
+  --color-surface-active: color-mix(
+    in oklab,
+    var(--color-neutral-80),
+    var(--color-neutral-90) 75%
+  );
+
+  /* ── Focus Ring (반투명 ring 레이어 · 양 모드 동일) ─────────────────
+   * primary-50 @ 40% alpha. dark 에서 재정의하지 않는다 (mode-independent). */
+  --color-focus-ring: color-mix(
+    in oklab,
+    var(--color-primary-50) 40%,
+    transparent
+  );
+
+  /* ── State Layer (opacity only, no color) ────────────────────────── */
   --state-hover: 0.08;
   --state-pressed: 0.12;
   --state-focus: 0.12;
@@ -80,7 +118,8 @@
 
   /* ── shadcn 호환 alias ────────────────────────────────────────────
    * 기존 shadcn 컴포넌트가 사용하는 클래스명을 새 시스템에 매핑.
-   * 새 컴포넌트는 위쪽 semantic 이름을 직접 사용할 것 (이 alias 의존 금지). */
+   * 새 컴포넌트는 위쪽 semantic 이름을 직접 사용할 것 (이 alias 의존 금지).
+   * var() 참조이므로 dark 모드에서 자동 갱신 (재정의 불필요). */
   --color-primary-foreground: var(--color-on-primary);
   --color-secondary-foreground: var(--color-on-secondary);
   --color-destructive: var(--color-error);
@@ -120,9 +159,12 @@
   "text-{on-primary,on-secondary,on-error,on-success,on-warning,on-info}"
 );
 @source inline("text-{foreground,foreground-muted,foreground-subtle,foreground-inverse}");
-/* 인터랙션 상태 (hover/active) + focus ring */
+/* 인터랙션 상태 (hover/active) — 6색 + surface */
 @source inline(
-  "bg-{primary-hover,primary-active,secondary-hover,secondary-active,error-hover,error-active}"
+  "bg-{primary-hover,primary-active,secondary-hover,secondary-active}"
+);
+@source inline(
+  "bg-{error-hover,error-active,success-hover,success-active,warning-hover,warning-active,info-hover,info-active}"
 );
 @source inline("bg-{surface-hover,surface-active}");
 @source inline("bg-focus-ring");

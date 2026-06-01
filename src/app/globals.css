@@ -4,7 +4,7 @@
  * 토큰 추가/수정 시 카테고리에 맞는 파일에 작성. 새 카테고리 추가 시
  * 이 manifest와 아래 @import 목록 모두 갱신.
  *
- *   - palette.css     : primitive palette (65 tokens)
+ *   - palette.css     : primitive palette (91 tokens · 7 palettes × 13)
  *   - semantic.css    : semantic tokens (light defaults) + shadcn aliases
  *   - typography.css  : type scale (18 scales × 5 fields)
  *   - spacing.css     : spacing + radius

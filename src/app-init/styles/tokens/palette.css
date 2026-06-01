@@ -1,98 +1,135 @@
 /* ───────────────────────────────────────────────────────────────────────
- * Primitive Palette — 65 tokens (5 palettes × 13 tonal steps)
+ * Primitive Palette — 91 tokens (7 palettes × 13 tonal steps)
  *
  * ⚠️  DO NOT use these tokens directly in components.
  *     Use semantic tokens (background, foreground, primary, ...) instead.
  *
- * Generated from seed: oklch(0.58 0.20 260)  (= #2E5BFF)
- *   - primary         : h=260, chroma peak 0.20 (indigo)
- *   - secondary       : h=165, chroma peak 0.16 (teal — non-competing)
- *   - neutral         : h=260, chroma peak 0.010 (cool gray)
- *   - neutral-variant : h=275, chroma peak 0.025 (slightly more saturated, for borders)
- *   - error           : h=25,  chroma peak 0.20 (red)
+ * Seed: brand color #2E5BFF → Material Theme Builder (MTB) hue extraction.
+ *   MD3 표준 알고리즘 산출 hue를 그대로 채택 (계산식 rotation 휴리스틱 미사용).
+ *
+ *   - primary         : h=276.82, chroma peak 0.20  (brand signature)
+ *   - secondary       : h=276.35, chroma peak 0.08  (primary와 hue 동일, chroma로 분리 / muted)
+ *   - neutral         : h=271.38, chroma peak 0.015 (cool gray — 표면/텍스트)
+ *   - neutral-variant : h=276.38, chroma peak 0.030 (보더/outline — 약간 더 채도)
+ *   - error           : h=24.89,  chroma peak 0.20  (red-orange)
+ *   - warning         : h=85,     chroma peak 0.18  (amber)
+ *   - info            : h=220,    chroma peak 0.18  (sky blue)
+ *
+ *   success 는 별도 palette 없음 — semantic 에서 primary palette 를 alias 승계.
  *
  * Lightness scale (all palettes share):
  *   0=0.00, 10=0.12, 20=0.22, 30=0.32, 40=0.45, 50=0.55, 60=0.65,
  *   70=0.75, 80=0.82, 90=0.90, 95=0.95, 99=0.99, 100=1.00
  *
- * Chroma curve: peak at step 40, tapering to 0 at both ends (0, 100).
+ * Chroma curve (× peak): 0=0, 10=.30, 20=.50, 30=.75, 40=1, 50=1,
+ *   60=.90, 70=.75, 80=.55, 90=.33, 95=.17, 99=.05, 100=0
  * ─────────────────────────────────────────────────────────────────────── */
 
 @theme {
-  /* Primary — indigo (h=260) */
-  --color-primary-0: oklch(0 0 260);
-  --color-primary-10: oklch(0.12 0.06 260);
-  --color-primary-20: oklch(0.22 0.1 260);
-  --color-primary-30: oklch(0.32 0.15 260);
-  --color-primary-40: oklch(0.45 0.2 260);
-  --color-primary-50: oklch(0.55 0.2 260);
-  --color-primary-60: oklch(0.65 0.18 260);
-  --color-primary-70: oklch(0.75 0.15 260);
-  --color-primary-80: oklch(0.82 0.11 260);
-  --color-primary-90: oklch(0.9 0.07 260);
-  --color-primary-95: oklch(0.95 0.034 260);
-  --color-primary-99: oklch(0.99 0.01 260);
-  --color-primary-100: oklch(1 0 260);
+  /* Primary — brand signature (h=276.82, peak 0.20) */
+  --color-primary-0: oklch(0 0 276.82);
+  --color-primary-10: oklch(0.12 0.06 276.82);
+  --color-primary-20: oklch(0.22 0.1 276.82);
+  --color-primary-30: oklch(0.32 0.15 276.82);
+  --color-primary-40: oklch(0.45 0.2 276.82);
+  --color-primary-50: oklch(0.55 0.2 276.82);
+  --color-primary-60: oklch(0.65 0.18 276.82);
+  --color-primary-70: oklch(0.75 0.15 276.82);
+  --color-primary-80: oklch(0.82 0.11 276.82);
+  --color-primary-90: oklch(0.9 0.066 276.82);
+  --color-primary-95: oklch(0.95 0.034 276.82);
+  --color-primary-99: oklch(0.99 0.01 276.82);
+  --color-primary-100: oklch(1 0 276.82);
 
-  /* Secondary — teal (h=165), chroma peak 0.16 */
-  --color-secondary-0: oklch(0 0 165);
-  --color-secondary-10: oklch(0.12 0.048 165);
-  --color-secondary-20: oklch(0.22 0.08 165);
-  --color-secondary-30: oklch(0.32 0.12 165);
-  --color-secondary-40: oklch(0.45 0.16 165);
-  --color-secondary-50: oklch(0.55 0.16 165);
-  --color-secondary-60: oklch(0.65 0.144 165);
-  --color-secondary-70: oklch(0.75 0.12 165);
-  --color-secondary-80: oklch(0.82 0.088 165);
-  --color-secondary-90: oklch(0.9 0.053 165);
-  --color-secondary-95: oklch(0.95 0.027 165);
-  --color-secondary-99: oklch(0.99 0.008 165);
-  --color-secondary-100: oklch(1 0 165);
+  /* Secondary — muted brand (h=276.35, peak 0.08) */
+  --color-secondary-0: oklch(0 0 276.35);
+  --color-secondary-10: oklch(0.12 0.024 276.35);
+  --color-secondary-20: oklch(0.22 0.04 276.35);
+  --color-secondary-30: oklch(0.32 0.06 276.35);
+  --color-secondary-40: oklch(0.45 0.08 276.35);
+  --color-secondary-50: oklch(0.55 0.08 276.35);
+  --color-secondary-60: oklch(0.65 0.072 276.35);
+  --color-secondary-70: oklch(0.75 0.06 276.35);
+  --color-secondary-80: oklch(0.82 0.044 276.35);
+  --color-secondary-90: oklch(0.9 0.026 276.35);
+  --color-secondary-95: oklch(0.95 0.014 276.35);
+  --color-secondary-99: oklch(0.99 0.004 276.35);
+  --color-secondary-100: oklch(1 0 276.35);
 
-  /* Neutral — cool gray (h=260), chroma peak 0.010 */
-  --color-neutral-0: oklch(0 0 260);
-  --color-neutral-10: oklch(0.12 0.003 260);
-  --color-neutral-20: oklch(0.22 0.005 260);
-  --color-neutral-30: oklch(0.32 0.008 260);
-  --color-neutral-40: oklch(0.45 0.01 260);
-  --color-neutral-50: oklch(0.55 0.01 260);
-  --color-neutral-60: oklch(0.65 0.009 260);
-  --color-neutral-70: oklch(0.75 0.008 260);
-  --color-neutral-80: oklch(0.82 0.006 260);
-  --color-neutral-90: oklch(0.9 0.003 260);
-  --color-neutral-95: oklch(0.95 0.002 260);
-  --color-neutral-99: oklch(0.99 0.001 260);
-  --color-neutral-100: oklch(1 0 260);
+  /* Neutral — cool gray (h=271.38, peak 0.015) */
+  --color-neutral-0: oklch(0 0 271.38);
+  --color-neutral-10: oklch(0.12 0.005 271.38);
+  --color-neutral-20: oklch(0.22 0.008 271.38);
+  --color-neutral-30: oklch(0.32 0.011 271.38);
+  --color-neutral-40: oklch(0.45 0.015 271.38);
+  --color-neutral-50: oklch(0.55 0.015 271.38);
+  --color-neutral-60: oklch(0.65 0.014 271.38);
+  --color-neutral-70: oklch(0.75 0.011 271.38);
+  --color-neutral-80: oklch(0.82 0.008 271.38);
+  --color-neutral-90: oklch(0.9 0.005 271.38);
+  --color-neutral-95: oklch(0.95 0.003 271.38);
+  --color-neutral-99: oklch(0.99 0.001 271.38);
+  --color-neutral-100: oklch(1 0 271.38);
 
-  /* Neutral Variant — slightly saturated cool gray (h=275), chroma peak 0.025 */
-  --color-neutral-variant-0: oklch(0 0 275);
-  --color-neutral-variant-10: oklch(0.12 0.008 275);
-  --color-neutral-variant-20: oklch(0.22 0.013 275);
-  --color-neutral-variant-30: oklch(0.32 0.019 275);
-  --color-neutral-variant-40: oklch(0.45 0.025 275);
-  --color-neutral-variant-50: oklch(0.55 0.025 275);
-  --color-neutral-variant-60: oklch(0.65 0.023 275);
-  --color-neutral-variant-70: oklch(0.75 0.019 275);
-  --color-neutral-variant-80: oklch(0.82 0.014 275);
-  --color-neutral-variant-90: oklch(0.9 0.008 275);
-  --color-neutral-variant-95: oklch(0.95 0.004 275);
-  --color-neutral-variant-99: oklch(0.99 0.001 275);
-  --color-neutral-variant-100: oklch(1 0 275);
+  /* Neutral Variant — borders/outline (h=276.38, peak 0.030) */
+  --color-neutral-variant-0: oklch(0 0 276.38);
+  --color-neutral-variant-10: oklch(0.12 0.009 276.38);
+  --color-neutral-variant-20: oklch(0.22 0.015 276.38);
+  --color-neutral-variant-30: oklch(0.32 0.023 276.38);
+  --color-neutral-variant-40: oklch(0.45 0.03 276.38);
+  --color-neutral-variant-50: oklch(0.55 0.03 276.38);
+  --color-neutral-variant-60: oklch(0.65 0.027 276.38);
+  --color-neutral-variant-70: oklch(0.75 0.023 276.38);
+  --color-neutral-variant-80: oklch(0.82 0.017 276.38);
+  --color-neutral-variant-90: oklch(0.9 0.01 276.38);
+  --color-neutral-variant-95: oklch(0.95 0.005 276.38);
+  --color-neutral-variant-99: oklch(0.99 0.002 276.38);
+  --color-neutral-variant-100: oklch(1 0 276.38);
 
-  /* Error — red (h=25), chroma peak 0.20 */
-  --color-error-0: oklch(0 0 25);
-  --color-error-10: oklch(0.12 0.06 25);
-  --color-error-20: oklch(0.22 0.1 25);
-  --color-error-30: oklch(0.32 0.15 25);
-  --color-error-40: oklch(0.45 0.2 25);
-  --color-error-50: oklch(0.55 0.2 25);
-  --color-error-60: oklch(0.65 0.18 25);
-  --color-error-70: oklch(0.75 0.15 25);
-  --color-error-80: oklch(0.82 0.11 25);
-  --color-error-90: oklch(0.9 0.07 25);
-  --color-error-95: oklch(0.95 0.034 25);
-  --color-error-99: oklch(0.99 0.01 25);
-  --color-error-100: oklch(1 0 25);
+  /* Error — red-orange (h=24.89, peak 0.20) */
+  --color-error-0: oklch(0 0 24.89);
+  --color-error-10: oklch(0.12 0.06 24.89);
+  --color-error-20: oklch(0.22 0.1 24.89);
+  --color-error-30: oklch(0.32 0.15 24.89);
+  --color-error-40: oklch(0.45 0.2 24.89);
+  --color-error-50: oklch(0.55 0.2 24.89);
+  --color-error-60: oklch(0.65 0.18 24.89);
+  --color-error-70: oklch(0.75 0.15 24.89);
+  --color-error-80: oklch(0.82 0.11 24.89);
+  --color-error-90: oklch(0.9 0.066 24.89);
+  --color-error-95: oklch(0.95 0.034 24.89);
+  --color-error-99: oklch(0.99 0.01 24.89);
+  --color-error-100: oklch(1 0 24.89);
+
+  /* Warning — amber (h=85, peak 0.18) */
+  --color-warning-0: oklch(0 0 85);
+  --color-warning-10: oklch(0.12 0.054 85);
+  --color-warning-20: oklch(0.22 0.09 85);
+  --color-warning-30: oklch(0.32 0.135 85);
+  --color-warning-40: oklch(0.45 0.18 85);
+  --color-warning-50: oklch(0.55 0.18 85);
+  --color-warning-60: oklch(0.65 0.162 85);
+  --color-warning-70: oklch(0.75 0.135 85);
+  --color-warning-80: oklch(0.82 0.099 85);
+  --color-warning-90: oklch(0.9 0.059 85);
+  --color-warning-95: oklch(0.95 0.031 85);
+  --color-warning-99: oklch(0.99 0.009 85);
+  --color-warning-100: oklch(1 0 85);
+
+  /* Info — sky blue (h=220, peak 0.18) */
+  --color-info-0: oklch(0 0 220);
+  --color-info-10: oklch(0.12 0.054 220);
+  --color-info-20: oklch(0.22 0.09 220);
+  --color-info-30: oklch(0.32 0.135 220);
+  --color-info-40: oklch(0.45 0.18 220);
+  --color-info-50: oklch(0.55 0.18 220);
+  --color-info-60: oklch(0.65 0.162 220);
+  --color-info-70: oklch(0.75 0.135 220);
+  --color-info-80: oklch(0.82 0.099 220);
+  --color-info-90: oklch(0.9 0.059 220);
+  --color-info-95: oklch(0.95 0.031 220);
+  --color-info-99: oklch(0.99 0.009 220);
+  --color-info-100: oklch(1 0 220);
 }
 
 /* ───────────────────────────────────────────────────────────────────────
@@ -105,9 +142,13 @@
  * 아래 @source inline 디렉티브는 Tailwind에게 해당 utility들을 "사용됨"
  * 으로 표시하도록 강제하고, 그 결과 CSS 변수도 함께 emit됩니다.
  * Storybook 토큰 문서가 런타임에 var()로 참조하기 위해 필요합니다.
+ *
+ * success palette 는 없음 (primary 승계) → 여기에 항목 없음.
  * ─────────────────────────────────────────────────────────────────────── */
 @source inline("bg-primary-{0,10,20,30,40,50,60,70,80,90,95,99,100}");
 @source inline("bg-secondary-{0,10,20,30,40,50,60,70,80,90,95,99,100}");
 @source inline("bg-neutral-{0,10,20,30,40,50,60,70,80,90,95,99,100}");
 @source inline("bg-neutral-variant-{0,10,20,30,40,50,60,70,80,90,95,99,100}");
 @source inline("bg-error-{0,10,20,30,40,50,60,70,80,90,95,99,100}");
+@source inline("bg-warning-{0,10,20,30,40,50,60,70,80,90,95,99,100}");
+@source inline("bg-info-{0,10,20,30,40,50,60,70,80,90,95,99,100}");
