@@ -20,13 +20,13 @@
 
 ## 코드 추가 방법
 
-1. kebab-case 파일 생성: `src/shared/ui/badge.tsx`
-2. Story co-locate: `src/shared/ui/badge.stories.tsx`
-3. 파일에서 바로 export — `shared/*`는 슬라이스 배럴(`index.ts`)을 **쓰지 않는다**. 깊은 경로로 직접 import: `@/shared/ui/badge`
+1. 컴포넌트 파일 생성 (PascalCase): `src/shared/ui/Badge.tsx` — `lib/`·`api/`·`config/` 하위 helper 파일은 kebab-case (`format-date.ts`)
+2. Story co-locate: `src/shared/ui/Badge.stories.tsx`
+3. 파일에서 바로 export — `shared/*`는 슬라이스 배럴(`index.ts`)을 **쓰지 않는다**. 깊은 경로로 직접 import: `@/shared/ui/Badge`
 
 ## Import 경로 예시
 
 ```ts
-import { Button } from '@/shared/ui/button'
+import { Button } from '@/shared/ui/Button'
 import { cn } from '@/shared/lib/utils'
 ```
