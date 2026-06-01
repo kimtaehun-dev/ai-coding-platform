@@ -16,6 +16,7 @@
 3. **§2 인벤토리에 등록된 컴포넌트는 절대 재생성하지 않는다.** 필요하면 그대로 사용·확장한다.
 4. **의뢰서 템플릿의 ⬜ 항목은 사용자에게 직접 질문해서 채운다.** 임의 추정·가정 금지. 묶음별로 묻고, 답을 받으면 해당 칸을 채운 뒤 다음 묶음으로 진행한다.
 5. 모든 ⬜가 채워지면 시안 + 코드를 산출한다.
+6. 작업 중 **하네스 충돌**(PRD 간/하네스 문서 간/하네스↔코드 컨벤션 간 모순으로 작업이 막히거나 임의 결정이 필요해진 경우) 또는 **PRD `§Open ⬜`에 없던 추가 질문**을 의뢰자에게 던지게 된 경우, 즉시 [docs/agents/logs/](../agents/logs/README.md)에 사건 파일 1건 생성. 선택 아님.
 
 > 코드 리팩토링/통합 지시 금지 — 핸드오프 후 별도 단계에서 처리.
 
@@ -61,10 +62,11 @@
 - **Tailwind v4 + 프로젝트 토큰만** 사용 (예: `bg-primary`, `text-on-surface`). 하드코딩 hex/rgb 금지.
 - 기존 primitive (`@/shared/ui/*`) 최대 재사용. §2 인벤토리 항목은 절대 재생성 금지.
 - 각 컴포넌트에 **co-located `*.stories.tsx`** 페어 산출. production 코드에서 stories import 금지.
+- 스토리 분할·각 케이스의 props 조합은 클로드 디자인이 만든 **시안 쇼케이스 프레임을 1:1로 옮긴다** (임의 추가/누락 금지).
 - **TypeScript** 필수. `any` 금지.
 - **RSC default**. `'use client'`는 실제 인터랙션 필요한 컴포넌트에만.
 - 다크/라이트 모두 토큰 변수로 자동 처리 (자체 미디어 쿼리 작성 금지).
-- **네이밍**: 파일 = `kebab-case` (예: `hero-section.tsx`), React 컴포넌트 = `PascalCase` (예: `HeroSection`), 훅 = `use<X>`.
+- **네이밍**: 컴포넌트 파일 = `PascalCase` (예: `HeroSection.tsx`, `HeroSection.stories.tsx`), 그 외 파일 = `kebab-case` (예: `use-toggle.ts`, `utils.ts`), 폴더 = `kebab-case` (예: `hero-section/`), React 컴포넌트 이름 = `PascalCase` (예: `HeroSection`), 훅 = `use<X>`.
 
 ---
 

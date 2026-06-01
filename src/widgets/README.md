@@ -13,10 +13,10 @@
 ```
 widgets/<widget-name>/
 ├── ui/
-│   ├── header.tsx
-│   └── header.stories.tsx
+│   ├── Header.tsx            # 컴포넌트 파일은 PascalCase
+│   └── Header.stories.tsx
 ├── model/                    # widget 내부 상태 (옵션)
-├── lib/                      # widget 전용 헬퍼 (옵션)
+├── lib/                      # widget 전용 헬퍼 (옵션, *.ts는 kebab-case)
 └── index.ts                  # PUBLIC API
 ```
 

@@ -12,12 +12,12 @@
 
 ```
 features/<verb-noun>/
-├── ui/
-│   ├── login-form.tsx
-│   └── login-form.stories.tsx
-├── model/                    # 훅, 상태, 검증 스키마
+├── ui/                       # 컴포넌트 — PascalCase
+│   ├── LoginForm.tsx
+│   └── LoginForm.stories.tsx
+├── model/                    # 훅, 상태, 검증 스키마 — kebab-case
 │   └── use-login.ts
-├── api/                      # 이 행위에 해당하는 mutation/query
+├── api/                      # 이 행위에 해당하는 mutation/query — kebab-case
 │   └── login.ts
 ├── lib/                      # feature 전용 헬퍼 (옵션)
 └── index.ts                  # PUBLIC API
@@ -37,5 +37,5 @@ features/<verb-noun>/
 import { LoginForm, useLogin } from '@/features/auth-login'
 
 // ❌ 금지
-import { LoginForm } from '@/features/auth-login/ui/login-form'
+import { LoginForm } from '@/features/auth-login/ui/LoginForm'
 ```

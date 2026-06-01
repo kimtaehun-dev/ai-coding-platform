@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import * as React from 'react'
 
-import { Button } from './button'
+import { Button } from './Button'
 
 /**
  * Button — design-token 기반 베이스 컴포넌트.
@@ -769,7 +769,7 @@ export const Showcase: Story = {
                 light/dark 자동 대응.
               </p>
               <div className="flex gap-2 mt-3.5">
-                {['src/shared/ui/button.tsx', 'cva', 'WCAG AA+'].map((c) => (
+                {['src/shared/ui/Button.tsx', 'cva', 'WCAG AA+'].map((c) => (
                   <code
                     key={c}
                     className="font-mono text-caption bg-surface border border-border text-foreground-muted px-2 py-0.5 rounded-sm"

@@ -53,7 +53,6 @@ docs/agents/claude-design.md §1 FSD 레이어 결정 테이블에 따른 위치
 ## 8. 산출물 (코드 기대치)
 docs/agents/claude-design.md §3 "코드 산출 기대치" 그대로 적용.
 - variant × size × state 조합을 시안에서 모두 보일 것.
-- 컴포넌트는 자체 파일 + co-located `*.stories.tsx` 페어로 산출.
 
 ## 9. 참고 문서
 - docs/design-system/index.md
@@ -74,8 +73,7 @@ docs/agents/claude-design.md §3 "코드 산출 기대치" 그대로 적용.
 ### 핸드오프 후
 
 1. 코드를 claude-design.md §1 FSD 결정에 맞는 위치로 이동
-2. **co-located `*.stories.tsx` 페어링** — production 코드에서 stories import 금지
-3. variant × size × state 스토리 케이스가 모두 잡혀 있는지 확인
-4. 본문 토큰 사용 점검: `grep -E '#[0-9a-fA-F]{3,6}|rgb\(' <컴포넌트 경로>` 결과가 비어야 함
-5. **claude-design.md §2 인벤토리에 한 블록 append** ← 빼먹지 말 것
-6. `pnpm lint && pnpm fsd:lint` 통과 → PR
+2. variant × size × state 스토리 케이스가 시안 쇼케이스와 일치하는지 확인 (claude-design.md §3)
+3. 본문 토큰 사용 점검: `grep -E '#[0-9a-fA-F]{3,6}|rgb\(' <컴포넌트 경로>` 결과가 비어야 함
+4. **claude-design.md §2 인벤토리에 한 블록 append** ← 빼먹지 말 것
+5. `pnpm lint && pnpm fsd:lint` 통과 → PR

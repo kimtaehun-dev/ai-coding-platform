@@ -16,46 +16,49 @@ export const PALETTES = ['primary', 'secondary', 'neutral', 'neutral-variant', '
 export const SEMANTIC_GROUPS = [
   { title: 'Surface (배경)', description: '페이지와 컴포넌트의 배경면. 깊이감은 surface → elevated 순서.',
     tokens: [
-      { name: 'background',       usage: '페이지 최하단 배경' },
-      { name: 'surface',          usage: '카드, 리스트 행 등 1차 표면' },
-      { name: 'surface-muted',    usage: '비활성/보조 영역' },
-      { name: 'surface-elevated', usage: '팝오버, 모달, 떠있는 표면' },
-      { name: 'surface-overlay',  usage: '딤 처리용 반투명 오버레이' },
+      { name: 'background',       usage: '페이지 최하단 배경',           primitive: { light: 'neutral-99',  dark: 'neutral-10' } },
+      { name: 'surface',          usage: '카드, 리스트 행 등 1차 표면',  primitive: { light: 'neutral-95',  dark: 'neutral-20' } },
+      { name: 'surface-muted',    usage: '비활성/보조 영역',             primitive: { light: 'neutral-90',  dark: 'neutral-15*' } },
+      { name: 'surface-elevated', usage: '팝오버, 모달, 떠있는 표면',    primitive: { light: 'neutral-100', dark: 'neutral-25*' } },
+      { name: 'surface-overlay',  usage: '딤 처리용 반투명 오버레이',    primitive: { light: 'neutral-99 @ 85%', dark: 'neutral-30 @ 85%' } },
     ] },
   { title: 'Foreground (텍스트)', description: '텍스트와 아이콘의 색. 중요도에 따라 단계적으로 사용.',
     tokens: [
-      { name: 'foreground',         usage: '본문, 제목 — 기본 텍스트' },
-      { name: 'foreground-muted',   usage: '보조 설명, 캡션' },
-      { name: 'foreground-subtle',  usage: 'placeholder, 비활성 텍스트' },
-      { name: 'foreground-inverse', usage: '어두운 배경 위 텍스트' },
+      { name: 'foreground',         usage: '본문, 제목 — 기본 텍스트',     primitive: { light: 'neutral-10', dark: 'neutral-95' } },
+      { name: 'foreground-muted',   usage: '보조 설명, 캡션',              primitive: { light: 'neutral-30', dark: 'neutral-80' } },
+      { name: 'foreground-subtle',  usage: 'placeholder, 비활성 텍스트',   primitive: { light: 'neutral-50', dark: 'neutral-70' } },
+      { name: 'foreground-inverse', usage: '어두운 배경 위 텍스트',        primitive: { light: 'neutral-99', dark: 'neutral-10' } },
     ] },
   { title: 'Border (테두리)', description: '경계선과 디바이더. UI 컴포넌트의 가시성 확보.',
     tokens: [
-      { name: 'border',          usage: '기본 테두리, 입력 필드' },
-      { name: 'border-muted',    usage: '약한 디바이더' },
-      { name: 'border-strong',   usage: '강조 경계선' },
-      { name: 'outline',         usage: 'focus ring 등 인터랙티브 윤곽' },
-      { name: 'outline-variant', usage: '비활성 인터랙티브 윤곽' },
+      { name: 'border',          usage: '기본 테두리, 입력 필드',         primitive: { light: 'neutral-variant-80', dark: 'neutral-variant-30' } },
+      { name: 'border-muted',    usage: '약한 디바이더',                  primitive: { light: 'neutral-variant-90', dark: 'neutral-variant-20' } },
+      { name: 'border-strong',   usage: '강조 경계선',                    primitive: { light: 'neutral-variant-60', dark: 'neutral-variant-50' } },
+      { name: 'outline',         usage: 'focus ring 등 인터랙티브 윤곽',  primitive: { light: 'neutral-variant-60', dark: 'neutral-variant-60' } },
+      { name: 'outline-variant', usage: '비활성 인터랙티브 윤곽',         primitive: { light: 'neutral-variant-80', dark: 'neutral-variant-30' } },
     ] },
   { title: 'Interactive (인터랙티브)', description: '버튼, 링크 등 사용자가 상호작용하는 요소의 색.',
     tokens: [
-      { name: 'primary',      usage: '기본 액션 (CTA, primary 버튼)' },
-      { name: 'on-primary',   usage: 'primary 위 텍스트/아이콘' },
-      { name: 'secondary',    usage: '보조 액션' },
-      { name: 'on-secondary', usage: 'secondary 위 텍스트/아이콘' },
+      { name: 'primary',      usage: '기본 액션 (CTA, primary 버튼)',  primitive: { light: 'primary-40',   dark: 'primary-70' } },
+      { name: 'on-primary',   usage: 'primary 위 텍스트/아이콘',       primitive: { light: 'primary-100',  dark: 'primary-10' } },
+      { name: 'secondary',    usage: '보조 액션',                      primitive: { light: 'secondary-40', dark: 'secondary-70' } },
+      { name: 'on-secondary', usage: 'secondary 위 텍스트/아이콘',     primitive: { light: 'secondary-100', dark: 'secondary-10' } },
     ] },
   { title: 'Feedback (피드백)', description: '상태와 알림. on-* 는 해당 색 위에 올리는 대비색.',
     tokens: [
-      { name: 'error',      usage: '에러, 파괴적 액션' },
-      { name: 'on-error',   usage: 'error 위 텍스트' },
-      { name: 'success',    usage: '성공 상태' },
-      { name: 'on-success', usage: 'success 위 텍스트' },
-      { name: 'warning',    usage: '주의 상태' },
-      { name: 'on-warning', usage: 'warning 위 텍스트' },
-      { name: 'info',       usage: '정보성 상태' },
-      { name: 'on-info',    usage: 'info 위 텍스트' },
+      { name: 'error',      usage: '에러, 파괴적 액션',  primitive: { light: 'error-40',  dark: 'error-70' } },
+      { name: 'on-error',   usage: 'error 위 텍스트',    primitive: { light: 'error-100', dark: 'error-10' } },
+      { name: 'success',    usage: '성공 상태',          primitive: null },
+      { name: 'on-success', usage: 'success 위 텍스트',  primitive: null },
+      { name: 'warning',    usage: '주의 상태',          primitive: null },
+      { name: 'on-warning', usage: 'warning 위 텍스트',  primitive: null },
+      { name: 'info',       usage: '정보성 상태',        primitive: { light: 'primary-50',  dark: 'primary-60' } },
+      { name: 'on-info',    usage: 'info 위 텍스트',     primitive: { light: 'primary-100', dark: 'primary-10' } },
     ] },
 ]
+
+{/* `*` = palette stop 사이 보간값 (neutral-15, neutral-25 등 정의된 stop 외).
+    primitive: null = 5개 팔레트 밖의 커스텀 hue (success/warning) 또는 단색. */}
 
 export const SHADCN_ALIASES = [
   { alias: 'primary-foreground',     mapsTo: 'on-primary' },
@@ -92,7 +95,7 @@ export function Divider() {
   return <hr style={{ border: 0, borderTop: '1px solid var(--color-border-muted)', margin: '40px 0' }} />
 }
 
-export function Swatch({ cssVar, label, sub }) {
+export function Swatch({ cssVar, label, sub, primitive }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
       <div style={{ width: 44, height: 44, borderRadius: 8, background: `var(${cssVar})`, border: '1px solid var(--color-border)', flexShrink: 0 }} aria-hidden />
@@ -100,6 +103,11 @@ export function Swatch({ cssVar, label, sub }) {
         <code style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</code>
         {sub ? (
           <span style={{ fontSize: 11, color: 'var(--color-foreground-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{sub}</span>
+        ) : null}
+        {primitive ? (
+          <code style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: 'var(--color-foreground-subtle)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: 2 }}>
+            → --color-{primitive}
+          </code>
         ) : null}
       </div>
     </div>
@@ -118,14 +126,20 @@ export function ThemePanel({ scheme, children }) {
   )
 }
 
-export function SemanticGroup({ group }) {
+export function SemanticGroup({ group, scheme }) {
   return (
     <section style={{ marginBottom: 24 }}>
       <h4 style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-foreground)', margin: '0 0 4px 0' }}>{group.title}</h4>
       <p style={{ fontSize: 12, color: 'var(--color-foreground-muted)', margin: '0 0 12px 0' }}>{group.description}</p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
         {group.tokens.map((t) => (
-          <Swatch key={t.name} cssVar={`--color-${t.name}`} label={`--color-${t.name}`} sub={t.usage} />
+          <Swatch
+            key={t.name}
+            cssVar={`--color-${t.name}`}
+            label={`--color-${t.name}`}
+            sub={t.usage}
+            primitive={t.primitive ? t.primitive[scheme] : null}
+          />
         ))}
       </div>
     </section>
@@ -143,10 +157,10 @@ export function ColorsDoc() {
         />
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
           <ThemePanel scheme="light">
-            {SEMANTIC_GROUPS.map((g) => (<SemanticGroup key={g.title} group={g} />))}
+            {SEMANTIC_GROUPS.map((g) => (<SemanticGroup key={g.title} group={g} scheme="light" />))}
           </ThemePanel>
           <ThemePanel scheme="dark">
-            {SEMANTIC_GROUPS.map((g) => (<SemanticGroup key={g.title} group={g} />))}
+            {SEMANTIC_GROUPS.map((g) => (<SemanticGroup key={g.title} group={g} scheme="dark" />))}
           </ThemePanel>
         </div>
       </section>
