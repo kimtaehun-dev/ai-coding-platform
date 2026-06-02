@@ -1,0 +1,4 @@
+{
+  "$comment": "Team-shared toggle for superpowers SessionStart auto-injection. Commit this file to share the state. mode='auto' = inject the superpowers skill into every new session's first message; mode='manual' = skills exist but are only triggered when invoked explicitly (e.g. /superpowers, /brainstorming).",
+  "mode": "manual"
+}

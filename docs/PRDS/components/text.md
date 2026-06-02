@@ -1,7 +1,7 @@
 # Component Spec: Text — 타이포그래피 wrapper 의뢰서
 
 > 이 문서는 **클로드 디자인의 진입점**이다. 사용자가 _"docs/PRDS/components/text.md 따라 의뢰"_ 한 줄만 보내면, 아래 §Procedure 순서로 진행한다.
-> 산출물: `src/shared/ui/text.tsx` + `text.stories.tsx` + claude-design.md §2 인벤토리 한 블록 append.
+> 산출물: `src/shared/ui/Text.tsx` + `Text.stories.tsx` + claude-design.md §2 인벤토리 한 블록 append.
 
 ---
 
@@ -38,7 +38,7 @@
 
 ## ⚑ FSD 위치 (claude-design.md §1 적용)
 
-도메인 무관 primitive → `src/shared/ui/text.tsx` + co-located `text.stories.tsx`.
+도메인 무관 primitive → `src/shared/ui/Text.tsx` + co-located `Text.stories.tsx`.
 
 ---
 
@@ -151,8 +151,8 @@ claude-design.md §3 "코드 산출 기대치"를 그대로 적용한 위에 다
 
 ### 파일
 
-- `src/shared/ui/text.tsx`
-- `src/shared/ui/text.stories.tsx`
+- `src/shared/ui/Text.tsx`
+- `src/shared/ui/Text.stories.tsx`
 
 ### 시그니처 (Pre-decided + Decided 반영 후 최종)
 
@@ -167,7 +167,7 @@ export { Text, textVariants }
 export type { TextProps }
 ```
 
-### 스토리 의무 (text.stories.tsx)
+### 스토리 의무 (Text.stories.tsx)
 
 | 스토리                | 필수 조합                                                |
 | --------------------- | -------------------------------------------------------- |
@@ -182,7 +182,7 @@ export type { TextProps }
 
 ## ⚑ Post-handoff Checklist (산출 후 모두 통과)
 
-- [ ] `grep -E '#[0-9a-fA-F]{3,6}|rgb\(' src/shared/ui/text.tsx` 결과 비어 있음 (hex/rgb 인라인 금지)
+- [ ] `grep -E '#[0-9a-fA-F]{3,6}|rgb\(' src/shared/ui/Text.tsx` 결과 비어 있음 (hex/rgb 인라인 금지)
 - [ ] primitive 토큰 직접 호출 없음 (semantic 토큰만 — `primary-40` 같은 거 금지)
 - [ ] 스토리에 한영 혼용 + 숫자 본문 1케이스 이상 포함
 - [ ] `as` prop으로 h1~h6 케이스 시연
