@@ -48,6 +48,17 @@
 - 토큰: semantic 토큰만 사용 (primitive 직접 호출 금지)
 - 자세한 제약: 파일 상단 docblock + `docs/design-system/design-token.md` §Token Categories · §시스템 불변 제약
 
+### `@/shared/ui/Text`
+
+- 외부 시그니처: `Text`, `textVariants`, `as` prop
+- hierarchy: `display` · `headline` · `title` · `body`(default) · `label` · `caption` · `code`
+- size: `lg` · `md`(default) · `sm`
+- color: `default` · `muted` · `subtle` · `inverse` · `inherit`
+- polymorphic: `as` prop (default `'p'`) — 시각 스케일과 semantic element 분리
+- 비대칭 size 규칙: `caption`은 size 무시 (단일 토큰), `code`는 md/sm만 토큰 존재 (lg는 md 폴백)
+- 토큰: typography.css 18 스케일 + foreground 계열만
+- 자세한 제약: 파일 상단 docblock + `docs/PRDS/components/text.md`
+
 (이후 컴포넌트 추가 시 동일 양식으로 한 블록 append)
 
 ---
